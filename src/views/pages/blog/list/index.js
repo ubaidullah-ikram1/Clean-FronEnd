@@ -1,11 +1,11 @@
 // ** React Imports
 import { Link } from 'react-router-dom'
 import { Fragment, useState, useEffect, useContext } from 'react'
-
+import Basemap from '../map/basemap'
 // ** Third Party Components
 import axios from 'axios'
 import { ThemeColors } from '@src/utility/context/ThemeColors'
-import LineChart from '../../../charts/chart-js/ChartjsLineChart'
+import Chart from '../map/chart'
 import Select from 'react-select'
 import Flatpickr from 'react-flatpickr'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
@@ -59,9 +59,7 @@ const BlogList = () => {
       return (
         <Col key={item.title} md='12'>
           <Card>
-            <Link to={`/pages/blog/detail/${item.id}`}>
-              <CardImg className='img-fluid' src="http://www.techpluto.com/wp-content/uploads/2012/04/google-earth-online.jpg" alt={item.title} top />
-            </Link>
+         < Basemap />
             <CardBody>
 
 
@@ -105,13 +103,7 @@ const BlogList = () => {
                   />
                 </Col>
                 <Col md={8}>
-                  <LineChart
-                    labelColor={labelColor}
-                    gridLineColor={gridLineColor}
-                    lineChartDanger={lineChartDanger}
-                    lineChartPrimary={lineChartPrimary}
-                    warningColorShade={warningColorShade}
-                  />
+               < Chart />
                 </Col>
 
               </Row>

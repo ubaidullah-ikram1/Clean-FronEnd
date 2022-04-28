@@ -37,6 +37,7 @@
     "i18next-xhr-backend": "^3.2.2",
     "jquery": "^3.5.1",
     "jsonwebtoken": "~8.5.1",
+    "leaflet": "^1.6.0",
     "moment": "^2.29.1",
     "nouislider": "^15.5.0",
     "nouislider-react": "^3.3.8",
@@ -58,6 +59,7 @@
     "react-flatpickr": "^3.9.1",
     "react-hook-form": "7.18.1",
     "react-i18next": "^11.13.0",
+    "react-leaflet": "^3.2.0",
     "react-paginate": "^7.0.0",
     "react-perfect-scrollbar": "^1.5.5",
     "react-player": "^2.6.2",
@@ -104,17 +106,10 @@
     "eslint-plugin-import": "^2.22.0",
     "sass-loader": "8.0.2"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
   "homepage": ""
 }
