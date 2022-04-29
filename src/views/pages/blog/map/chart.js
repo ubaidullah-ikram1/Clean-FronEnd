@@ -57,8 +57,8 @@ const Chart = () => {
           Highcharts.chart('container', {
             chart: {
             
-              height:230,
-              backgroundColor:'#292929' ,
+              height:220,
+              backgroundColor:'#283046' ,
               color : '#FF0000' ,
               style: {
                 fontFamily: 'monospace',

@@ -41,6 +41,7 @@ const BlogList = () => {
   // ** States
   const [data, setData] = useState(null)
   const [picker, setPicker] = useState(new Date())
+  const [search, setSearch] = useState(null)
   const { } = useContext(ThemeColors),
     { skin } = useSkin(),
     labelColor = skin === 'dark' ? '#b4b7bd' : '#6e6b7b',
@@ -128,7 +129,7 @@ const BlogList = () => {
             ) : null}
           </div>
         </div>
-        <Sidebar />
+        <Sidebar search={setSearch}/>
       </div>
     </Fragment>
   )
