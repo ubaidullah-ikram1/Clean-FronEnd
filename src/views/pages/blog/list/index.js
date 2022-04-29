@@ -41,13 +41,7 @@ const BlogList = () => {
   // ** States
   const [data, setData] = useState(null)
   const [picker, setPicker] = useState(new Date())
-  const { } = useContext(ThemeColors),
-    { skin } = useSkin(),
-    labelColor = skin === 'dark' ? '#b4b7bd' : '#6e6b7b',
-    gridLineColor = 'rgba(200, 200, 200, 0.2)',
-    lineChartPrimary = '#666ee8',
-    lineChartDanger = '#ff4961',
-    warningColorShade = '#ffbd1f'
+  const { } = useContext(ThemeColors)
 
   useEffect(() => {
     axios.get('/blog/list/data').then(res => setData(res.data.slice(0, 1)))
@@ -59,7 +53,7 @@ const BlogList = () => {
       return (
         <Col key={item.title} md='12'>
           <Card>
-         < Basemap />
+            < Basemap />
             <CardBody>
 
 
@@ -103,7 +97,7 @@ const BlogList = () => {
                   />
                 </Col>
                 <Col md={8}>
-               < Chart />
+                  < Chart />
                 </Col>
 
               </Row>
