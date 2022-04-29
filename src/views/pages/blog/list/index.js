@@ -41,7 +41,9 @@ const BlogList = () => {
   // ** States
   const [data, setData] = useState(null)
   const [picker, setPicker] = useState(new Date())
-  const { } = useContext(ThemeColors)
+  const [search, setSearch] = useState(null)
+  const { } = useContext(ThemeColors),
+    { skin } = useSkin()
 
   useEffect(() => {
     axios.get('/blog/list/data').then(res => setData(res.data.slice(0, 1)))
@@ -122,7 +124,7 @@ const BlogList = () => {
             ) : null}
           </div>
         </div>
-        <Sidebar />
+        <Sidebar search={setSearch} />
       </div>
     </Fragment>
   )

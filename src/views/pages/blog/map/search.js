@@ -1,7 +1,7 @@
 import { useEffect, useState,useLayoutEffect } from 'react'
 import './search.css'
-import { farmidcommunicator } from '../../store/farmidcommunicator';
 import { Msidn } from '../../store/msidn';
+import { farmidcommunicator } from '../../store/farmidcommunicator';
 // import * as L from 'leaflet'
 // import { lngt } from '../../../stores/polygoncentroid';
 // import { lat } from '../../../stores/polygoncentroid';
@@ -59,7 +59,7 @@ r=>{
 {
       console.log('idvalue', d.data.features[0]['properties']['farm_crop_id'])
       d.data.features[0]['properties']['farm_crop_id'] ?   farmidcommunicator.dispatch({type:'search',id:d.data.features[0]['properties']['farm_crop_id']}) :  <></>
-       setFarmids(d.data.features[0]['properties']['farm_crop_id'])
+      //  setFarmids(d.data.features[0]['properties']['farm_crop_id'])
      
      }
     )
