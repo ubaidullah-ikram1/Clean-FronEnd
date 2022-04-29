@@ -10,11 +10,11 @@ import Select from 'react-select'
 import Flatpickr from 'react-flatpickr'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 import horizentalslider from '../map/'
-import Dateslider from '../map/dateslider'
 import { selectThemeColors } from '@utils'
 import { MessageSquare } from 'react-feather'
 // ** Custom Components
 import Sidebar from '../BlogSidebar'
+import Dateslider from '../map/dateslider'
 import Avatar from '@components/avatar'
 import Breadcrumbs from '@components/breadcrumbs'
 // ** Reactstrap Imports

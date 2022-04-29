@@ -48,7 +48,7 @@ const Chart = () => {
 
           if(growernamer){
            
-            datestore.dispatch({type:'date',date :date})
+            // datestore.dispatch({type:'date',date :date})
             axios.get('https://gistest.bkk.ag/NDVI_baseline/'+growernamer,{ headers: {
         'Access-Control-Allow-Origin' : '*',
         "Content-Type": "application/json",
