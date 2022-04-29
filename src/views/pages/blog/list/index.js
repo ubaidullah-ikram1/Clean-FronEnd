@@ -9,18 +9,14 @@ import Chart from '../map/chart'
 import Select from 'react-select'
 import Flatpickr from 'react-flatpickr'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
-
-
-// ** Utils
+import horizentalslider from '../map/'
+import Dateslider from '../map/dateslider'
 import { selectThemeColors } from '@utils'
-
 import { MessageSquare } from 'react-feather'
-
 // ** Custom Components
 import Sidebar from '../BlogSidebar'
 import Avatar from '@components/avatar'
 import Breadcrumbs from '@components/breadcrumbs'
-
 // ** Reactstrap Imports
 import {
   Row,
@@ -61,6 +57,7 @@ const BlogList = () => {
         <Col key={item.title} md='12'>
           <Card>
          < Basemap />
+         {/* <Dateslider /> */}
             <CardBody>
 
 
