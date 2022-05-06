@@ -49,7 +49,7 @@ const BlogList = () => {
   const renderRenderList = () => {
     return data.map(item => {
       return (
-        <Col key={item.title} md='12'>
+        <Col style={{ width: '100%' }} key={item.title} md='12' lg='12'>
           <Card>
          < Basemap />
          <Dateslider />

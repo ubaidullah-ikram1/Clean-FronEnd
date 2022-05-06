@@ -48,7 +48,7 @@ const EmailApp = () => {
 
   return (
     <Fragment>
-      <Sidebar
+      {/* <Sidebar
         store={store}
         dispatch={dispatch}
         getMails={getMails}
@@ -56,7 +56,7 @@ const EmailApp = () => {
         toggleCompose={toggleCompose}
         setSidebarOpen={setSidebarOpen}
         resetSelectedMail={resetSelectedMail}
-      />
+      /> */}
       <div className='content-right'>
         <div className='content-body'>
           <div

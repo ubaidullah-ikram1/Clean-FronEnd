@@ -55,7 +55,7 @@ const TODO = () => {
 
   return (
     <Fragment>
-      <Sidebar
+      {/* <Sidebar
         store={store}
         params={params}
         getTasks={getTasks}
@@ -63,14 +63,14 @@ const TODO = () => {
         mainSidebar={mainSidebar}
         urlFilter={paramsURL.filter}
         setMainSidebar={setMainSidebar}
-        handleTaskSidebar={handleTaskSidebar}
-      />
+        handleTaskSidebar={handleTaskSidebar} */}
+      {/* /> */}
       <div className='content-right'>
         <div className='content-wrapper'>
           <div className='content-body'>
             <div
               className={classnames('body-content-overlay', {
-                show: mainSidebar === true
+                show: mainSidebar === false
               })}
               onClick={handleMainSidebar}
             ></div>
