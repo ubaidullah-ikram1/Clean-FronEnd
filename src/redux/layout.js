@@ -69,7 +69,7 @@ export const layoutSlice = createSlice({
     },
     handleMenuCollapsed: (state, action) => {
       state.menuCollapsed = action.payload
-      window.localStorage.setItem('menuCollapsed', JSON.stringify(action.payload))
+      window.localStorage.setItem('menuCollapsed', true)
     },
     handleRouterTransition: (state, action) => {
       state.routerTransition = action.payload
