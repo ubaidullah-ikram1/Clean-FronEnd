@@ -28,11 +28,9 @@ import {
   CardImg,
   Badge, Label
 } from 'reactstrap'
-
 // ** Styles
 import '@styles/base/pages/page-blog.scss'
 import { useSkin } from '@hooks/useSkin'
-
 const BlogList = () => {
   // ** States
   const [data, setData] = useState(null)
@@ -45,24 +43,21 @@ const BlogList = () => {
     lineChartPrimary = '#666ee8',
     lineChartDanger = '#ff4961',
     warningColorShade = '#ffbd1f'
-
   useEffect(() => {
     axios.get('/blog/list/data').then(res => setData(res.data.slice(0, 1)))
   }, [])
-
-
   const renderRenderList = () => {
     return data.map(item => {
       return (
         <Col key={item.title} md='12'>
           <Card>
          < Basemap />
-         {/* <Dateslider /> */}
+         <Dateslider />
             <CardBody>
-
-
               <Row>
                 <Col md={4}>
+                
+
                   <Label className='form-label'>Index</Label>
                   <Select
                     theme={selectThemeColors}
