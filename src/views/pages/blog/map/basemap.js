@@ -11,19 +11,21 @@ export default () => {
   map ? mapcontainer.dispatch({ type: 'map', map }) : <></>
   console.log('map', map)
   return (
-    <MapContainer center={[33, 73]} zoom={13}
-      whenCreated={map => {
-        mapcontainer.dispatch({ type: 'map', map })
-        console.log('map', map)
-      }}
-      ref={setMap}
-    >
-      {/* <SearchBar/> */}
-      <Hblfarmwms />
-      <TileLayer
-        url='https://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}'
-      />
-    </MapContainer >
+    <div>
+      <MapContainer center={[33, 73]} zoom={13}
+        whenCreated={map => {
+          mapcontainer.dispatch({ type: 'map', map })
+          console.log('map', map)
+        }}
+        ref={setMap}
+      >
+        {/* <SearchBar/> */}
+        <Hblfarmwms />
+        <TileLayer
+          url='https://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}'
+        />
+      </MapContainer >
+    </div>
 
   )
 }

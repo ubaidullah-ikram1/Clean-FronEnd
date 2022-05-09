@@ -9,10 +9,7 @@ const ExtensionsRoutes = [
     path: '/extensions/toastr',
     component: lazy(() => import('../../views/extensions/toastify'))
   },
-  {
-    path: '/extensions/slider',
-    component: lazy(() => import('../../views/extensions/sliders'))
-  },
+
   {
     path: '/extensions/drag-and-drop',
     component: lazy(() => import('../../views/extensions/drag-and-drop'))
@@ -32,10 +29,6 @@ const ExtensionsRoutes = [
   {
     path: '/extensions/context-menu',
     component: lazy(() => import('../../views/extensions/context-menu'))
-  },
-  {
-    path: '/extensions/swiper',
-    component: lazy(() => import('../../views/extensions/swiper'))
   },
   {
     path: '/access-control',

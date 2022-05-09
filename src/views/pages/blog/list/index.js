@@ -49,6 +49,9 @@ const BlogList = () => {
   useEffect(() => {
     axios.get('/blog/list/data').then(res => setData(res.data.slice(0, 1)))
   }, [])
+  useEffect(() => {
+    
+  }, [])
   const renderRenderList = () => {
     console.log('select',select)
     return data.map(item => {
@@ -104,10 +107,11 @@ const BlogList = () => {
                < Chart />
                 </Col>
 
-              </Row>
-            </CardBody>
-          </Card>
-        </Col>
+                </Row>
+              </CardBody>
+            </Card>
+          </Col>
+        
       )
     })
   }

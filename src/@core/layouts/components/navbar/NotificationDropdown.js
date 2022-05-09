@@ -110,16 +110,16 @@ const NotificationDropdown = () => {
                         {...(item.img
                           ? { img: item.img, imgHeight: 32, imgWidth: 32 }
                           : item.avatarContent
-                          ? {
+                            ? {
                               content: item.avatarContent,
                               color: item.color
                             }
-                          : item.avatarIcon
-                          ? {
-                              icon: item.avatarIcon,
-                              color: item.color
-                            }
-                          : null)}
+                            : item.avatarIcon
+                              ? {
+                                icon: item.avatarIcon,
+                                color: item.color
+                              }
+                              : null)}
                       />
                     </div>
                     <div className='list-item-body flex-grow-1'>
@@ -150,22 +150,7 @@ const NotificationDropdown = () => {
           5
         </Badge>
       </DropdownToggle>
-      <DropdownMenu end tag='ul' className='dropdown-menu-media mt-0'>
-        <li className='dropdown-menu-header'>
-          <DropdownItem className='d-flex' tag='div' header>
-            <h4 className='notification-title mb-0 me-auto'>Notifications</h4>
-            <Badge tag='div' color='light-primary' pill>
-              6 New
-            </Badge>
-          </DropdownItem>
-        </li>
-        {renderNotificationItems()}
-        <li className='dropdown-menu-footer'>
-          <Button color='primary' block>
-            Read all notifications
-          </Button>
-        </li>
-      </DropdownMenu>
+
     </UncontrolledDropdown>
   )
 }

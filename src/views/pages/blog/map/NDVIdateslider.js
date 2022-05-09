@@ -58,20 +58,9 @@ export default () => {
 
       },[updatedata])
     
-      useEffect(() => {
-        datestore.subscribe(() => {
-            setDates(datestore.getState())
-          })
-        farmidcommunicator.subscribe(() => {
-          setFarmid(farmidcommunicator.getState())
-        })
-        let data = mapcontainer.getState();
-        setMap(data)
-        rastergenaration(farmid, updatedata)
-      },[])
       const fetchdata =e =>{
     
-        
+    
         let data = mapcontainer.getState();
         setMap(data)
          setUpdatedata(e.target.textContent)

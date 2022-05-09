@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 // ** Product detail components
 import ItemFeatures from './ItemFeatures'
 import ProductDetails from './ProductDetails'
-import RelatedProducts from './RelatedProducts'
+
 
 // ** Custom Components
 import BreadCrumbs from '@components/breadcrumbs'

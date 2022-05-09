@@ -13,16 +13,21 @@ import { Msidn } from '../store/msidn'
 import Avatar from '@components/avatar'
 
 // ** Reactstrap Imports
-import { InputGroup, Input, InputGroupText, Card, CardHeader, CardTitle, CardBody, CardText, Button } from 'reactstrap'
+import { InputGroup, Input, InputGroupText, Card, CardHeader, CardTitle, CardBody, CardText, UncontrolledCollapse } from 'reactstrap'
 
 const BlogSidebar = (prop) => {
   // ** States
   const [farmids, setFarmids] = useState()
   const [overviewData, setOverviewData] = useState([])
   const [farmerList, setfarmerList] = useState([])
+  const [searchedResult, setsearchedResult] = useState([]);
 
   const [map, setMap] = useState(mapcontainer.getState())
-
+  const getFarmersList = async () => {
+    let res = await axios.get("https://gistest.bkk.ag/HBL_overview/hbl");
+    setfarmerList(res.data)
+    setsearchedResult(res.data)
+  }
   useEffect(async () => {
     let res = await axios.get("https://gistest.bkk.ag/Partner_stats/hbl");
     setOverviewData(res.data[0])
@@ -30,18 +35,23 @@ const BlogSidebar = (prop) => {
 
   }, [])
 
-  const getFarmersList = async () => {
-    let res = await axios.get("https://gistest.bkk.ag/HBL_overview/hbl");
-    setfarmerList(res.data)
-  }
 
+  const searchHandler = (event) => {
+
+    let searcjQery = event;
+    var displayedfarmers = farmerList.filter((el) => {
+      let searchValue = el.msisdn;
+      return searchValue.toLowerCase().indexOf(searcjQery.toLowerCase()) !== -1;
+    });
+    setsearchedResult(displayedfarmers);
+  };
 
 
   const renderTransactions = (farmerList) => {
     return farmerList.map(item => {
       return (
         <Card className='card-transaction mt-1' >
-          <CardAction title={item?.farmer_name} actions='collapse'>
+          <CardAction title={item?.msisdn} actions='collapse'>
 
             <CardBody>
               <div className='meetup-header d-flex align-items-center'>
@@ -55,8 +65,8 @@ const BlogSidebar = (prop) => {
               <div className='d-flex mt-2'>
                 <Avatar color='light-primary' className='rounded me-1' icon={<Icon.Phone size={18} />} />
                 <div>
-                  <h6 className='mb-0'>MSISDN</h6>
-                  <small >{item.msisdn}</small>
+                  <h6 className='mb-0'>Name</h6>
+                  <small >{item.farmer_name}</small>
                 </div>
               </div>
               <div className='d-flex mt-1'>
@@ -128,22 +138,16 @@ const BlogSidebar = (prop) => {
                       <small >{overviewData.count_crops}</small>
                     </div>
                   </div>
-                  <div className='d-flex mt-2'>
-                    <Avatar color='light-primary' className='rounded me-1' icon={<Icon.MapPin size={18} />} />
-                    <div>
-                      <h6 className='mb-0'>Location Count</h6>
-                      <small >{overviewData.count_locations}</small>
-                    </div>
-                  </div>
+
 
                 </CardBody>
               </CardAction>
             </Card>
             <div className='blog-search'>
               <InputGroup className='input-group-merge'>
-                <Input placeholder='Search here' onKeyDown={(e) => {
+                <Input placeholder='Search here' onChange={(e) => searchHandler(e.target.value)} onKeyDown={(e) => {
 
-                  console.log('event', e.key)
+
                   if (e.key == 'Enter') {
                     console.log('enter', e.target.value)
                     var msidn = e.target.value
@@ -201,7 +205,8 @@ const BlogSidebar = (prop) => {
 
                 <InputGroupText>
                   <Icon.Search size={14} />
-                </InputGroupText>
+
+                </InputGroupText >
               </InputGroup>
             </div>
 
@@ -209,7 +214,7 @@ const BlogSidebar = (prop) => {
 
 
 
-            <div style={{ height: "250px", overflowY: "scroll" }} className="mt-1">{renderTransactions(farmerList)}</div>
+            <div style={{ height: "250px", overflowY: "scroll" }} className="side_bar mt-1">{renderTransactions(searchedResult)}</div>
 
           </div>
         </div>
