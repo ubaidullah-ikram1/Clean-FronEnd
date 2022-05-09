@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { MapContainer, WMSTileLayer, TileLayer, Marker, Popup } from 'react-leaflet'
 import SearchBar from './search'
 import Hblfarmwms from './hblfarmwms'
-
+import Soildata from './soildata'
 export default () => {
   const [map, setMap] = useState(null)
   map ? mapcontainer.dispatch({ type: 'map', map }) : <></>

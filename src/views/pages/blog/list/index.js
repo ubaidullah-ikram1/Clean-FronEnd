@@ -9,14 +9,11 @@ import Chart from '../map/chart'
 import Select from 'react-select'
 import Flatpickr from 'react-flatpickr'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
-import horizentalslider from '../map/'
 import { selectThemeColors } from '@utils'
-import { MessageSquare } from 'react-feather'
-// ** Custom Components
 import Sidebar from '../BlogSidebar'
-import Dateslider from '../map/dateslider'
-import Avatar from '@components/avatar'
-import Breadcrumbs from '@components/breadcrumbs'
+import NDVIdateslider from '../map/NDVIdateslider'
+import { indexselection } from '../../store/indexselection'
+import NDMIdateslider from '../map/NDMIdateslider'
 // ** Reactstrap Imports
 import {
   Row,
@@ -36,6 +33,7 @@ const BlogList = () => {
   const [data, setData] = useState(null)
   const [picker, setPicker] = useState(new Date())
   const [search, setSearch] = useState(null)
+  const [select,setSelect] = useState(null)
   const { } = useContext(ThemeColors),
     { skin } = useSkin(),
     labelColor = skin === 'dark' ? '#b4b7bd' : '#6e6b7b',
@@ -43,16 +41,27 @@ const BlogList = () => {
     lineChartPrimary = '#666ee8',
     lineChartDanger = '#ff4961',
     warningColorShade = '#ffbd1f'
+
+    const options = [
+      { value: 'NDVI', label: 'NDVI' },
+      { value: 'NDMI', label: 'NDMI' },
+    ]
   useEffect(() => {
     axios.get('/blog/list/data').then(res => setData(res.data.slice(0, 1)))
   }, [])
   const renderRenderList = () => {
+    console.log('select',select)
     return data.map(item => {
       return (
         <Col style={{ width: '100%' }} key={item.title} md='12' lg='12'>
           <Card>
          < Basemap />
-         <Dateslider />
+         {
+           select == 'NDVI' ?  <NDVIdateslider /> : <></>
+         }
+         {select == 'NDMI' ?  <NDMIdateslider /> : <></>}  
+
+         
             <CardBody>
               <Row>
                 <Col md={4}>
@@ -63,9 +72,14 @@ const BlogList = () => {
                     theme={selectThemeColors}
                     className='react-select'
                     classNamePrefix='select'
-
+                    options={options}
                     isClearable={false}
-                  />
+                    onChange={(e)=>{
+                      setSelect(e.label)
+                     select? indexselection.dispatch({type:'index',index:select }) :  <></>
+                    }}
+                  >
+                  </Select>
                   <Label className='form-label mt-1' for='date-time-picker'>
                     Start Date
                   </Label>
@@ -85,15 +99,6 @@ const BlogList = () => {
                     id='date-time-picker'
                     className='form-control'
                     onChange={date => setPicker(date)} />
-
-                  <Label className='form-label mt-1'>Weather Data</Label>
-                  <Select
-                    theme={selectThemeColors}
-                    className='react-select'
-                    classNamePrefix='select'
-
-                    isClearable={false}
-                  />
                 </Col>
                 <Col md={8}>
                < Chart />

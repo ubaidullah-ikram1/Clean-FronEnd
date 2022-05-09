@@ -16,7 +16,36 @@ export default () => {
     const [dates, setDates] = useState(datestore.getState())
     const [updatedata,setUpdatedata]=useState(null)
     const [map, setMap] = useState(null)
-
+    const rastergenaration= (farm, update)=>{
+        console.log('farm',farm)
+      var url_to_geotiff_file = "https://gistest.bkk.ag/NDMI_image/"+farm+"/"+update;
+      fetch(url_to_geotiff_file)
+        .then(response => response.arrayBuffer())
+        .then(arrayBuffer => {  
+          parseGeoraster(arrayBuffer).then(georaster => {
+            const min = -1;
+            const max = 1;
+            const range = 2;
+            var scale = chroma.scale(['#b1988d', '#cab6ba', '#a99ed6', '#5363d4', '#1030e0']);
+           var layer = new GeoRasterLayer({
+                georaster: georaster, 
+                opacity: 1,
+                pixelValuesToColorFn: function(pixelValues) {
+                  var pixelValue = pixelValues[0];
+                  if (isNaN(pixelValue)) return null;
+                  var scaledPixelValue = (pixelValue - min) / range;
+                  var color = scale(scaledPixelValue).hex();
+                  console.log('color',color)
+                  return color;
+                },
+                resolution: 256
+            });
+          
+            map.addLayer(layer)
+           
+        });
+      })
+    }
     useEffect(() => {
         datestore.subscribe(() => {
             setDates(datestore.getState())
@@ -26,40 +55,26 @@ export default () => {
         })
         let data = mapcontainer.getState();
         setMap(data)
+        rastergenaration(farmid, updatedata)
+
       },[updatedata])
-      const rastergenaration= (farm, update)=>{
-        var url_to_geotiff_file = "https://gistest.bkk.ag/NDVI_image/"+farm+"/"+update;
-        fetch(url_to_geotiff_file)
-          .then(response => response.arrayBuffer())
-          .then(arrayBuffer => {  
-            parseGeoraster(arrayBuffer).then(georaster => {
-              const min = 0;
-              const max = 1;
-              const range = 1;
-              var scale = chroma.scale("RdYlGn");
-             var layer = new GeoRasterLayer({
-                  georaster: georaster, 
-                  opacity: 1,
-                  pixelValuesToColorFn: function(pixelValues) {
-                    var pixelValue = pixelValues[0];
-                    if (isNaN(pixelValue)) return null;
-                    var scaledPixelValue = (pixelValue - min) / range;
-                    var color = scale(scaledPixelValue).hex();
-                    console.log('color',color)
-                    return color;
-                  },
-                  resolution: 256
-              });
-            
-              map.addLayer(layer)
-             
-          });
+    
+      useEffect(() => {
+        datestore.subscribe(() => {
+            setDates(datestore.getState())
+          })
+        farmidcommunicator.subscribe(() => {
+          setFarmid(farmidcommunicator.getState())
         })
-      }
+        let data = mapcontainer.getState();
+        setMap(data)
+        rastergenaration(farmid, updatedata)
+      },[])
       const fetchdata =e =>{
     
         
-      
+        let data = mapcontainer.getState();
+        setMap(data)
          setUpdatedata(e.target.textContent)
          
          rastergenaration(farmid, e.target.textContent)

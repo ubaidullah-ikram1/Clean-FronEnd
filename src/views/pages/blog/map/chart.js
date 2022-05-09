@@ -33,6 +33,8 @@ const Chart = () => {
     var maxndvi = []
     var date = []
     var avgbaselinendvi = []
+    var avgndmi = []
+
     axios.get('https://gistest.bkk.ag/NDVI_polygon/' + growernamer).then((response) => {
 
       response.data ?
@@ -57,106 +59,121 @@ const Chart = () => {
             avgbaselinendvi.push(parseFloat(val.baseline_max_ndvi))
          
           })
-          Highcharts.chart('container', {
-            chart: {
-            
-              height:300,
-              backgroundColor:'rgba(248, 248, 248, 0.95)' ,
-              color : '#FF0000' ,
-              style: {
-                fontFamily: 'monospace',
-                color: "#FFFFFF"
-            }             
-            },
-            title: {
-              text: 'NDVI',
-              style: {
-                fontFamily: 'monospace',
-                color: "#FFFFFF"
-            }   
-            },
-            subtitle: {
-            
-              style: {
-                fontFamily: 'monospace',
-                color: "#FFFFFF"
-            }   
-            },     
-            yAxis: {
-              title: {
-                text: 'NDVI'
-              }
-            },
-            style: {
-              fontFamily: 'monospace',
-              color: "#696969"
-          }   ,
-            xAxis: {
-              tickInterval: 2,
-              categories: date,
-              labels: {
-                  enabled: true,
-              },
-              style: {
-                fontFamily: 'monospace',
-                color: "#696969"
-            }        
-          },
 
-            legend: {
-              itemStyle: { 
-                 color: '#696969',
-                 
-              },
-              layout: 'vertical',
-              // floating: true,
-              align: 'right',
-              verticalAlign: 'top',
+          axios.get('https://gistest.bkk.ag/NDMI_date/'+ growernamer).then(
+            (response) =>{
+              response.data.map(function (val, index) {
+                avgndmi.push(parseFloat(val.ndmi_avg))
              
-              symbolPadding: 20,
-              symbolWidth: 50
-            },
-            series: [{
-              name: 'Avg NDVI',
-              data: avgndvi,
-              style: {
-                fontFamily: 'monospace',
-              
-                fill : '#696969'
-            }   
-            },
-            {
-              name: 'Baseline Avg NDVI',
-              data:avgbaselinendvi,
-             color:'#FFFF00',
-             legendColor: 'red',   
-            },
-            // {
-            //   name: 'Baseline NDVI',
-            //   data: avgbaselinendvi,
-            //   style: {
-            //     fontFamily: 'monospace',
-              
-            //     fill : '#FFFFFF'
-            // }   
-            // }
-          ],
-      
-            responsive: {
-              rules: [{
-                condition: {
-                  maxWidth: 500
+              })
+              Highcharts.chart('container', {
+                chart: {
+                
+                  height:300,
+                  backgroundColor:'rgba(248, 248, 248, 0.95)' ,
+                  color : '#FF0000' ,
+                  style: {
+                    fontFamily: 'monospace',
+                    color: "#FFFFFF"
+                }             
                 },
-                chartOptions: {
-                  legend: {
-                    layout: 'horizontal',
-                    align: 'center',
-                    verticalAlign: 'bottom'
+                title: {
+                  text: 'NDVI',
+                  style: {
+                    fontFamily: 'monospace',
+                    color: "#FFFFFF"
+                }   
+                },
+                subtitle: {
+                
+                  style: {
+                    fontFamily: 'monospace',
+                    color: "#FFFFFF"
+                }   
+                },     
+                yAxis: {
+                  title: {
+                    text: 'NDVI'
                   }
+                },
+                style: {
+                  fontFamily: 'monospace',
+                  color: "#696969"
+              }   ,
+                xAxis: {
+                  tickInterval: 2,
+                  categories: date,
+                  labels: {
+                      enabled: true,
+                  },
+                  style: {
+                    fontFamily: 'monospace',
+                    color: "#696969"
+                }        
+              },
+    
+                legend: {
+                  itemStyle: { 
+                     color: '#696969',
+                     
+                  },
+                  layout: 'vertical',
+                  // floating: true,
+                  align: 'right',
+                  verticalAlign: 'top',
+                 
+                  symbolPadding: 20,
+                  symbolWidth: 50
+                },
+                series: [
+                  {
+                    name: 'Avg NDMI',
+                    data:avgndvi,
+                   color:'red',
+                   legendColor: 'red',   
+                  }  ,
+                {
+                  name: 'Baseline Avg NDVI',
+                  data:avgbaselinendvi,
+                 color:'#FFFF00',
+                 legendColor: 'red',   
+                },
+                {
+                  name: 'Avg NDMI',
+                  data:avgndmi,
+                 color:'blue',
+                 legendColor: 'red',   
+                },
+                // {avgndmi avgndvi
+                //   name: 'Baseline NDVI',
+                //   data: avgbaselinendvi,
+                //   style: {
+                //     fontFamily: 'monospace',
+                  
+                //     fill : '#FFFFFF'
+                // }   
+                // }
+              ],
+          
+                responsive: {
+                  rules: [{
+                    condition: {
+                      maxWidth: 500
+                    },
+                    chartOptions: {
+                      legend: {
+                        layout: 'horizontal',
+                        align: 'center',
+                        verticalAlign: 'bottom'
+                      }
+                    }
+                  }]
                 }
-              }]
+              })
+
             }
-          })
+          )
+         
         })
       }
     });
