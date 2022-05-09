@@ -53,59 +53,64 @@ const BlogList = () => {
   const renderRenderList = () => {
     return data.map(item => {
       return (
-        <Col style={{ width: '100%' }} key={item.title} md='12' lg='12'>
-          <Card>
-            < Basemap />
-            <CardBody>
+        <div>
+
+          < Basemap />
+          <Col style={{ width: '100%' }} key={item.title} md='12' lg='12'>
+
+            <Card>
+
+              <CardBody>
 
 
-              <Row>
-                <Col md={4}>
-                  <Label className='form-label'>Index</Label>
-                  <Select
-                    theme={selectThemeColors}
-                    className='react-select'
-                    classNamePrefix='select'
+                <Row>
+                  <Col md={4}>
+                    <Label className='form-label'>Index</Label>
+                    <Select
+                      theme={selectThemeColors}
+                      className='react-select'
+                      classNamePrefix='select'
 
-                    isClearable={false}
-                  />
-                  <Label className='form-label mt-1' for='date-time-picker'>
-                    Start Date
-                  </Label>
-                  <Flatpickr
-                    value={picker}
-                    data-enable-time
-                    id='date-time-picker'
-                    className='form-control'
-                    onChange={date => setPicker(date)} />
+                      isClearable={false}
+                    />
+                    <Label className='form-label mt-1' for='date-time-picker'>
+                      Start Date
+                    </Label>
+                    <Flatpickr
+                      value={picker}
+                      data-enable-time
+                      id='date-time-picker'
+                      className='form-control'
+                      onChange={date => setPicker(date)} />
 
-                  <Label className='form-label mt-1' for='date-time-picker'>
-                    End Date
-                  </Label>
-                  <Flatpickr
-                    value={picker}
-                    data-enable-time
-                    id='date-time-picker'
-                    className='form-control'
-                    onChange={date => setPicker(date)} />
+                    <Label className='form-label mt-1' for='date-time-picker'>
+                      End Date
+                    </Label>
+                    <Flatpickr
+                      value={picker}
+                      data-enable-time
+                      id='date-time-picker'
+                      className='form-control'
+                      onChange={date => setPicker(date)} />
 
-                  <Label className='form-label mt-1'>Weather Data</Label>
-                  <Select
-                    theme={selectThemeColors}
-                    className='react-select'
-                    classNamePrefix='select'
+                    <Label className='form-label mt-1'>Weather Data</Label>
+                    <Select
+                      theme={selectThemeColors}
+                      className='react-select'
+                      classNamePrefix='select'
 
-                    isClearable={false}
-                  />
-                </Col>
-                <Col md={8}>
-                  < Chart />
-                </Col>
+                      isClearable={false}
+                    />
+                  </Col>
+                  <Col md={8}>
+                    < Chart />
+                  </Col>
 
-              </Row>
-            </CardBody>
-          </Card>
-        </Col>
+                </Row>
+              </CardBody>
+            </Card>
+          </Col>
+        </div>
       )
     })
   }
