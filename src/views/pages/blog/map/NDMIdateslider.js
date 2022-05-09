@@ -40,7 +40,7 @@ export default () => {
                 },
                 resolution: 256
             });
-          
+          console.log('mapuse',layer)
             map.addLayer(layer)
            
         });
@@ -55,21 +55,11 @@ export default () => {
         })
         let data = mapcontainer.getState();
         setMap(data)
-        rastergenaration(farmid, updatedata)
+        // rastergenaration(farmid, updatedata)
 
       },[updatedata])
     
-      useEffect(() => {
-        datestore.subscribe(() => {
-            setDates(datestore.getState())
-          })
-        farmidcommunicator.subscribe(() => {
-          setFarmid(farmidcommunicator.getState())
-        })
-        let data = mapcontainer.getState();
-        setMap(data)
-        rastergenaration(farmid, updatedata)
-      },[])
+  
       const fetchdata =e =>{
     
         

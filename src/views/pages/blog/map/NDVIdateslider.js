@@ -15,7 +15,7 @@ export default () => {
     const[farmid,setFarmid]=useState(farmidcommunicator.getState())
     const [dates, setDates] = useState(datestore.getState())
     const [updatedata,setUpdatedata]=useState(null)
-    const [map, setMap] = useState(null)
+    const [map, setMap] = useState(mapcontainer.getState())
     const rastergenaration= (farm, update)=>{
       var url_to_geotiff_file = "https://gistest.bkk.ag/NDVI_image/"+farm+"/"+update;
       fetch(url_to_geotiff_file)
@@ -54,21 +54,18 @@ export default () => {
         })
         let data = mapcontainer.getState();
         setMap(data)
-        rastergenaration(farmid, updatedata)
+        console.log('mapuse',map)
+        // rastergenaration(farmid, updatedata)
 
       },[updatedata])
-    
       const fetchdata =e =>{
-    
-    
         let data = mapcontainer.getState();
         setMap(data)
-         setUpdatedata(e.target.textContent)
-         
+         setUpdatedata(e.target.textContent) 
+         console.log('mapuseclick',map)
+
          rastergenaration(farmid, e.target.textContent)
-    
              }  
-    
     return (
         <div className="swiper  " >
         <Swiper
