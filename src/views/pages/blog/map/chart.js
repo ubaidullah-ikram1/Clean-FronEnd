@@ -2,9 +2,9 @@ import React, { useLayoutEffect, useState, useEffect } from 'react'
 import Highcharts from 'highcharts'
 import axios from "axios"
 import { farmidcommunicator } from '../../store/farmidcommunicator';
-// import { datestore } from '../../../stores/datesstore';
+import { datestore } from '../../store/datesstore';
 // import { fetchfarmid } from '../../../stores/visibilty';
-// import { clouddate } from '../../../stores/datesstore';
+
 const Chart = () => {
   const [reset, setReset] = useState('c')
   // const [dates, setDates] = useState([])
@@ -46,7 +46,7 @@ const Chart = () => {
 
       if (growernamer) {
 
-        // datestore.dispatch({type:'date',date :date})
+        datestore.dispatch({type:'date',date :date})
         axios.get('https://gistest.bkk.ag/NDVI_baseline/' + growernamer, {
           headers: {
             'Access-Control-Allow-Origin': '*',
@@ -55,32 +55,33 @@ const Chart = () => {
         }).then((response) => {
           response.data.map(function (val, index) {
             avgbaselinendvi.push(parseFloat(val.baseline_max_ndvi))
+         
           })
           Highcharts.chart('container', {
             chart: {
             
-              height:220,
-              backgroundColor:'#283046' ,
+              height:300,
+              backgroundColor:'rgba(248, 248, 248, 0.95)' ,
               color : '#FF0000' ,
               style: {
                 fontFamily: 'monospace',
                 color: "#FFFFFF"
-              }
+            }             
             },
             title: {
               text: 'NDVI',
               style: {
                 fontFamily: 'monospace',
                 color: "#FFFFFF"
-              }
+            }   
             },
             subtitle: {
-
+            
               style: {
                 fontFamily: 'monospace',
                 color: "#FFFFFF"
-              }
-            },
+            }   
+            },     
             yAxis: {
               title: {
                 text: 'NDVI'
@@ -88,30 +89,30 @@ const Chart = () => {
             },
             style: {
               fontFamily: 'monospace',
-              color: "#FFFFFF"
-            },
+              color: "#696969"
+          }   ,
             xAxis: {
               tickInterval: 2,
               categories: date,
               labels: {
-                enabled: true,
+                  enabled: true,
               },
               style: {
                 fontFamily: 'monospace',
-                color: "#FFFFFF"
-              }
-            },
+                color: "#696969"
+            }        
+          },
 
             legend: {
-              itemStyle: {
-                color: '#FFFFFF',
-
+              itemStyle: { 
+                 color: '#696969',
+                 
               },
               layout: 'vertical',
               // floating: true,
               align: 'right',
               verticalAlign: 'top',
-
+             
               symbolPadding: 20,
               symbolWidth: 50
             },
@@ -120,27 +121,27 @@ const Chart = () => {
               data: avgndvi,
               style: {
                 fontFamily: 'monospace',
-
-                fill: '#FFFFFF'
-              }
+              
+                fill : '#696969'
+            }   
             },
             {
               name: 'Baseline Avg NDVI',
-              data: avgbaselinendvi,
-              color: '#FFFF00',
-              legendColor: 'red',
+              data:avgbaselinendvi,
+             color:'#FFFF00',
+             legendColor: 'red',   
             },
-              // {
-              //   name: 'Baseline NDVI',
-              //   data: avgbaselinendvi,
-              //   style: {
-              //     fontFamily: 'monospace',
-
-              //     fill : '#FFFFFF'
-              // }   
-              // }
-            ],
-
+            // {
+            //   name: 'Baseline NDVI',
+            //   data: avgbaselinendvi,
+            //   style: {
+            //     fontFamily: 'monospace',
+              
+            //     fill : '#FFFFFF'
+            // }   
+            // }
+          ],
+      
             responsive: {
               rules: [{
                 condition: {

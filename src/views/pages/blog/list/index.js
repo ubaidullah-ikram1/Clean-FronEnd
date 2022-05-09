@@ -9,18 +9,14 @@ import Chart from '../map/chart'
 import Select from 'react-select'
 import Flatpickr from 'react-flatpickr'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
-
-
-// ** Utils
+import horizentalslider from '../map/'
 import { selectThemeColors } from '@utils'
-
 import { MessageSquare } from 'react-feather'
-
 // ** Custom Components
 import Sidebar from '../BlogSidebar'
+import Dateslider from '../map/dateslider'
 import Avatar from '@components/avatar'
 import Breadcrumbs from '@components/breadcrumbs'
-
 // ** Reactstrap Imports
 import {
   Row,
@@ -32,44 +28,41 @@ import {
   CardImg,
   Badge, Label
 } from 'reactstrap'
-
 // ** Styles
 import '@styles/base/pages/page-blog.scss'
 import { useSkin } from '@hooks/useSkin'
-
 const BlogList = () => {
   // ** States
   const [data, setData] = useState(null)
   const [picker, setPicker] = useState(new Date())
   const [search, setSearch] = useState(null)
   const { } = useContext(ThemeColors),
-    { skin } = useSkin()
-
+    { skin } = useSkin(),
+    labelColor = skin === 'dark' ? '#b4b7bd' : '#6e6b7b',
+    gridLineColor = 'rgba(200, 200, 200, 0.2)',
+    lineChartPrimary = '#666ee8',
+    lineChartDanger = '#ff4961',
+    warningColorShade = '#ffbd1f'
   useEffect(() => {
     axios.get('/blog/list/data').then(res => setData(res.data.slice(0, 1)))
   }, [])
-
-
   const renderRenderList = () => {
     return data.map(item => {
       return (
-        <div>
+        <Col style={{ width: '100%' }} key={item.title} md='12' lg='12'>
+          <Card>
+         < Basemap />
+         <Dateslider />
+            <CardBody>
+              <Row>
+                <Col md={4}>
+                
 
-          < Basemap />
-          <Col style={{ width: '100%' }} key={item.title} md='12' lg='12'>
-
-            <Card>
-
-              <CardBody>
-
-
-                <Row>
-                  <Col md={4}>
-                    <Label className='form-label'>Index</Label>
-                    <Select
-                      theme={selectThemeColors}
-                      className='react-select'
-                      classNamePrefix='select'
+                  <Label className='form-label'>Index</Label>
+                  <Select
+                    theme={selectThemeColors}
+                    className='react-select'
+                    classNamePrefix='select'
 
                       isClearable={false}
                     />
@@ -99,18 +92,18 @@ const BlogList = () => {
                       className='react-select'
                       classNamePrefix='select'
 
-                      isClearable={false}
-                    />
-                  </Col>
-                  <Col md={8}>
-                    < Chart />
-                  </Col>
+                    isClearable={false}
+                  />
+                </Col>
+                <Col md={8}>
+               < Chart />
+                </Col>
 
                 </Row>
               </CardBody>
             </Card>
           </Col>
-        </div>
+        
       )
     })
   }
@@ -129,7 +122,7 @@ const BlogList = () => {
             ) : null}
           </div>
         </div>
-        <Sidebar search={setSearch} />
+        <Sidebar search={setSearch}/>
       </div>
     </Fragment>
   )
