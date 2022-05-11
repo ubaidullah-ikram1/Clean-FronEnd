@@ -4,17 +4,14 @@ import axios from "axios"
 import { farmidcommunicator } from '../../store/farmidcommunicator';
 import { datestore } from '../../store/datesstore';
 // import { fetchfarmid } from '../../../stores/visibilty';
-
 const Chart = () => {
   const [reset, setReset] = useState('c')
   // const [dates, setDates] = useState([])
   // const [cloudesdate, setCloudesdate] = useState(clouddate.getState())
-
   const [growernamer, setGrowernamer] = useState(farmidcommunicator.getState())
   useLayoutEffect(() => {
     farmidcommunicator.subscribe(() => {
       setGrowernamer(farmidcommunicator.getState())
-
     })
     //   clouddate.subscribe(()=>{ 
     //     setCloudesdate(clouddate.getState() )
@@ -70,16 +67,13 @@ const Chart = () => {
              
               })
 
-            //   axios.get('https://prod.bkk.ag/weather-api/weather/historic/33.65855/73.05353/3-26-2022/4-27-2022').then(
-            // (response) =>{
-            //   console.log(response['data'].forEach(r=> console.log (r)))
-
-
-                  
-            //     }
-                
-            //   )
-           
+              axios.get('https://prod.bkk.ag/weather-api/weather/historic/30.21337183/73.19943331/2022-04-02/2022-05-05').then(
+            (response) =>{
+             
+              Object.values(response.data).map((e)=>{
+                console.log(e)
+                temp.push(e.minTemp)
+              })
               Highcharts.chart('container', {
                 chart: {
                 
@@ -158,6 +152,12 @@ const Chart = () => {
                  color:'blue',
                  legendColor: 'red',   
                 },
+                {
+                  name: 'temp',
+                  data:temp,
+                 color:'blue',
+                 legendColor: 'red',   
+                },
                 // {
                 //   name: 'Avg NDMI',
                 //   data:temp,
@@ -190,6 +190,11 @@ const Chart = () => {
                   }]
                 }
               })
+                }
+                
+              )
+           
+             
             }
           )
          
