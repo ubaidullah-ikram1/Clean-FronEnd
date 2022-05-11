@@ -42,7 +42,6 @@ export const isNavLinkActive = (link, currentURL, routerProps) => {
  */
 export const hasActiveChild = (item, currentUrl) => {
   const { children } = item
-
   if (!children) {
     return false
   }

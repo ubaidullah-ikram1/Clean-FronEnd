@@ -9,7 +9,6 @@ const Chart = () => {
   const [reset, setReset] = useState('c')
   // const [dates, setDates] = useState([])
   // const [cloudesdate, setCloudesdate] = useState(clouddate.getState())
-
   const [growernamer, setGrowernamer] = useState(farmidcommunicator.getState())
   useLayoutEffect(() => {
     farmidcommunicator.subscribe(() => {

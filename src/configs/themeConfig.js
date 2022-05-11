@@ -4,14 +4,14 @@
 const themeConfig = {
   app: {
     appName: 'HBL',
-    appLogoImage: require('@src/assets/images/logo/logo.svg').default
+    appLogoImage: require('@src/assets/images/logo/logo.png').default
   },
   layout: {
     isRTL: false,
     skin: 'light', // light, dark, bordered, semi-dark
     routerTransition: 'fadeIn', // fadeIn, fadeInLeft, zoomIn, none or check this for more transition https://animate.style/
     type: 'horizontal', // vertical, horizontal
-    contentWidth: 'boxed', // full, boxed
+    contentWidth: 'full', // full, boxed
     menu: {
       isHidden: true,
       isCollapsed: true

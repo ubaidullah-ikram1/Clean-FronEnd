@@ -37,7 +37,6 @@ const BlogSidebar = (prop) => {
 
 
   const searchHandler = (event) => {
-
     let searcjQery = event;
     var displayedfarmers = farmerList.filter((el) => {
       let searchValue = el.msisdn;
@@ -63,7 +62,7 @@ const BlogSidebar = (prop) => {
                 </div>
               </div>
               <div className='d-flex mt-2'>
-                <Avatar color='light-primary' className='rounded me-1' icon={<Icon.Phone size={18} />} />
+                <Avatar color='light-primary' className='rounded me-1' icon={<Icon.User size={18} />} />
                 <div>
                   <h6 className='mb-0'>Name</h6>
                   <small >{item.farmer_name}</small>
@@ -83,9 +82,6 @@ const BlogSidebar = (prop) => {
                   <small>{overviewData.total_area}</small>
                 </div>
               </div>
-
-
-
             </CardBody>
           </CardAction>
         </Card>
@@ -104,7 +100,6 @@ const BlogSidebar = (prop) => {
       <div className='sidebar'>
         <div className='blog-sidebar right-sidebar my-1 my-lg-0'>
           <div className='right-sidebar-content'>
-
             <Card className='card-transaction' >
               <CardAction title='HBL Overview' actions='collapse'>
 

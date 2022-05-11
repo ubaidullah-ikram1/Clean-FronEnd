@@ -33,7 +33,7 @@ const BlogList = () => {
   const [data, setData] = useState(null)
   const [picker, setPicker] = useState(new Date())
   const [search, setSearch] = useState(null)
-  const [select,setSelect] = useState(null)
+  const [select, setSelect] = useState(null)
   const { } = useContext(ThemeColors),
     { skin } = useSkin(),
     labelColor = skin === 'dark' ? '#b4b7bd' : '#6e6b7b',
@@ -42,33 +42,33 @@ const BlogList = () => {
     lineChartDanger = '#ff4961',
     warningColorShade = '#ffbd1f'
 
-    const options = [
-      { value: 'NDVI', label: 'NDVI' },
-      { value: 'NDMI', label: 'NDMI' },
-    ]
+  const options = [
+    { value: 'NDVI', label: 'NDVI' },
+    { value: 'NDMI', label: 'NDMI' },
+  ]
   useEffect(() => {
     axios.get('/blog/list/data').then(res => setData(res.data.slice(0, 1)))
   }, [])
   useEffect(() => {
-    
+
   }, [])
   const renderRenderList = () => {
-    console.log('select',select)
+    console.log('select', select)
     return data.map(item => {
       return (
         <Col style={{ width: '100%' }} key={item.title} md='12' lg='12'>
           <Card>
-         < Basemap />
-         {
-           select == 'NDVI' ?  <NDVIdateslider /> : <></>
-         }
-         {select == 'NDMI' ?  <NDMIdateslider /> : <></>}  
+            < Basemap />
+            {
+              select == 'NDVI' ? <NDVIdateslider /> : <></>
+            }
+            {select == 'NDMI' ? <NDMIdateslider /> : <></>}
 
-         
+
             <CardBody>
               <Row>
                 <Col md={4}>
-                
+
 
                   <Label className='form-label'>Index</Label>
                   <Select
@@ -77,9 +77,9 @@ const BlogList = () => {
                     classNamePrefix='select'
                     options={options}
                     isClearable={false}
-                    onChange={(e)=>{
+                    onChange={(e) => {
                       setSelect(e.label)
-                     select? indexselection.dispatch({type:'index',index:select }) :  <></>
+                      select ? indexselection.dispatch({ type: 'index', index: select }) : <></>
                     }}
                   >
                   </Select>
@@ -104,14 +104,14 @@ const BlogList = () => {
                     onChange={date => setPicker(date)} />
                 </Col>
                 <Col md={8}>
-               < Chart />
+                  < Chart />
                 </Col>
 
-                </Row>
-              </CardBody>
-            </Card>
-          </Col>
-        
+              </Row>
+            </CardBody>
+          </Card>
+        </Col>
+
       )
     })
   }
@@ -130,7 +130,7 @@ const BlogList = () => {
             ) : null}
           </div>
         </div>
-        <Sidebar search={setSearch}/>
+        <Sidebar search={setSearch} />
       </div>
     </Fragment>
   )
