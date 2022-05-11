@@ -1,6 +1,5 @@
 // ** Icons Import
-import { FileText, Circle, Square, UserCheck } from 'react-feather'
-
+import { FileText } from 'react-feather'
 export default [
   {
     id: 'pages',
@@ -9,6 +8,5 @@ export default [
     permissions: ['admin', 'editor'],
     navLink: '/pages/blog/list'
   }
-
 ]
 

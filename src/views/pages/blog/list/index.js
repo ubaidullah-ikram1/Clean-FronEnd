@@ -65,7 +65,7 @@ const BlogList = () => {
 
             <CardBody>
               <Row>
-                <Col md={4}>
+                <Col md={2}>
 
 
                   <Label className='form-label'>Index</Label>
@@ -101,7 +101,7 @@ const BlogList = () => {
                     className='form-control'
                     onChange={date => setPicker(date)} />
                 </Col>
-                <Col md={8}>
+                <Col md={10}>
                   < Chart />
                 </Col>
 
