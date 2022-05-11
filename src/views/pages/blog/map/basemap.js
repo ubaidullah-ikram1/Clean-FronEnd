@@ -6,6 +6,8 @@ import { MapContainer, WMSTileLayer, TileLayer, Marker, Popup } from 'react-leaf
 import SearchBar from './search'
 import Hblfarmwms from './hblfarmwms'
 import Soildata from './soildata'
+import NDVIdateslider from './NDVIdateslider'
+
 export default () => {
   const [map, setMap] = useState(null)
   map ? mapcontainer.dispatch({ type: 'map', map }) : <></>
@@ -19,7 +21,7 @@ export default () => {
         }}
         ref={setMap}
       >
-        {/* <SearchBar/> */}
+        <Soildata/>
         <Hblfarmwms />
         <TileLayer
           url='https://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}'

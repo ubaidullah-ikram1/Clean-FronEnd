@@ -34,7 +34,7 @@ const Chart = () => {
     var date = []
     var avgbaselinendvi = []
     var avgndmi = []
-
+    var temp=[]
     axios.get('https://gistest.bkk.ag/NDVI_polygon/' + growernamer).then((response) => {
 
       response.data ?
@@ -43,9 +43,12 @@ const Chart = () => {
             avgndvi.push(parseFloat(val.ndvi_avg))
             date.push(val.date)
             //   setDates(date)
+           
+
           }
         }) : <></>
-
+        console.log('startdate',date[0])
+        console.log('enddate',date.slice(-1))
       if (growernamer) {
 
         datestore.dispatch({type:'date',date :date})
@@ -66,6 +69,17 @@ const Chart = () => {
                 avgndmi.push(parseFloat(val.ndmi_avg))
              
               })
+
+            //   axios.get('https://prod.bkk.ag/weather-api/weather/historic/33.65855/73.05353/3-26-2022/4-27-2022').then(
+            // (response) =>{
+            //   console.log(response['data'].forEach(r=> console.log (r)))
+
+
+                  
+            //     }
+                
+            //   )
+           
               Highcharts.chart('container', {
                 chart: {
                 
@@ -127,7 +141,7 @@ const Chart = () => {
                 },
                 series: [
                   {
-                    name: 'Avg NDMI',
+                    name: 'Avg NDVI',
                     data:avgndvi,
                    color:'red',
                    legendColor: 'red',   
@@ -144,6 +158,12 @@ const Chart = () => {
                  color:'blue',
                  legendColor: 'red',   
                 },
+                // {
+                //   name: 'Avg NDMI',
+                //   data:temp,
+                //  color:'blue',
+                //  legendColor: 'red',   
+                // }
                 // {avgndmi avgndvi
                 //   name: 'Baseline NDVI',
                 //   data: avgbaselinendvi,
@@ -170,7 +190,6 @@ const Chart = () => {
                   }]
                 }
               })
-
             }
           )
          

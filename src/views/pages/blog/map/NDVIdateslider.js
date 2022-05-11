@@ -39,9 +39,8 @@ export default () => {
                 },
                 resolution: 256
             });
-          
+          console.log('layer',layer)
             map.addLayer(layer)
-           
         });
       })
     }
@@ -54,10 +53,11 @@ export default () => {
         })
         let data = mapcontainer.getState();
         setMap(data)
+        rastergenaration(farmid, updatedata)
         console.log('mapuse',map)
-        // rastergenaration(farmid, updatedata)
 
       },[updatedata])
+    
       const fetchdata =e =>{
         let data = mapcontainer.getState();
         setMap(data)
@@ -66,6 +66,24 @@ export default () => {
 
          rastergenaration(farmid, e.target.textContent)
              }  
+
+           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     return (
         <div className="swiper  " >
         <Swiper

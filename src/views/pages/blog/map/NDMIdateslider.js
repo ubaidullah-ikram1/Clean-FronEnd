@@ -15,7 +15,7 @@ export default () => {
     const[farmid,setFarmid]=useState(farmidcommunicator.getState())
     const [dates, setDates] = useState(datestore.getState())
     const [updatedata,setUpdatedata]=useState(null)
-    const [map, setMap] = useState(null)
+    const [map, setMap] = useState(mapcontainer.getState())
     const rastergenaration= (farm, update)=>{
         console.log('farm',farm)
       var url_to_geotiff_file = "https://gistest.bkk.ag/NDMI_image/"+farm+"/"+update;
@@ -53,10 +53,10 @@ export default () => {
         farmidcommunicator.subscribe(() => {
           setFarmid(farmidcommunicator.getState())
         })
+        
+        rastergenaration(farmid, updatedata)
         let data = mapcontainer.getState();
         setMap(data)
-        // rastergenaration(farmid, updatedata)
-
       },[updatedata])
     
   

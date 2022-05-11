@@ -59,10 +59,9 @@ const BlogList = () => {
         <Col style={{ width: '100%' }} key={item.title} md='12' lg='12'>
           <Card>
          < Basemap />
-         {
-           select == 'NDVI' ?  <NDVIdateslider /> : <></>
-         }
+        
          {select == 'NDMI' ?  <NDMIdateslider /> : <></>}  
+         {select == 'NDVI' ?   <NDVIdateslider /> : <></>}  
 
          
             <CardBody>

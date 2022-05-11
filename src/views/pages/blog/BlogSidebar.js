@@ -9,12 +9,12 @@ import axios from 'axios'
 import * as Icon from 'react-feather'
 import { useLayoutEffect, useState, useEffect } from 'react'
 import { Msidn } from '../store/msidn'
+import { lat } from '../store/polygoncentroid'
+import { lngt } from '../store/polygoncentroid'
 // ** Custom Components
 import Avatar from '@components/avatar'
-
 // ** Reactstrap Imports
 import { InputGroup, Input, InputGroupText, Card, CardHeader, CardTitle, CardBody, CardText, UncontrolledCollapse } from 'reactstrap'
-
 const BlogSidebar = (prop) => {
   // ** States
   const [farmids, setFarmids] = useState()
@@ -168,7 +168,7 @@ const BlogSidebar = (prop) => {
                         r.data.features.map(d => {
                           //     // console.log(d)
                           map.on('click', e => {
-                            console.log(e.latlng)
+                          
                             var sw = map.options.crs.project(map.getBounds().getSouthWest());
                             var ne = map.options.crs.project(map.getBounds().getNorthEast());
                             var BBOX = sw.x + "," + sw.y + "," + ne.x + "," + ne.y;
@@ -185,13 +185,16 @@ const BlogSidebar = (prop) => {
 
                               }
                             )
-                            // var bbxs=r.data.features[0]['properties']['cordinate'].split(',')
-                            //  var lats=bbxs[0]
-                            //  var lngs=bbxs[1]
+                            var bbxs=r.data.features[0]['geometry']['coordinates'][0][0][0]
+                          
+                            var lats=bbxs[1]
+                             var lngs=bbxs[0]
+                             console.log('lngs',lngs)
+                             console.log('lat',lats)
+                            
 
-
-                            //    lat.dispatch({type:'lat',lat:lats})
-                            //    lngt.dispatch({type:'lng',lng:lngs})
+                               lat.dispatch({type:'lat',lat:lats})
+                               lngt.dispatch({type:'lng',lng:lngs})
 
                           })
 
