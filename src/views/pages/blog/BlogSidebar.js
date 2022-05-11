@@ -126,13 +126,13 @@ const BlogSidebar = (prop) => {
                       <small>{overviewData.total_area}</small>
                     </div>
                   </div>
-                  <div className='d-flex mt-2'>
+                  {/* <div className='d-flex mt-2'>
                     <Avatar color='light-primary' className='rounded me-1' icon={<Icon.Crop size={18} />} />
                     <div>
                       <h6 className='mb-0'>Crops Count</h6>
                       <small >{overviewData.count_crops}</small>
                     </div>
-                  </div>
+                  </div> */}
 
 
                 </CardBody>

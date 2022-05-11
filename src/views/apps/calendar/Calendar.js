@@ -1,6 +1,5 @@
 // ** React Import
 import { useEffect, useRef, memo, Fragment } from 'react'
-
 // ** Full Calendar & it's Plugins
 import FullCalendar from '@fullcalendar/react'
 import listPlugin from '@fullcalendar/list'
