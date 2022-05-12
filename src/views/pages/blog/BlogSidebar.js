@@ -13,7 +13,7 @@ import { Msidn } from '../store/msidn'
 import Avatar from '@components/avatar'
 
 // ** Reactstrap Imports
-import { InputGroup, Input, InputGroupText, Card, CardHeader, CardTitle, CardBody, CardText, UncontrolledCollapse } from 'reactstrap'
+import { InputGroup, Row, Col, Input, InputGroupText, Card, CardHeader, CardTitle, CardBody, CardText, UncontrolledTooltip } from 'reactstrap'
 
 const BlogSidebar = (prop) => {
   // ** States
@@ -49,23 +49,24 @@ const BlogSidebar = (prop) => {
   const renderTransactions = (farmerList) => {
     return farmerList.map(item => {
       return (
-        <Card className='card-transaction mt-1' >
-          <CardAction title={item?.msisdn} actions='collapse'>
+        <div className='right-sidebar-content'>
+          <Card style={{ marginLeft: '4%' }} className='card-transaction' >
+
 
             <CardBody>
               <div className='meetup-header d-flex align-items-center'>
 
                 <div className='my-auto'>
-                  <h6>  Crops</h6>
+                  <h6>  {item.msisdn}</h6>
 
-                  <CardText className='mb-0  text-success'>{item.crops}</CardText>
+                  <CardText className='mb-0  text-success'>{item.farmer_name}</CardText>
                 </div>
               </div>
               <div className='d-flex mt-2'>
                 <Avatar color='light-primary' className='rounded me-1' icon={<Icon.User size={18} />} />
                 <div>
                   <h6 className='mb-0'>Name</h6>
-                  <small >{item.farmer_name}</small>
+                  <small >{item.crops}</small>
                 </div>
               </div>
               <div className='d-flex mt-1'>
@@ -83,8 +84,9 @@ const BlogSidebar = (prop) => {
                 </div>
               </div>
             </CardBody>
-          </CardAction>
-        </Card>
+
+          </Card>
+        </div>
       )
     })
   }
@@ -98,47 +100,58 @@ const BlogSidebar = (prop) => {
   return (
     <div className='sidebar-detached sidebar-right'>
       <div className='sidebar'>
-        <div className='blog-sidebar right-sidebar my-1 my-lg-0'>
+        <div className='blog-sidebar right-sidebar my-0 my-lg-0'>
           <div className='right-sidebar-content'>
             <Card className='card-transaction' >
-              <CardAction title='HBL Overview' actions='collapse'>
 
-                <CardBody>
-                  <div className='meetup-header d-flex align-items-center'>
+
+
+
+              <CardBody>
+                <h6 style={{ textAlign: 'center', color: 'green' }}>HBL OVERVIEW</h6>
+                <Row>
+                  <Col>
 
                     <div className='my-auto'>
-                      <h6>  Locations</h6>
+                      <h6>  Locations <Icon.HelpCircle id='location' size={14} /></h6>
+                      <UncontrolledTooltip placement='bottom' target="location">
+                        {overviewData.locations}
+                      </UncontrolledTooltip>
 
-                      <CardText className='mb-0  text-success'>{overviewData.locations}</CardText>
+                      <CardText className='mb-0  text-success'>{overviewData.count_locations}</CardText>
                     </div>
-                  </div>
-                  <div className='d-flex mt-1'>
-                    <Avatar color='light-primary' className='rounded me-1' icon={<Icon.Check size={18} />} />
-                    <div>
-                      <h6 className='mb-0'>Fields</h6>
-                      <small >{overviewData.fields}</small>
+                  </Col>
+                  <Col>
+                    <div className='my-auto'>
+                      <h6>  Fields</h6>
+
+                      <CardText className='mb-0  text-success'>{overviewData.fields}</CardText>
                     </div>
-                  </div>
-                  <div className='d-flex mt-2'>
-                    <Avatar color='light-primary' className='rounded me-1' icon={<Icon.MapPin size={18} />} />
-                    <div>
-                      <h6 className='mb-0'>Total Area</h6>
-                      <small>{overviewData.total_area}</small>
+                  </Col>
+                  <Col>
+                    <div className='my-auto'>
+                      <h6>  Total Area</h6>
+
+                      <CardText className='mb-0  text-success'>{overviewData.total_area}</CardText>
                     </div>
-                  </div>
-                  {/* <div className='d-flex mt-2'>
-                    <Avatar color='light-primary' className='rounded me-1' icon={<Icon.Crop size={18} />} />
-                    <div>
-                      <h6 className='mb-0'>Crops Count</h6>
-                      <small >{overviewData.count_crops}</small>
+                  </Col>
+                  <Col>
+                    <div className='my-auto'>
+                      <h6>  Crops <Icon.HelpCircle id='crop' size={14} /></h6>
+                      <UncontrolledTooltip placement='bottom' target="crop">
+                        {overviewData.crops}
+                      </UncontrolledTooltip>
+
+                      <CardText className='mb-0  text-success'>{overviewData.count_crops}</CardText>
                     </div>
-                  </div> */}
+                  </Col>
 
 
-                </CardBody>
-              </CardAction>
+                </Row>
+              </CardBody>
+
             </Card>
-            <div className='blog-search'>
+            <div >
               <InputGroup className='input-group-merge'>
                 <Input placeholder='Search here' onChange={(e) => searchHandler(e.target.value)} onKeyDown={(e) => {
 
@@ -204,12 +217,7 @@ const BlogSidebar = (prop) => {
                 </InputGroupText >
               </InputGroup>
             </div>
-
-
-
-
-
-            <div style={{ height: "250px", overflowY: "scroll" }} className="side_bar mt-1">{renderTransactions(searchedResult)}</div>
+            <div style={{ height: "650px", overflowY: "scroll", marginTop: "5%" }} className="side_bar">{renderTransactions(searchedResult)}</div>
 
           </div>
         </div>

@@ -63,19 +63,19 @@ const Login = () => {
     formState: { errors }
   } = useForm({ defaultValues })
   const illustration = skin === 'dark' ? 'login-v2-dark.svg' : 'login-v2.svg',
-    source = require(`@src/assets/images/pages/${illustration}`).default
+    source = require(`@src/assets/images/logo/cropbanner.jpg`).default
 
   const onSubmit = data => {
     if (Object.values(data).every(field => field.length > 0)) {
       useJwt
         .login({ email: data.loginEmail, password: data.password })
         .then(res => {
-          const data = { ...res.data.userData, accessToken: res.data.accessToken, refreshToken: res.data.refreshToken }
+          const data = { ...res.data.userData }
           dispatch(handleLogin(data))
           ability.update(res.data.userData.ability)
           history.push(getHomeRouteForLoggedInUser(data.role))
           toast.success(
-            <ToastContent name={data.fullName || data.username || 'John Doe'} role={data.role || 'admin'} />,
+            <ToastContent name={data.fullName || data.username || 'admin'} role={data.role || 'admin'} />,
             { icon: false, transition: Slide, hideProgressBar: true, autoClose: 2000 }
           )
         })
@@ -143,19 +143,19 @@ const Login = () => {
               </g>
             </g>
           </svg>
-          <h2 className='brand-text text-primary ms-1'>Vuexy</h2>
+          <h2 className='brand-text text-primary ms-1'>Crop Monitoring</h2>
         </Link>
-        <Col className='d-none d-lg-flex align-items-center p-5' lg='8' sm='12'>
-          <div className='w-100 d-lg-flex align-items-center justify-content-center px-5'>
+        <Col className='d-none d-lg-flex align-items-center p-1' lg='8' sm='12'>
+          <div className='w-100 d-lg-flex align-items-center justify-content-center px-1'>
             <img className='img-fluid' src={source} alt='Login Cover' />
           </div>
         </Col>
         <Col className='d-flex align-items-center auth-bg px-2 p-lg-5' lg='4' sm='12'>
           <Col className='px-xl-2 mx-auto' sm='8' md='6' lg='12'>
             <CardTitle tag='h2' className='fw-bold mb-1'>
-              Welcome to Vuexy! 👋
+              Welcome to Crop Monitoring System! 👋
             </CardTitle>
-            <CardText className='mb-2'>Please sign-in to your account and start the adventure</CardText>
+
             <Alert color='primary'>
               <div className='alert-body font-small-2'>
                 <p>
@@ -233,23 +233,6 @@ const Login = () => {
                 <span>Create an account</span>
               </Link>
             </p>
-            <div className='divider my-2'>
-              <div className='divider-text'>or</div>
-            </div>
-            <div className='auth-footer-btn d-flex justify-content-center'>
-              <Button color='facebook'>
-                <Facebook size={14} />
-              </Button>
-              <Button color='twitter'>
-                <Twitter size={14} />
-              </Button>
-              <Button color='google'>
-                <Mail size={14} />
-              </Button>
-              <Button className='me-0' color='github'>
-                <GitHub size={14} />
-              </Button>
-            </div>
           </Col>
         </Col>
       </Row>

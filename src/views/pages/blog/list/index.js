@@ -22,12 +22,15 @@ import {
   CardBody,
   CardText,
   CardTitle,
+  CardHeader,
   CardImg,
-  Badge, Label
+  Badge, Label, Input, UncontrolledPopover, PopoverHeader, PopoverBody
 } from 'reactstrap'
 // ** Styles
 import '@styles/base/pages/page-blog.scss'
+import * as Icon from 'react-feather'
 import { useSkin } from '@hooks/useSkin'
+
 const BlogList = () => {
   // ** States
   const [data, setData] = useState(null)
@@ -56,9 +59,62 @@ const BlogList = () => {
     console.log('select', select)
     return data.map(item => {
       return (
+
         <Col style={{ width: '100%' }} key={item.title} md='12' lg='12'>
-          <Card>
-            < Basemap />
+          < Basemap />
+
+          <Card><CardHeader>
+            <div className='d-flex align-items-center'>
+              <CardTitle tag='h4'>Crop Timeline</CardTitle>
+            </div>
+
+            <Icon.Filter id='popClick' size={18} className='cursor-pointer' />
+          </CardHeader>
+            <UncontrolledPopover trigger='click' placement='top' target='popClick'>
+              <PopoverHeader>Apply Filters</PopoverHeader>
+              <PopoverBody>
+                <Row>
+                  <Col md={12}>
+
+
+                    <Label className='form-label'>Index</Label>
+                    <Select
+                      theme={selectThemeColors}
+                      className='react-select'
+                      classNamePrefix='select'
+                      options={options}
+                      isClearable={false}
+                      onChange={(e) => {
+                        setSelect(e.label)
+                        select ? indexselection.dispatch({ type: 'index', index: select }) : <></>
+                      }}
+                    >
+                    </Select>
+                    <Label className='form-label mt-1' for='date-time-picker'>
+                      Start Date
+                    </Label>
+                    <Flatpickr
+                      value={picker}
+                      data-enable-time
+                      id='date-time-picker'
+                      className='form-control'
+                      onChange={date => setPicker(date)} />
+
+                    <Label className='form-label mt-1' for='date-time-picker'>
+                      End Date
+                    </Label>
+                    <Flatpickr
+                      value={picker}
+                      data-enable-time
+                      id='date-time-picker'
+                      className='form-control'
+                      onChange={date => setPicker(date)} />
+                  </Col>
+                </Row>
+              </PopoverBody>
+            </UncontrolledPopover>
+
+
             {
               select == 'NDVI' ? <NDVIdateslider /> : <></>
             }
@@ -67,43 +123,8 @@ const BlogList = () => {
 
             <CardBody>
               <Row>
-                <Col md={2}>
-
-
-                  <Label className='form-label'>Index</Label>
-                  <Select
-                    theme={selectThemeColors}
-                    className='react-select'
-                    classNamePrefix='select'
-                    options={options}
-                    isClearable={false}
-                    onChange={(e) => {
-                      setSelect(e.label)
-                      select ? indexselection.dispatch({ type: 'index', index: select }) : <></>
-                    }}
-                  >
-                  </Select>
-                  <Label className='form-label mt-1' for='date-time-picker'>
-                    Start Date
-                  </Label>
-                  <Flatpickr
-                    value={picker}
-                    data-enable-time
-                    id='date-time-picker'
-                    className='form-control'
-                    onChange={date => setPicker(date)} />
-
-                  <Label className='form-label mt-1' for='date-time-picker'>
-                    End Date
-                  </Label>
-                  <Flatpickr
-                    value={picker}
-                    data-enable-time
-                    id='date-time-picker'
-                    className='form-control'
-                    onChange={date => setPicker(date)} />
-                </Col>
-                <Col md={10}>
+               
+                <Col md={12}>
                   < Chart />
                 </Col>
 
