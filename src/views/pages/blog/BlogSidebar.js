@@ -24,7 +24,7 @@ const BlogSidebar = (prop) => {
 
   const [map, setMap] = useState(mapcontainer.getState())
   const getFarmersList = async () => {
-    let res = await axios.get("https://gistest.bkk.ag/HBL_overview/hbl");
+    let res = await axios.get("https://gistest.bkk.ag/all_growers/hbl");
     setfarmerList(res.data)
     setsearchedResult(res.data)
   }
@@ -59,7 +59,7 @@ const BlogSidebar = (prop) => {
                 <div className='my-auto'>
                   <h6>  {item.msisdn}</h6>
 
-                  <CardText className='mb-0  text-success'>{item.farmer_name}</CardText>
+                  <CardText className='mb-0  text-success'>{item.growername}</CardText>
                 </div>
               </div>
               <div className='d-flex mt-2'>
@@ -73,14 +73,14 @@ const BlogSidebar = (prop) => {
                 <Avatar color='light-primary' className='rounded me-1' icon={<Icon.Check size={18} />} />
                 <div>
                   <h6 className='mb-0'>Fields</h6>
-                  <small >{overviewData.fields}</small>
+                  <small >{item.fields}</small>
                 </div>
               </div>
               <div className='d-flex mt-2'>
                 <Avatar color='light-primary' className='rounded me-1' icon={<Icon.MapPin size={18} />} />
                 <div>
                   <h6 className='mb-0'>Total Area</h6>
-                  <small>{overviewData.total_area}</small>
+                  <small>{item.total_area} Acres</small>
                 </div>
               </div>
             </CardBody>
@@ -217,7 +217,7 @@ const BlogSidebar = (prop) => {
                 </InputGroupText >
               </InputGroup>
             </div>
-            <div style={{ height: "650px", overflowY: "scroll", marginTop: "5%" }} className="side_bar">{renderTransactions(searchedResult)}</div>
+            <div style={{ height: "650px", overflowY: "scroll", marginTop: "5%" }} className="side_bar">{renderTransactions(farmerList)}</div>
 
           </div>
         </div>
