@@ -29,9 +29,11 @@ const Chart = () => {
     var minndvi = []
     var maxndvi = []
     var date = []
+    var axisdate=[]
     var avgbaselinendvi = []
     var avgndmi = []
     var temp=[]
+    
     axios.get('https://gistest.bkk.ag/NDVI_polygon/' + growernamer).then((response) => {
 
       response.data ?
@@ -67,63 +69,80 @@ const Chart = () => {
              
               })
 
-              axios.get('https://prod.bkk.ag/weather-api/weather/historic/30.21337183/73.19943331/2022-04-02/2022-05-05').then(
+              axios.get('https://prod.bkk.ag/weather-api/weather/historic/30.21337183/73.19943331/2-04-2022/5-05-2022').then(
             (response) =>{
-             
+              console.log(response)
+              Object.keys(response.data).map(
+                (e)=>{
+                  axisdate.push(e)
+                  console.log('axisdate',axisdate);
+
+                }
+              )
               Object.values(response.data).map((e)=>{
-                console.log(e)
+                
                 temp.push(e.minTemp)
               })
-              Highcharts.chart('container', {
-                chart: {
-                
-                  height:300,
-                  backgroundColor:'rgba(248, 248, 248, 0.95)' ,
-                  color : '#FF0000' ,
-                  style: {
-                    fontFamily: 'monospace',
-                    color: "#FFFFFF"
-                }             
-                },
-                title: {
-                  text: 'NDVI',
-                  style: {
-                    fontFamily: 'monospace',
-                    color: "#FFFFFF"
-                }   
-                },
-                subtitle: {
-                
-                  style: {
-                    fontFamily: 'monospace',
-                    color: "#FFFFFF"
-                }   
-                },     
-                yAxis: {
-                  title: {
-                    text: 'NDVI'
-                  }
-                },
-                style: {
-                  fontFamily: 'monospace',
-                  color: "#696969"
-              }   ,
-                xAxis: {
-                  tickInterval: 2,
-                  categories: date,
-                  labels: {
-                      enabled: true,
-                  },
-                  style: {
-                    fontFamily: 'monospace',
-                    color: "#696969"
-                }        
+            
+            Highcharts.chart('container', {
+              chart: {
+                  type  :'scatter'
               },
-    
+             
+              xAxis: {
+                      tickInterval: 5,
+                      categories: axisdate.reverse(),
+                      labels: {
+                          enabled: true,
+                         
+                      },
+                      crosshair: true,
+                      style: {
+                        fontFamily: 'monospace',
+                        color: "#696969"
+                    }        
+                  },
+                  plotOptions: {
+                        series: {
+                            cursor: 'pointer',
+                            events: {
+                                click: function (event) {
+                                  alert("event",event.point.category)
+                                  
+                                }
+                            }
+                        }
+                    },
+              yAxis: [{ // Primary yAxis
+          
+                  title: {
+                      text: 'NDVI/NDMI',
+                      style: {
+                          color: Highcharts.getOptions().colors[1]
+                      }
+                  }
+              }, { // Secondary yAxis
+                  title: {
+                      text: 'Rainfall',
+                      style: {
+                          color: Highcharts.getOptions().colors[0]
+                      }
+                  },
+                  labels: {
+                      format: '{value} mm',
+                      style: {
+                          color: Highcharts.getOptions().colors[0]
+                      }
+                  },
+                  opposite: true
+              }],
+              tooltip: {
+                  shared: true
+              },
+              
                 legend: {
                   itemStyle: { 
                      color: '#696969',
-                     
                   },
                   layout: 'vertical',
                   // floating: true,
@@ -133,63 +152,42 @@ const Chart = () => {
                   symbolPadding: 20,
                   symbolWidth: 50
                 },
-                series: [
-                  {
-                    name: 'Avg NDVI',
-                    data:avgndvi,
-                   color:'red',
-                   legendColor: 'red',   
-                  }  ,
+              series: [
                 {
-                  name: 'Baseline Avg NDVI',
-                  data:avgbaselinendvi,
-                 color:'#FFFF00',
-                 legendColor: 'red',   
-                },
-                {
-                  name: 'Avg NDMI',
-                  data:avgndmi,
-                 color:'blue',
-                 legendColor: 'red',   
-                },
-                {
-                  name: 'temp',
-                  data:temp,
-                 color:'blue',
-                 legendColor: 'red',   
-                },
-                // {
-                //   name: 'Avg NDMI',
-                //   data:temp,
-                //  color:'blue',
-                //  legendColor: 'red',   
-                // }
-                // {avgndmi avgndvi
-                //   name: 'Baseline NDVI',
-                //   data: avgbaselinendvi,
-                //   style: {
-                //     fontFamily: 'monospace',
-                  
-                //     fill : '#FFFFFF'
-                // }   
-                // }
-              ],
-          
-                responsive: {
-                  rules: [{
-                    condition: {
-                      maxWidth: 500
-                    },
-                    chartOptions: {
-                      legend: {
-                        layout: 'horizontal',
-                        align: 'center',
-                        verticalAlign: 'bottom'
-                      }
-                    }
-                  }]
-                }
-              })
+                          name: 'Avg NDVI',
+                          type: 'spline',
+                          data:avgndvi,
+                          color:'red',
+                          legendColor: 'red', 
+                       
+                           
+                          
+                }     
+                          ,
+                      {
+                        name: 'Baseline Avg NDVI',
+                        type: 'spline',
+                        data:avgbaselinendvi,
+                       color:'#FFFF00',
+                       legendColor: 'red',   
+                      },
+                      {
+                        name: 'Avg NDMI',
+                        data:avgndmi,
+                        type: 'spline',
+                       color:'blue',
+                       legendColor: 'red',   
+                      },
+                      {
+                           name: 'temp',
+                           type: 'column',
+                           data:temp,
+                           yAxis: 1,
+                           color:'blue',
+                           legendColor: 'red',   
+                           },
+              ]
+          });
                 }
                 
               )
