@@ -63,9 +63,9 @@ const BlogSidebar = (prop) => {
                 </div>
               </div>
               <div className='d-flex mt-2'>
-                <Avatar color='light-primary' className='rounded me-1' icon={<Icon.User size={18} />} />
+                <Avatar color='light-primary' className='rounded me-1' icon={<Icon.Crosshair size={18} />} />
                 <div>
-                  <h6 className='mb-0'>Name</h6>
+                  <h6 className='mb-0'>Crop</h6>
                   <small >{item.crops}</small>
                 </div>
               </div>
