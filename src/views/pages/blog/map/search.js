@@ -2,6 +2,8 @@ import { useEffect, useState,useLayoutEffect } from 'react'
 import './search.css'
 import { Msidn } from '../../store/msidn';
 import { farmidcommunicator } from '../../store/farmidcommunicator';
+import { lat } from '../../store/polygoncentroid';
+import { lngt } from '../../store/polygoncentroid';
 // import * as L from 'leaflet'
 // import { lngt } from '../../../stores/polygoncentroid';
 // import { lat } from '../../../stores/polygoncentroid';
@@ -63,13 +65,7 @@ r=>{
      
      }
     )
-// var bbxs=r.data.features[0]['properties']['cordinate'].split(',')
-//  var lats=bbxs[0]
-//  var lngs=bbxs[1]
 
-   
-//    lat.dispatch({type:'lat',lat:lats})
-//    lngt.dispatch({type:'lng',lng:lngs})
 
      })
 

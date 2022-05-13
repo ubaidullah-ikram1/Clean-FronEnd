@@ -115,9 +115,9 @@ const BlogList = () => {
             </UncontrolledPopover>
 
 
-            {
-              select == 'NDVI' ? <NDVIdateslider /> : <></>
-            }
+            
+              <NDVIdateslider />
+            
             {select == 'NDMI' ? <NDMIdateslider /> : <></>}
 
 

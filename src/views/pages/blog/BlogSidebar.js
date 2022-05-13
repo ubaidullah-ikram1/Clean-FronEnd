@@ -9,9 +9,10 @@ import axios from 'axios'
 import * as Icon from 'react-feather'
 import { useLayoutEffect, useState, useEffect } from 'react'
 import { Msidn } from '../store/msidn'
+import { lat } from '../store/polygoncentroid'
+import { lngt } from '../store/polygoncentroid'
 // ** Custom Components
 import Avatar from '@components/avatar'
-
 // ** Reactstrap Imports
 import { InputGroup, Row, Col, Input, InputGroupText, Card, CardHeader, CardTitle, CardBody, CardText, UncontrolledTooltip } from 'reactstrap'
 
@@ -207,9 +208,8 @@ const BlogSidebar = (prop) => {
 
                             console.log(lats, lngs)
 
-
-                            //    lat.dispatch({type:'lat',lat:lats})
-                            //    lngt.dispatch({type:'lng',lng:lngs})
+                               lat.dispatch({type:'lat',lat:lats})
+                               lngt.dispatch({type:'lng',lng:lngs})
 
                           })
 
