@@ -22,6 +22,7 @@ const BlogSidebar = (props) => {
   const [overviewData, setOverviewData] = useState([])
   const [farmerList, setfarmerList] = useState([])
   const [searchedResult, setsearchedResult] = useState([]);
+  const [sepcicFarm, setSpecificFarm] = useState(null);
 
   const [map, setMap] = useState(mapcontainer.getState())
   const getFarmersList = async () => {
@@ -31,9 +32,17 @@ const BlogSidebar = (props) => {
   }
 
   const getNowcastWeather = async (lat, lng) => {
-    let res = await axios.get(`https://prod.bkk.ag/weather-api/weather/now-cast/${lat}/${lng}`);
+    let res = await axios.get(`https://prod.bkk.ag/weather-api/weather/now-cast/${lat}/${lng}`, { headers: { Authorization: "Basic c3lzdGVtOjU4OU5jUlVIV2RLTjZzRVM=" } });
     console.log(res.data)
   }
+
+
+  const getSpecificFram = async (id) => {
+    let res = await axios.get(`https://gistest.bkk.ag/hbl_farmer_data/${id}`);
+    setSpecificFarm(res.data)
+  }
+
+
 
 
   useEffect(async () => {
@@ -89,6 +98,50 @@ const BlogSidebar = (props) => {
                 <div>
                   <h6 className='mb-0'>Total Area</h6>
                   <small>{item.total_area} Acres</small>
+                </div>
+              </div>
+            </CardBody>
+
+          </Card>
+        </div>
+      )
+    })
+  }
+  const renderSpecific = (sepcicFarm) => {
+    return sepcicFarm.map(item => {
+      return (
+        <div className='right-sidebar-content'>
+          <Card style={{ marginLeft: '8%' }} className='card-transaction' >
+
+
+            <CardBody>
+              <div className='meetup-header d-flex align-items-center'>
+
+                <div className='my-auto'>
+                  <h6>  {item.msisdn}</h6>
+
+                  <CardText className='mb-0  text-success'>{item.farmer_name}</CardText>
+                </div>
+              </div>
+              <div className='d-flex mt-2'>
+                <Avatar color='light-primary' className='rounded me-1' icon={<Icon.Crosshair size={18} />} />
+                <div>
+                  <h6 className='mb-0'>Crop</h6>
+                  <small >{item.crop_name}</small>
+                </div>
+              </div>
+              <div className='d-flex mt-1'>
+                <Avatar color='light-primary' className='rounded me-1' icon={<Icon.Check size={18} />} />
+                <div>
+                  <h6 className='mb-0'>Location</h6>
+                  <small >{item.location_name}</small>
+                </div>
+              </div>
+              <div className='d-flex mt-2'>
+                <Avatar color='light-primary' className='rounded me-1' icon={<Icon.MapPin size={18} />} />
+                <div>
+                  <h6 className='mb-0'>Total Area</h6>
+                  <small>{item.area_acres} Acres</small>
                 </div>
               </div>
             </CardBody>
@@ -187,7 +240,7 @@ const BlogSidebar = (props) => {
                           props.setIsloading(true)
 
                             getNowcastWeather(e.latlng.lat, e.latlng.lng)
-                            console.log(e.latlng.lat)
+
                             var sw = map.options.crs.project(map.getBounds().getSouthWest());
                             var ne = map.options.crs.project(map.getBounds().getNorthEast());
                             var BBOX = sw.x + "," + sw.y + "," + ne.x + "," + ne.y;
@@ -201,6 +254,7 @@ const BlogSidebar = (props) => {
                                 console.log('idvalue', d.data.features[0]['properties']['farm_crop_id'])
                                 d.data.features[0]['properties']['farm_crop_id'] ? farmidcommunicator.dispatch({ type: 'search', id: d.data.features[0]['properties']['farm_crop_id'] }) : <></>
                                 setFarmids(d.data.features[0]['properties']['farm_crop_id'])
+                                getSpecificFram(d.data.features[0]['properties']['farm_crop_id'])
 
                               }
                             )
@@ -210,8 +264,8 @@ const BlogSidebar = (props) => {
 
                             console.log(lats, lngs)
 
-                               lat.dispatch({type:'lat',lat:lats})
-                               lngt.dispatch({type:'lng',lng:lngs})
+                            lat.dispatch({ type: 'lat', lat: lats })
+                            lngt.dispatch({ type: 'lng', lng: lngs })
 
                           })
 
@@ -229,7 +283,7 @@ const BlogSidebar = (props) => {
                 </InputGroupText >
               </InputGroup>
             </div>
-            <div style={{ height: "650px", overflowY: "scroll", marginTop: "5%" }} className="side_bar">{renderTransactions(searchedResult)}</div>
+            <div style={{ height: "650px", overflowY: "scroll", marginTop: "5%" }} className="side_bar">{sepcicFarm ? renderSpecific(sepcicFarm) : renderTransactions(searchedResult)}</div>
 
           </div>
         </div>
