@@ -34,7 +34,7 @@ const NavbarUser = props => {
       </NavItem>
       {/* <NavbarSearch />
       <CartDropdown /> */}
-      <NotificationDropdown />
+
       <UserDropdown />
     </ul>
   )

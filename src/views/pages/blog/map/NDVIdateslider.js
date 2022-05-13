@@ -3,7 +3,7 @@ import SwiperCore, { EffectCoverflow, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper";
 import axios from "axios";
-import { useEffect,useState } from "react";
+import { useLayoutEffect,useEffect,useState } from "react";
 import { farmidcommunicator } from "../../store/farmidcommunicator";
 import { datestore } from "../../store/datesstore";
 import './dateslider.css'
@@ -11,11 +11,13 @@ import parseGeoraster  from  'georaster';
 import GeoRasterLayer  from 'georaster-layer-for-leaflet'
 import chroma from 'chroma-js'
 import { mapcontainer } from "../../store/mapcontainer";
+import { ndvis } from "../../store/ndviraster";
 export default () => {
     const[farmid,setFarmid]=useState(farmidcommunicator.getState())
     const [dates, setDates] = useState(datestore.getState())
     const [updatedata,setUpdatedata]=useState(null)
     const [map, setMap] = useState(mapcontainer.getState())
+    const [ndvi,setNdvi] =useState(ndvis.getState())
     const rastergenaration= (farm, update)=>{
       var url_to_geotiff_file = "https://gistest.bkk.ag/NDVI_image/"+farm+"/"+update;
       fetch(url_to_geotiff_file)
@@ -44,6 +46,31 @@ export default () => {
         });
       })
     }
+   
+    useLayoutEffect(() => {
+      ndvis.subscribe(() => {
+        setNdvi(ndvis.getState())
+        let data = mapcontainer.getState();
+        setMap(data)
+        if(ndvi){
+      
+        console.log(map)
+        console.log(farmid)
+
+        rastergenaration(farmid, '2022-02-04')
+        }
+       
+       
+
+      })
+    })
+    useEffect(()=>{
+      if(ndvi){
+        let data = mapcontainer.getState();
+      setMap(data)
+      rastergenaration(farmid, '2022-02-04')
+      }
+    },[])
     useEffect(() => {
         datestore.subscribe(() => {
             setDates(datestore.getState())
@@ -51,9 +78,14 @@ export default () => {
         farmidcommunicator.subscribe(() => {
           setFarmid(farmidcommunicator.getState())
         })
-        let data = mapcontainer.getState();
+        if(ndvi != null){
+          let data = mapcontainer.getState();
         setMap(data)
-        rastergenaration(farmid, updatedata)
+        rastergenaration(farmid, '2022-02-04')
+        }
+        // let data = mapcontainer.getState();
+        // setMap(data)
+        // rastergenaration(farmid, updatedata)
         console.log('mapuse',map)
 
       },[updatedata])
@@ -86,7 +118,7 @@ export default () => {
 
     return (
         <div className="swiper  " >
-        <Swiper
+        {/* <Swiper
         //   effect={"coverflow"}
         //   navigation={true}
         //  modules={[Navigation]}
@@ -109,7 +141,7 @@ export default () => {
  })
 } 
       
-        </Swiper>
+        </Swiper> */}
       </div>
     );
   };

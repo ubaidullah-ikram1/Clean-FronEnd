@@ -23,7 +23,7 @@ export default class JwtService {
         // ** If token is present add it to request's Authorization Header
         if (accessToken) {
           // ** eslint-disable-next-line no-param-reassign
-          config.headers.Authorization = `${this.jwtConfig.tokenType} ${accessToken}`
+          // config.headers.Authorization = `${this.jwtConfig.tokenType} ${accessToken}`
         }
         return config
       },
@@ -57,7 +57,7 @@ export default class JwtService {
               // ** Make sure to assign accessToken according to your response.
               // ** Check: https://pixinvent.ticksy.com/ticket/2413870
               // ** Change Authorization header
-              originalRequest.headers.Authorization = `${this.jwtConfig.tokenType} ${accessToken}`
+              // originalRequest.headers.Authorization = `${this.jwtConfig.tokenType} ${accessToken}`
               resolve(this.axios(originalRequest))
             })
           })
