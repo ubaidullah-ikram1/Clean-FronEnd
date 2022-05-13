@@ -1,6 +1,6 @@
 // ** React Imports
 import { Link } from 'react-router-dom'
-import { Fragment, useState, useEffect, useContext } from 'react'
+import { Fragment, useState, useEffect, useLayoutEffect,useContext } from 'react'
 import Basemap from '../map/basemap'
 // ** Third Party Components
 import axios from 'axios'
@@ -14,6 +14,7 @@ import Sidebar from '../BlogSidebar'
 import NDVIdateslider from '../map/NDVIdateslider'
 import { indexselection } from '../../store/indexselection'
 import NDMIdateslider from '../map/NDMIdateslider'
+import { indexsel } from '../../store/indexselect'
 // ** Reactstrap Imports
 import {
   Row,
@@ -37,6 +38,7 @@ const BlogList = () => {
   const [picker, setPicker] = useState(new Date())
   const [search, setSearch] = useState(null)
   const [select, setSelect] = useState(null)
+  const [indexselect,setIndexselect] =useState(indexsel.getState())
   const { } = useContext(ThemeColors),
     { skin } = useSkin(),
     labelColor = skin === 'dark' ? '#b4b7bd' : '#6e6b7b',
@@ -55,15 +57,23 @@ const BlogList = () => {
   useEffect(() => {
 
   }, [])
+
+  useLayoutEffect(()=>{
+    indexsel.subscribe(() => {
+      setIndexselect(indexsel.getState())
+      console.log('action',indexselect)
+    })
+   })
   const renderRenderList = () => {
     console.log('select', select)
     return data.map(item => {
       return (
 
-        <Col style={{ width: '100%' }} key={item.title} md='12' lg='12'>
+        <Col  className='p-0 m-0' style={{ width: '100%' }} key={item.title} md='12' lg='12'>
           < Basemap />
 
-          <Card><CardHeader>
+          <Card className='p-0 m-0'>
+            <CardHeader >
             <div className='d-flex align-items-center'>
               <CardTitle tag='h4'>Crop Timeline</CardTitle>
             </div>
@@ -116,20 +126,20 @@ const BlogList = () => {
 
 
             
-              <NDVIdateslider />
+          
+            {indexselect == 'Avg NDMI' ? <NDMIdateslider /> : <></>}
+            {indexselect == 'Avg NDVI' ? <NDVIdateslider />: <></>}
+
+
             
-            {select == 'NDMI' ? <NDMIdateslider /> : <></>}
-
-
-            <CardBody>
-              <Row>
-
-                <Col md={12}>
+              
+               
+          
                   < Chart />
-                </Col>
+               
 
-              </Row>
-            </CardBody>
+            
+          
           </Card>
         </Col>
 
