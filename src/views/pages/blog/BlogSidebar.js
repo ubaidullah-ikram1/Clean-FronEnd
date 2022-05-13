@@ -195,7 +195,7 @@ const BlogSidebar = (prop) => {
                               }
                             )
                             var bbxs=r.data.features[0]['geometry']['coordinates'][0][0][0]
-                          
+                          console.log('bbxs',bbxs)
                             var lats=bbxs[1]
                              var lngs=bbxs[0]
                              console.log('lngs',lngs)

@@ -12,12 +12,23 @@ import GeoRasterLayer  from 'georaster-layer-for-leaflet'
 import chroma from 'chroma-js'
 import { mapcontainer } from "../../store/mapcontainer";
 import { ndvis } from "../../store/ndviraster";
+import { indexsel } from "../../store/indexselect";
+import { Alert } from "reactstrap";
 export default () => {
     const[farmid,setFarmid]=useState(farmidcommunicator.getState())
     const [dates, setDates] = useState(datestore.getState())
     const [updatedata,setUpdatedata]=useState(null)
     const [map, setMap] = useState(mapcontainer.getState())
     const [ndvi,setNdvi] =useState(ndvis.getState())
+    const [indexselect,setIndexselect] =useState(indexsel.getState())
+
+     useLayoutEffect(()=>{
+      indexsel.subscribe(() => {
+        setIndexselect(indexsel.getState())
+        console.log('action',indexselect)
+      })
+     })
+    
     const rastergenaration= (farm, update)=>{
       var url_to_geotiff_file = "https://gistest.bkk.ag/NDVI_image/"+farm+"/"+update;
       fetch(url_to_geotiff_file)
@@ -46,7 +57,11 @@ export default () => {
         });
       })
     }
-   
+    if(ndvi != null) {
+      console.log('indexselect',indexselect)
+      rastergenaration(farmid, ndvi)
+
+    }
     useLayoutEffect(() => {
       ndvis.subscribe(() => {
         setNdvi(ndvis.getState())
@@ -57,20 +72,14 @@ export default () => {
         console.log(map)
         console.log(farmid)
 
-        rastergenaration(farmid, '2022-02-04')
+        
         }
        
        
 
       })
     })
-    useEffect(()=>{
-      if(ndvi){
-        let data = mapcontainer.getState();
-      setMap(data)
-      rastergenaration(farmid, '2022-02-04')
-      }
-    },[])
+    
     useEffect(() => {
         datestore.subscribe(() => {
             setDates(datestore.getState())
@@ -81,14 +90,14 @@ export default () => {
         if(ndvi != null){
           let data = mapcontainer.getState();
         setMap(data)
-        rastergenaration(farmid, '2022-02-04')
+        rastergenaration(farmid, ndvi)
         }
         // let data = mapcontainer.getState();
         // setMap(data)
         // rastergenaration(farmid, updatedata)
         console.log('mapuse',map)
 
-      },[updatedata])
+      },[ndvi])
     
       const fetchdata =e =>{
         let data = mapcontainer.getState();

@@ -4,10 +4,11 @@ import axios from "axios"
 import { farmidcommunicator } from '../../store/farmidcommunicator';
 import { datestore } from '../../store/datesstore';
 import { ndvis } from '../../store/ndviraster';
-import { selectionndvi } from '../../store/ndviraster';
+import { indexsel } from '../../store/indexselect';
 // import { fetchfarmid } from '../../../stores/visibilty';
 const Chart = () => {
   const [reset, setReset] = useState('c')
+  const [indexname,SetIndexname] =useState()
   // const [dates, setDates] = useState([])
   // const [cloudesdate, setCloudesdate] = useState(clouddate.getState())
   const [growernamer, setGrowernamer] = useState(farmidcommunicator.getState())
@@ -100,9 +101,17 @@ const Chart = () => {
                   console.log(avgndvi)
                   Highcharts.chart('container', {
                     chart: {
-                      type: 'scatter'
+                      type: 'scatter',
+                      height : '300px'
                     },
-
+                    title: {
+                      text: ''
+                            // text: null // as an alternative
+                    },
+                    subtitle: {
+                      text: ''
+                            // text: null // as an alternative
+                    },
                     xAxis: {
                       tickInterval: 5,
                       categories: date,
@@ -124,7 +133,8 @@ const Chart = () => {
                         events: {
                           click: function (event) {
                             ndvis.dispatch({type:'ndvi',ndvi: event.point.category})
-                            // console.log("event", this.name )
+                            var ind   = this.name
+                            ind ? indexsel.dispatch({type:'indexis',indexis: ind}) :<></>
                             // console.log("event", event.point.category)
 
                           }
@@ -161,10 +171,10 @@ const Chart = () => {
                       itemStyle: {
                         color: '#696969',
                       },
-                      layout: 'vertical',
+                      layout: 'horizontal',
                       // floating: true,
                       align: 'right',
-                      verticalAlign: 'top',
+                      verticalAlign: 'bottom',
 
                       symbolPadding: 20,
                       symbolWidth: 50

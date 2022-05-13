@@ -11,8 +11,10 @@ import parseGeoraster  from  'georaster';
 import GeoRasterLayer  from 'georaster-layer-for-leaflet'
 import chroma from 'chroma-js'
 import { mapcontainer } from "../../store/mapcontainer";
+import { ndvis } from "../../store/ndviraster";
 export default () => {
     const[farmid,setFarmid]=useState(farmidcommunicator.getState())
+    const [ndvi,setNdvi] =useState(ndvis.getState())
     const [dates, setDates] = useState(datestore.getState())
     const [updatedata,setUpdatedata]=useState(null)
     const [map, setMap] = useState(mapcontainer.getState())
@@ -46,6 +48,11 @@ export default () => {
         });
       })
     }
+    if(ndvi != null) {
+      
+      rastergenaration(farmid, ndvi)
+
+    }
     useEffect(() => {
         datestore.subscribe(() => {
             setDates(datestore.getState())
@@ -53,11 +60,15 @@ export default () => {
         farmidcommunicator.subscribe(() => {
           setFarmid(farmidcommunicator.getState())
         })
-        
+        if(ndvi != null){
+          let data = mapcontainer.getState();
+        setMap(data)
+        rastergenaration(farmid, ndvi)
+        }
         rastergenaration(farmid, updatedata)
         let data = mapcontainer.getState();
         setMap(data)
-      },[updatedata])
+      },[ndvi])
     
   
       const fetchdata =e =>{
@@ -73,7 +84,7 @@ export default () => {
     
     return (
         <div className="swiper  " >
-        <Swiper
+        {/* <Swiper
         //   effect={"coverflow"}
         //   navigation={true}
         //  modules={[Navigation]}
@@ -96,7 +107,7 @@ export default () => {
  })
 } 
       
-        </Swiper>
+        </Swiper> */}
       </div>
     );
   };
