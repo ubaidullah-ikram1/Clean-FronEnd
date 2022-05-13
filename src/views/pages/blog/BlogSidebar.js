@@ -28,6 +28,13 @@ const BlogSidebar = (prop) => {
     setfarmerList(res.data)
     setsearchedResult(res.data)
   }
+
+  const getNowcastWeather = async (lat, lng) => {
+    let res = await axios.get(`https://prod.bkk.ag/weather-api/weather/now-cast/${lat}/${lng}`);
+    console.log(res.data)
+  }
+
+
   useEffect(async () => {
     let res = await axios.get("https://gistest.bkk.ag/Partner_stats/hbl");
     setOverviewData(res.data[0])
@@ -50,7 +57,7 @@ const BlogSidebar = (prop) => {
     return farmerList.map(item => {
       return (
         <div className='right-sidebar-content'>
-          <Card style={{ marginLeft: '4%' }} className='card-transaction' >
+          <Card style={{ marginLeft: '8%' }} className='card-transaction' >
 
 
             <CardBody>
@@ -176,7 +183,8 @@ const BlogSidebar = (prop) => {
                         r.data.features.map(d => {
                           //     // console.log(d)
                           map.on('click', e => {
-                            console.log(e.latlng)
+                            getNowcastWeather(e.latlng.lat, e.latlng.lng)
+                            console.log(e.latlng.lat)
                             var sw = map.options.crs.project(map.getBounds().getSouthWest());
                             var ne = map.options.crs.project(map.getBounds().getNorthEast());
                             var BBOX = sw.x + "," + sw.y + "," + ne.x + "," + ne.y;
@@ -193,9 +201,11 @@ const BlogSidebar = (prop) => {
 
                               }
                             )
-                            // var bbxs=r.data.features[0]['properties']['cordinate'].split(',')
-                            //  var lats=bbxs[0]
-                            //  var lngs=bbxs[1]
+                            var bbxs = r.data.features[0]['properties']['cordinate'].split(',')
+                            var lats = bbxs[0]
+                            var lngs = bbxs[1]
+
+                            console.log(lats, lngs)
 
 
                             //    lat.dispatch({type:'lat',lat:lats})
@@ -217,7 +227,7 @@ const BlogSidebar = (prop) => {
                 </InputGroupText >
               </InputGroup>
             </div>
-            <div style={{ height: "650px", overflowY: "scroll", marginTop: "5%" }} className="side_bar">{renderTransactions(farmerList)}</div>
+            <div style={{ height: "650px", overflowY: "scroll", marginTop: "5%" }} className="side_bar">{renderTransactions(searchedResult)}</div>
 
           </div>
         </div>

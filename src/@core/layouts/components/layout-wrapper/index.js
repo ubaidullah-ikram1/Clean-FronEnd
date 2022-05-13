@@ -60,11 +60,11 @@ const LayoutWrapper = props => {
     <div
       className={classnames('app-content content overflow-hidden', {
         [wrapperClass]: wrapperClass,
-        'show-overlay': navbarStore.query.length
+
       })}
     >
-      <div className='content-overlay'></div>
-      <div className='header-navbar-shadow' />
+
+      <div />
       <div
         className={classnames({
           'content-wrapper': !appLayout,
@@ -78,7 +78,7 @@ const LayoutWrapper = props => {
           {...(layout === 'HorizontalLayout' && !appLayout
             ? { className: classnames({ 'content-body': !appLayout }) }
             : {})}
-          /*eslint-enable */
+        /*eslint-enable */
         >
           {children}
         </Tag>

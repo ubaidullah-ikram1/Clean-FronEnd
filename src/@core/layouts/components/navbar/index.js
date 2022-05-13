@@ -14,7 +14,7 @@ const ThemeNavbar = props => {
     <Fragment>
       <div className='bookmark-wrapper d-flex align-items-center'>
         <span className='brand-logo'>
-          <img width='90%' src={Logo} alt='logo' />
+          <img width='60%' src={Logo} alt='logo' />
         </span>
       </div>
       <NavbarUser skin={skin} setSkin={setSkin} />
