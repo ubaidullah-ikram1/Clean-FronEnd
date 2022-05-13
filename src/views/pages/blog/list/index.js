@@ -152,7 +152,7 @@ const BlogList = () => {
 
       <div className='blog-wrapper'>
         <div className='content-detached content-left'>
-          <div className='content-body'>
+          <div  className='content-body'>
             {data !== null ? (
               <div className='blog-list-wrapper'>
                 <Row>{renderRenderList()}</Row>

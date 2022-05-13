@@ -31,9 +31,9 @@ html {
     transition: 300ms ease all;
     backface-visibility: hidden;
     min-height: calc(100% - #{$footer-height});
-    margin-left: $menu-expanded-width;
+  
     &.app-content {
-      padding: calc(#{$content-padding} + #{$navbar-height} + #{$floating-nav-margin}) #{$content-padding} 0;
+      // padding: calc(#{$content-padding} + #{$navbar-height} + #{$floating-nav-margin}) #{$content-padding} 0;
       &.show-overlay {
         .content-overlay {
           z-index: 10;
@@ -166,7 +166,7 @@ html {
   //for navbar hidden
   .navbar-hidden {
     .app-content {
-      padding: #{$content-padding} #{$content-padding} 0 #{$content-padding} !important;
+       padding: #{$content-padding} #{$content-padding} 0 #{$content-padding} !important;
     }
     &.footer-static {
       .app-content {
@@ -241,7 +241,7 @@ html {
   // for sticky navbar
   .navbar-sticky {
     .app-content {
-      padding: calc(#{$content-padding} + #{$navbar-height}) #{$content-padding} 0 #{$content-padding};
+       padding: calc(#{$content-padding} + #{$navbar-height}) #{$content-padding} 0 #{$content-padding};
     }
     &.footer-static {
       .app-content {
@@ -327,7 +327,10 @@ html {
         width: 100% !important;
       }
       .app-content {
-        padding: calc(#{$content-padding} + #{$navbar-height} + #{$floating-nav-margin}) #{$content-padding} 0 #{$content-padding} !important; // ? need to check all navbar types case
+        padding-top: 4% !important; 
+        padding-left: 0.2rem!important;
+        padding-right: 0.2rem!important;
+        // ? need to check all navbar types case
       }
       &.footer-fixed {
         .app-content {

@@ -268,13 +268,11 @@
   // navbar floating
   &.navbar-floating {
     // Horizontal layout navbar shadow position and height fix
-    .header-navbar-shadow {
-      height: 80px;
-    }
+   
     @include media-breakpoint-up(xl) {
-      .header-navbar-shadow {
-        top: 45px;
-      }
+      // .header-navbar-shadow {
+      //   top: 45px;
+      // }
     }
     &:not(.blank-page) {
       .app-content {
