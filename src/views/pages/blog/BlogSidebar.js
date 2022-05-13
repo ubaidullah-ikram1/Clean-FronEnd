@@ -16,7 +16,7 @@ import Avatar from '@components/avatar'
 // ** Reactstrap Imports
 import { InputGroup, Row, Col, Input, InputGroupText, Card, CardHeader, CardTitle, CardBody, CardText, UncontrolledTooltip } from 'reactstrap'
 
-const BlogSidebar = (prop) => {
+const BlogSidebar = (props) => {
   // ** States
   const [farmids, setFarmids] = useState()
   const [overviewData, setOverviewData] = useState([])
@@ -184,6 +184,8 @@ const BlogSidebar = (prop) => {
                         r.data.features.map(d => {
                           //     // console.log(d)
                           map.on('click', e => {
+                          props.setIsloading(true)
+
                             getNowcastWeather(e.latlng.lat, e.latlng.lng)
                             console.log(e.latlng.lat)
                             var sw = map.options.crs.project(map.getBounds().getSouthWest());

@@ -5,8 +5,9 @@ import { farmidcommunicator } from '../../store/farmidcommunicator';
 import { datestore } from '../../store/datesstore';
 import { ndvis } from '../../store/ndviraster';
 import { indexsel } from '../../store/indexselect';
+import { isPropsEqual } from '@fullcalendar/core';
 // import { fetchfarmid } from '../../../stores/visibilty';
-const Chart = () => {
+const Chart = (props) => {
   const [reset, setReset] = useState('c')
   const [indexname,SetIndexname] =useState()
   // const [dates, setDates] = useState([])
@@ -77,6 +78,7 @@ const Chart = () => {
 
               axios.get('https://prod.bkk.ag/weather-api/weather/historic/30.21337183/73.19943331/3-04-2022/5-05-2022').then(
                 (response) => {
+                props.setIsloading(false)
                   console.log(response)
                   Object.keys(response.data).map(
                     (e) => {

@@ -15,6 +15,7 @@ import NDVIdateslider from '../map/NDVIdateslider'
 import { indexselection } from '../../store/indexselection'
 import NDMIdateslider from '../map/NDMIdateslider'
 import { indexsel } from '../../store/indexselect'
+import { Spinner } from 'reactstrap'
 // ** Reactstrap Imports
 import {
   Row,
@@ -34,6 +35,7 @@ import { useSkin } from '@hooks/useSkin'
 
 const BlogList = () => {
   // ** States
+  const [isloading, setIsloading] = useState(false)
   const [data, setData] = useState(null)
   const [picker, setPicker] = useState(new Date())
   const [search, setSearch] = useState(null)
@@ -84,6 +86,7 @@ const BlogList = () => {
               <PopoverHeader>Apply Filters</PopoverHeader>
               <PopoverBody>
                 <Row>
+                  
                   <Col md={12}>
 
 
@@ -133,9 +136,9 @@ const BlogList = () => {
 
             
               
-               
-          
-                  < Chart />
+              <div  style={{display : 'flex'  , justifyContent : 'center' ,alignItem: 'center'}}> {isloading ?  <Spinner className='me-25' size='lg' color='success'/>: <></>}</div> 
+              < Chart   setIsloading={setIsloading} />
+              
                
 
             
@@ -161,7 +164,7 @@ const BlogList = () => {
             ) : null}
           </div>
         </div>
-        <Sidebar search={setSearch} />
+        <Sidebar search={setSearch} setIsloading={setIsloading} />
       </div>
     </Fragment>
   )
