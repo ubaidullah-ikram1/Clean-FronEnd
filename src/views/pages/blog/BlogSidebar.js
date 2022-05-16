@@ -32,7 +32,7 @@ const BlogSidebar = (props) => {
   }
 
   const getNowcastWeather = async (lat, lng) => {
-    let res = await axios.get(`https://prod.bkk.ag/weather-api/weather/now-cast/${lat}/${lng}`, { headers: { Authorization: "Basic c3lzdGVtOjU4OU5jUlVIV2RLTjZzRVM=" } });
+    let res = await axios.get(`http://192.168.100.162:200/weather/${lat}/${lng}`, { headers: { Authorization: "Basic c3lzdGVtOjU4OU5jUlVIV2RLTjZzRVM=" } });
     console.log(res.data)
   }
 
@@ -78,26 +78,27 @@ const BlogSidebar = (props) => {
 
                   <CardText className='mb-0  text-success'>{item.growername}</CardText>
                 </div>
+
               </div>
-              <div className='d-flex mt-2'>
-                <Avatar color='light-primary' className='rounded me-1' icon={<Icon.Crosshair size={18} />} />
-                <div>
-                  <h6 className='mb-0'>Crop</h6>
-                  <small >{item.crops}</small>
+              <div className='d-flex'>
+
+                <div style={{ backgroundColor: '#CDFFCC', width: '100%' }}>
+                  <Icon.Check size={14} />
+                  <small style={{ marginLeft: '2px' }}>{item.crops}</small>
                 </div>
               </div>
-              <div className='d-flex mt-1'>
-                <Avatar color='light-primary' className='rounded me-1' icon={<Icon.Check size={18} />} />
-                <div>
-                  <h6 className='mb-0'>Fields</h6>
-                  <small >{item.fields}</small>
+              <div className='d-flex'>
+
+                <div style={{ backgroundColor: '#CDFFCC', width: '100%', marginTop: '3px' }}>
+                  <Icon.Map size={14} />
+                  <small style={{ marginLeft: '2px' }} >{item.fields}</small>
                 </div>
               </div>
-              <div className='d-flex mt-2'>
-                <Avatar color='light-primary' className='rounded me-1' icon={<Icon.MapPin size={18} />} />
-                <div>
-                  <h6 className='mb-0'>Total Area</h6>
-                  <small>{item.total_area} Acres</small>
+              <div className='d-flex'>
+
+                <div style={{ backgroundColor: '#CDFFCC', width: '100%', marginTop: '3px' }}>
+                  <Icon.MapPin size={14} />
+                  <small style={{ marginLeft: '2px' }}>{item.total_area} Acres</small>
                 </div>
               </div>
             </CardBody>
@@ -218,7 +219,7 @@ const BlogSidebar = (props) => {
 
 
                   if (e.key == 'Enter') {
-                    console.log('enter', e.target.value)
+
                     var msidn = e.target.value
                     Msidn.dispatch({ type: 'msidn', msidn: msidn })
                     //   setMsidn(msidn)
@@ -237,9 +238,9 @@ const BlogSidebar = (props) => {
                         r.data.features.map(d => {
                           //     // console.log(d)
                           map.on('click', e => {
-                          props.setIsloading(true)
-
+                            props.setIsloading(true)
                             getNowcastWeather(e.latlng.lat, e.latlng.lng)
+
 
                             var sw = map.options.crs.project(map.getBounds().getSouthWest());
                             var ne = map.options.crs.project(map.getBounds().getNorthEast());
@@ -258,14 +259,14 @@ const BlogSidebar = (props) => {
 
                               }
                             )
-                            var bbxs = r.data.features[0]['properties']['cordinate'].split(',')
-                            var lats = bbxs[0]
-                            var lngs = bbxs[1]
+                            // var bbxs = r.data.features[0]['properties']['cordinate'].split(',')
+                            // var lats = bbxs[0]
+                            // var lngs = bbxs[1]
 
-                            console.log(lats, lngs)
+                            // console.log(lats, lngs)
 
-                            lat.dispatch({ type: 'lat', lat: lats })
-                            lngt.dispatch({ type: 'lng', lng: lngs })
+                            // lat.dispatch({ type: 'lat', lat: lats })
+                            // lngt.dispatch({ type: 'lng', lng: lngs })
 
                           })
 
