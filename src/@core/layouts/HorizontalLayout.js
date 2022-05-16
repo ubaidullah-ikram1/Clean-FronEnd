@@ -135,22 +135,7 @@ const HorizontalLayout = props => {
           }
         )}
       >
-        {!navbar && (
-          <div className='navbar-header d-xl-block d-none'>
-            <ul className='nav navbar-nav'>
-              <NavItem>
-                <Link to='/' className='navbar-brand'>
 
-
-                  <h2 className='brand-text mb-0'>Crop Monitoring</h2>
-                  <br />
-
-                </Link>
-                <span style={{ marginLeft: '20%' }}>Powered By BKK</span>
-              </NavItem>
-            </ul>
-          </div>
-        )}
 
         <div className='navbar-container d-flex content'>
           {navbar ? navbar : <NavbarComponent skin={skin} setSkin={setSkin} />}
