@@ -6,16 +6,22 @@ import { datestore } from '../../store/datesstore';
 import { ndvis } from '../../store/ndviraster';
 import { indexsel } from '../../store/indexselect';
 import { isPropsEqual } from '@fullcalendar/core';
+import { ndvilayer } from '../../store/ndvilayer';
 // import { fetchfarmid } from '../../../stores/visibilty';
 const Chart = (props) => {
   const [reset, setReset] = useState('c')
   const [indexname,SetIndexname] =useState()
+  const [layers,setLayers] =useState(ndvilayer.getState())
+
   // const [dates, setDates] = useState([])
   // const [cloudesdate, setCloudesdate] = useState(clouddate.getState())
   const [growernamer, setGrowernamer] = useState(farmidcommunicator.getState())
   useLayoutEffect(() => {
     farmidcommunicator.subscribe(() => {
       setGrowernamer(farmidcommunicator.getState())
+    })
+    ndvilayer.subscribe(() => {
+      setLayers(ndvilayer.getState())
     })
     //   clouddate.subscribe(()=>{ 
     //     setCloudesdate(clouddate.getState() )
@@ -114,6 +120,7 @@ const Chart = (props) => {
                       text: ''
                             // text: null // as an alternative
                     },
+                  
                     xAxis: {
                       tickInterval: 5,
                       categories: date,
@@ -136,6 +143,7 @@ const Chart = (props) => {
                           click: function (event) {
                             ndvis.dispatch({type:'ndvi',ndvi: event.point.category})
                             var ind   = this.name
+                            console.log('layers',layers)
                             ind ? indexsel.dispatch({type:'indexis',indexis: ind}) :<></>
                             // console.log("event", event.point.category)
 
@@ -149,7 +157,8 @@ const Chart = (props) => {
                         style: {
                           color: Highcharts.getOptions().colors[1]
                         }
-                      }
+                      },
+                      crosshair: true
                     }, { // Secondary yAxis
                       title: {
                         text: 'Rainfall',
@@ -166,7 +175,8 @@ const Chart = (props) => {
                       opposite: true
                     }],
                     tooltip: {
-                      shared: true
+                      shared: true,
+                     
                     },
 
                     legend: {

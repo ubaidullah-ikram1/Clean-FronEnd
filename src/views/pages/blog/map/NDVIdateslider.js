@@ -13,9 +13,10 @@ import chroma from 'chroma-js'
 import { mapcontainer } from "../../store/mapcontainer";
 import { ndvis } from "../../store/ndviraster";
 import { indexsel } from "../../store/indexselect";
-import { Alert } from "reactstrap";
+import { ndvilayer } from "../../store/ndvilayer";
 export default () => {
-    const[farmid,setFarmid]=useState(farmidcommunicator.getState())
+  var layer
+  const[farmid,setFarmid]=useState(farmidcommunicator.getState())
     const [dates, setDates] = useState(datestore.getState())
     const [updatedata,setUpdatedata]=useState(null)
     const [map, setMap] = useState(mapcontainer.getState())
@@ -27,8 +28,8 @@ export default () => {
         setIndexselect(indexsel.getState())
         console.log('action',indexselect)
       })
+     
      })
-    
     const rastergenaration= (farm, update)=>{
       var url_to_geotiff_file = "https://gistest.bkk.ag/NDVI_image/"+farm+"/"+update;
       fetch(url_to_geotiff_file)
@@ -39,7 +40,7 @@ export default () => {
             const max = 1;
             const range = 1;
             var scale = chroma.scale("RdYlGn");
-           var layer = new GeoRasterLayer({
+            layer = new GeoRasterLayer({
                 georaster: georaster, 
                 opacity: 1,
                 pixelValuesToColorFn: function(pixelValues) {
@@ -52,13 +53,20 @@ export default () => {
                 },
                 resolution: 256
             });
-          console.log('layer',layer)
+            layer ? indexsel.dispatch({type:'layerss',layerss: layer}) :<></>
             map.addLayer(layer)
+          console.log('layer',layer)
+          
         });
       })
     }
+    
     if(ndvi != null) {
       console.log('indexselect',indexselect)
+      
+      
+       
+      
       rastergenaration(farmid, ndvi)
 
     }
@@ -87,9 +95,15 @@ export default () => {
         farmidcommunicator.subscribe(() => {
           setFarmid(farmidcommunicator.getState())
         })
+
+        
+      layer ?   alert('ad'):  <></>
+        
         if(ndvi != null){
+          
           let data = mapcontainer.getState();
         setMap(data)
+        
         rastergenaration(farmid, ndvi)
         }
         // let data = mapcontainer.getState();

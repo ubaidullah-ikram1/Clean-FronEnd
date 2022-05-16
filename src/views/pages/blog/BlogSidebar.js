@@ -237,7 +237,7 @@ const BlogSidebar = (props) => {
                         r.data.features.map(d => {
                           //     // console.log(d)
                           map.on('click', e => {
-                          props.setIsloading(true)
+                    
 
                             getNowcastWeather(e.latlng.lat, e.latlng.lng)
 
@@ -249,15 +249,35 @@ const BlogSidebar = (props) => {
                             var X = Math.trunc(map.layerPointToContainerPoint(e.layerPoint).x);
                             var Y = Math.trunc(map.layerPointToContainerPoint(e.layerPoint).y);
                             var url = "https://gis.bkk.ag/geoserver/server/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&LAYERS=server:hbl_farms&CQL_FILTER=msisdn='" + msidn + "'&QUERY_LAYERS=server:hbl_farms&BBOX=" + BBOX + "&FEATURE_COUNT=1&HEIGHT=" + HEIGHT + "&WIDTH=" + WIDTH + "&INFO_FORMAT=application%2Fjson&TILED=false&CRS=EPSG%3A3857&I=" + X + "&J=" + Y;
+                           
                             axios.get(url).then(
                               d => {
+
                                 console.log('idvalue', d.data.features[0]['properties']['farm_crop_id'])
                                 d.data.features[0]['properties']['farm_crop_id'] ? farmidcommunicator.dispatch({ type: 'search', id: d.data.features[0]['properties']['farm_crop_id'] }) : <></>
                                 setFarmids(d.data.features[0]['properties']['farm_crop_id'])
+
+                                d.data.features[0]['properties']['farm_crop_id'] ? props.setIsloading(true) : <></>
+
                                 getSpecificFram(d.data.features[0]['properties']['farm_crop_id'])
 
                               }
                             )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                             var bbxs = r.data.features[0]['properties']['cordinate'].split(',')
                             var lats = bbxs[0]
                             var lngs = bbxs[1]
