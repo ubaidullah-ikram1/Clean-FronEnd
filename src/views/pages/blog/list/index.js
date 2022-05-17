@@ -1,7 +1,9 @@
 // ** React Imports
 import { Link } from 'react-router-dom'
-import { Fragment, useState, useEffect, useLayoutEffect,useContext } from 'react'
+import { Fragment, useState, useEffect, useLayoutEffect, useContext } from 'react'
 import Basemap from '../map/basemap'
+import Basemaphalf from '../map/basemaphalf'
+import classnames from 'classnames'
 // ** Third Party Components
 import axios from 'axios'
 import { ThemeColors } from '@src/utility/context/ThemeColors'
@@ -16,6 +18,7 @@ import { indexselection } from '../../store/indexselection'
 import NDMIdateslider from '../map/NDMIdateslider'
 import { indexsel } from '../../store/indexselect'
 import { Spinner } from 'reactstrap'
+import AudioRecorder from './AudioRecorder'
 // ** Reactstrap Imports
 import {
   Row,
@@ -25,7 +28,9 @@ import {
   CardText,
   CardTitle,
   CardHeader,
+  Button,
   CardImg,
+  Modal, ModalHeader, ModalBody, ModalFooter,
   Badge, Label, Input, UncontrolledPopover, PopoverHeader, PopoverBody
 } from 'reactstrap'
 // ** Styles
@@ -36,18 +41,18 @@ import { useSkin } from '@hooks/useSkin'
 const BlogList = () => {
   // ** States
   const [isloading, setIsloading] = useState(false)
+  const [showGraph, setshowGraph] = useState(false)
   const [data, setData] = useState(null)
   const [picker, setPicker] = useState(new Date())
   const [search, setSearch] = useState(null)
+  const [mapHeight, setmapHeight] = useState(false)
+  const [centeredModal, setCenteredModal] = useState(false)
+  const [centeredModalVoice, setcenteredModalVoice] = useState(false)
   const [select, setSelect] = useState(null)
-  const [indexselect,setIndexselect] =useState(indexsel.getState())
+  const [indexselect, setIndexselect] = useState(indexsel.getState())
+  const [value, setValue] = useState('')
   const { } = useContext(ThemeColors),
-    { skin } = useSkin(),
-    labelColor = skin === 'dark' ? '#b4b7bd' : '#6e6b7b',
-    gridLineColor = 'rgba(200, 200, 200, 0.2)',
-    lineChartPrimary = '#666ee8',
-    lineChartDanger = '#ff4961',
-    warningColorShade = '#ffbd1f'
+    { skin } = useSkin()
 
   const options = [
     { value: 'NDVI', label: 'NDVI' },
@@ -60,33 +65,72 @@ const BlogList = () => {
 
   }, [])
 
-  useLayoutEffect(()=>{
+  useLayoutEffect(() => {
     indexsel.subscribe(() => {
       setIndexselect(indexsel.getState())
-      console.log('action',indexselect)
+      console.log('action', indexselect)
     })
-   })
+  })
   const renderRenderList = () => {
     console.log('select', select)
     return data.map(item => {
       return (
 
-        <Col  className='p-0 m-0' style={{ width: '100%' }} key={item.title} md='12' lg='12'>
-          < Basemap />
+        <Col className='p-0 m-0' style={{ width: '100%' }} key={item.title} md='12' lg='12'>
+          {mapHeight ? <Basemaphalf /> : <Basemap />}
 
-          <Card className='p-0 m-0'>
+          <div className='vertically-centered-modal'>
+
+            <Modal isOpen={centeredModalVoice} toggle={() => setcenteredModalVoice(!centeredModalVoice)} className='modal-dialog-centered'>
+              <ModalHeader toggle={() => setcenteredModalVoice(!centeredModalVoice)}>Record  Message</ModalHeader>
+              <ModalBody>
+                <AudioRecorder />
+
+              </ModalBody>
+              <ModalFooter>
+                <Button color='primary' onClick={() => setcenteredModalVoice(!centeredModalVoice)}>
+                  Send
+                </Button>{' '}
+              </ModalFooter>
+            </Modal>
+          </div>
+          <div className='vertically-centered-modal'>
+
+            <Modal isOpen={centeredModal} toggle={() => setCenteredModal(!centeredModal)} className='modal-dialog-centered'>
+              <ModalHeader toggle={() => setCenteredModal(!centeredModal)}>Enter Message</ModalHeader>
+              <ModalBody>
+
+                <Input
+                  name='text'
+                  value={value}
+                  type='textarea'
+                  id='exampleText'
+                  placeholder='Message'
+                  style={{ minHeight: '100px' }}
+                  onChange={e => setValue(e.target.value)}
+                  className={classnames({ 'text-danger': value.length > 20 })} />
+              </ModalBody>
+              <ModalFooter>
+                <Button color='primary' onClick={() => setCenteredModal(!centeredModal)}>
+                  Send
+                </Button>{' '}
+              </ModalFooter>
+            </Modal>
+          </div>
+
+          {showGraph && <Card className='p-0 m-0'>
             <CardHeader >
-            <div className='d-flex align-items-center'>
-              <CardTitle tag='h4'>Crop Timeline</CardTitle>
-            </div>
+              <div className='d-flex align-items-center'>
+                <CardTitle tag='h4'>Crop Timeline</CardTitle>
+              </div>
 
-            <Icon.Filter id='popClick' size={18} className='cursor-pointer' />
-          </CardHeader>
+              <Icon.Filter id='popClick' size={18} className='cursor-pointer' />
+            </CardHeader>
             <UncontrolledPopover trigger='click' placement='top' target='popClick'>
               <PopoverHeader>Apply Filters</PopoverHeader>
               <PopoverBody>
                 <Row>
-                  
+
                   <Col md={12}>
 
 
@@ -128,22 +172,23 @@ const BlogList = () => {
             </UncontrolledPopover>
 
 
-            
-          
+
+
             {indexselect == 'Avg NDMI' ? <NDMIdateslider /> : <></>}
-            {indexselect == 'Avg NDVI' ? <NDVIdateslider />: <></>}
+            {indexselect == 'Avg NDVI' ? <NDVIdateslider /> : <></>}
 
 
-            
-              
-              <div  style={{display : 'flex'  , justifyContent : 'center' ,alignItem: 'center'}}> {isloading ?  <Spinner className='me-25' size='lg' color='success'/>: <></>}</div> 
-              < Chart   setIsloading={setIsloading} />
-              
-               
 
-            
-          
+
+            <div style={{ display: 'flex', justifyContent: 'center', alignItem: 'center' }}> {isloading ? <Spinner className='me-25' size='lg' color='success' /> : <></>}</div>
+            < Chart setIsloading={setIsloading} />
+
+
+
+
+
           </Card>
+          }
         </Col>
 
       )
@@ -155,7 +200,7 @@ const BlogList = () => {
 
       <div className='blog-wrapper'>
         <div className='content-detached content-left'>
-          <div  className='content-body'>
+          <div className='content-body'>
             {data !== null ? (
               <div className='blog-list-wrapper'>
                 <Row>{renderRenderList()}</Row>
@@ -164,7 +209,7 @@ const BlogList = () => {
             ) : null}
           </div>
         </div>
-        <Sidebar search={setSearch} setIsloading={setIsloading} />
+        <Sidebar setCenteredModal={setCenteredModal} setcenteredModalVoice={setcenteredModalVoice} search={setSearch} setIsloading={setIsloading} setshowGraph={setshowGraph} setmapHeight={setmapHeight} />
       </div>
     </Fragment>
   )

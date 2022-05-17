@@ -1,6 +1,5 @@
 // ** React Imports
 import { Fragment, useState, useEffect } from 'react'
-
 // ** Chat App Component Imports
 import Chat from './Chat'
 import Sidebar from './SidebarLeft'

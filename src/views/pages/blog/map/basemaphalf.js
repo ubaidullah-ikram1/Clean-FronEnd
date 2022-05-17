@@ -14,7 +14,7 @@ export default (props) => {
   console.log('map', map, props.mapHeight)
   return (
     <div>
-      <MapContainer style={{ width: '100%', height: '80vh' }} center={[33, 73]} zoom={13}
+      <MapContainer style={{ width: '100%', height: '40vh' }} center={[33, 73]} zoom={13}
         whenCreated={map => {
           mapcontainer.dispatch({ type: 'map', map })
           console.log('map', map)
