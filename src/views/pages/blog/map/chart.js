@@ -23,14 +23,7 @@ const Chart = (props) => {
     ndvilayer.subscribe(() => {
       setLayers(ndvilayer.getState())
     })
-    //   clouddate.subscribe(()=>{ 
-    //     setCloudesdate(clouddate.getState() )
-
-    //       })
-    //   datestore.subscribe(()=>{ 
-    //     setDates(datestore.getState() )
-
-    //       })
+    
   }, [])
   useEffect(() => {
     //   fetchfarmid.dispatch({type:'farmid',farmid :growernamer})
@@ -50,7 +43,6 @@ const Chart = (props) => {
         response.data.map(function (val, index) {
           if (parseFloat(val.cloud_cover) < 60.00) {
             avgndvi.push(parseFloat(val.ndvi_avg))
-            
             date.push(val.date)
             //   setDates(date)
           }
@@ -68,44 +60,34 @@ const Chart = (props) => {
         }).then((response) => {
           response.data.map(function (val, index) {
             avgbaselinendvi.push(parseFloat(val.baseline_max_ndvi))
-          
-
-
-
           })
-
           axios.get('https://gistest.bkk.ag/NDMI_date/' + growernamer).then(
             (response) => {
               response.data.map(function (val, index) {
                 avgndmi.push(parseFloat(val.ndmi_avg))
-               
-
               })
-
-              axios.get('https://prod.bkk.ag/weather-api/weather/historic/30.21337183/73.19943331/3-04-2022/5-05-2022').then(
+              axios.get('https://prod.bkk.ag/weather-api/weather/historic/30.21337183/73.19943331/3-04-2022/5-05-2022',{headers: {
+                // Accept: "application/json", <---- **Originally BE returned stringified json. Not sure if I should be returning it as something else or if this is still needed**
+              
+                "Access-Control-Allow-Origin": "*"
+              }}).then(
                 (response) => {
-                props.setIsloading(false)
+                // props.setIsloading(false)
                   console.log(response)
                   Object.keys(response.data).map(
                     (e) => {
-                      
                       axisdate.push(e)
                       console.log('axisdate', axisdate);
-
                     }
                   )
              var readldate   =  axisdate.filter((i)=>{ return i>= '4/2/2022' && i <= '5/5/2022';})
                   console.log('readldate',readldate)
-
                   Object.values(response.data).map((e) => {
                      console.log('rain',e)
                     temp.push(e.prec)
-
-
                   })
                   var dump = temp.length - avgndvi.length
                   console.log('dump', dump)
-
                   console.log(avgndvi)
                   Highcharts.chart('container', {
                     chart: {

@@ -16,6 +16,7 @@ import { indexselection } from '../../store/indexselection'
 import NDMIdateslider from '../map/NDMIdateslider'
 import { indexsel } from '../../store/indexselect'
 import { Spinner } from 'reactstrap'
+import Tempchart from '../map/chart/tempcheck'
 // ** Reactstrap Imports
 import {
   Row,
@@ -35,12 +36,13 @@ import { useSkin } from '@hooks/useSkin'
 
 const BlogList = () => {
   // ** States
-  const [isloading, setIsloading] = useState(false)
+  // const [isloading, setIsloading] = useState(false)
   const [data, setData] = useState(null)
   const [picker, setPicker] = useState(new Date())
   const [search, setSearch] = useState(null)
   const [select, setSelect] = useState(null)
   const [indexselect,setIndexselect] =useState(indexsel.getState())
+  const [temchek, setTemchek] = useState(false);
   const { } = useContext(ThemeColors),
     { skin } = useSkin(),
     labelColor = skin === 'dark' ? '#b4b7bd' : '#6e6b7b',
@@ -56,9 +58,11 @@ const BlogList = () => {
   useEffect(() => {
     axios.get('/blog/list/data').then(res => setData(res.data.slice(0, 1)))
   }, [])
-  useEffect(() => {
-
-  }, [])
+  const tempcheck = () => { 
+    
+    setTemchek(!temchek)
+    
+  };
 
   useLayoutEffect(()=>{
     indexsel.subscribe(() => {
@@ -79,7 +83,12 @@ const BlogList = () => {
             <div className='d-flex align-items-center'>
               <CardTitle tag='h4'>Crop Timeline</CardTitle>
             </div>
-
+            <div className='form-check form-check-inline'>
+              <Input type='checkbox' onChange={tempcheck}  id='basic-cb-checked' />
+              <Label for='basic-cb-checked' className='form-check-label'>
+                Checked
+              </Label>
+            </div>
             <Icon.Filter id='popClick' size={18} className='cursor-pointer' />
           </CardHeader>
             <UncontrolledPopover trigger='click' placement='top' target='popClick'>
@@ -136,9 +145,9 @@ const BlogList = () => {
 
             
               
-              <div  style={{display : 'flex'  , justifyContent : 'center' ,alignItem: 'center'}}> {isloading ?  <Spinner className='me-25' size='lg' color='success'/>: <></>}</div> 
-              < Chart   setIsloading={setIsloading} />
-              
+              {/* <div  style={{display : 'flex'  , justifyContent : 'center' ,alignItem: 'center'}}> {isloading ?  <Spinner className='me-25' size='lg' color='success'/>: <></>}</div>  */}
+              {/* < Chart   setIsloading={setIsloading} /> */}
+            {temchek ?   <Tempchart /> : <></> }
                
 
             
@@ -164,7 +173,10 @@ const BlogList = () => {
             ) : null}
           </div>
         </div>
-        <Sidebar search={setSearch} setIsloading={setIsloading} />
+        <Sidebar search={setSearch} 
+        // setIsloading={setIsloading} 
+        
+        />
       </div>
     </Fragment>
   )

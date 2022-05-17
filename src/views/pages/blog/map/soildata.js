@@ -6,6 +6,7 @@ import { mapcontainer } from '../../store/mapcontainer';
 import { LayersControl,Marker,Popup,Circle,FeatureGroup } from 'react-leaflet';
 import { func } from 'prop-types';
 import axios from 'axios';
+import Weatherstation from './weatherstation';
 // import './chasma.css'
 export default () => {
   const center = [51.505, -0.09]
@@ -88,7 +89,11 @@ layers = {'server:mz_soil_data'}
     
   
       </LayersControl.Overlay>
-     
+      <LayersControl.Overlay name="   Weather Data">
+      {
+< Weatherstation />
+         }
+      </LayersControl.Overlay>
      
     </LayersControl>
       

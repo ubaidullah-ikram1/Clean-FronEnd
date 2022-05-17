@@ -258,7 +258,7 @@ const BlogSidebar = (props) => {
                                 d.data.features[0]['properties']['farm_crop_id'] ? farmidcommunicator.dispatch({ type: 'search', id: d.data.features[0]['properties']['farm_crop_id'] }) : <></>
                                 setFarmids(d.data.features[0]['properties']['farm_crop_id'])
 
-                                d.data.features[0]['properties']['farm_crop_id'] ? props.setIsloading(true) : <></>
+                                // d.data.features[0]['properties']['farm_crop_id'] ? props.setIsloading(true) : <></>
                               
                                 getSpecificFram(d.data.features[0]['properties']['farm_crop_id'])
 
