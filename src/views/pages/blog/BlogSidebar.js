@@ -50,8 +50,58 @@ const BlogSidebar = (props) => {
     setOverviewData(res.data[0])
     getFarmersList()
 
-  }, [])
 
+  }, [])
+  function DrawMap(msidn) {
+
+    Msidn.dispatch({ type: 'msidn', msidn: msidn })
+
+    axios.get("https://gis.bkk.ag/geoserver/server/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=server%3Ahbl_farms&CQL_FILTER=msisdn='" + msidn + "'&outputFormat=application%2Fjson").then(
+      r => {
+
+        var bbx = r.data.features[0]['geometry']['coordinates'][0][0][0]
+
+        map.flyTo([bbx[1], bbx[0]], 15)
+
+
+        r.data.features.map(d => {
+          //     // console.log(d)
+          map.on('click', e => {
+            props.setshowGraph(true)
+            props.setmapHeight(true)
+
+            // getNowcastWeather(e.latlng.lat, e.latlng.lng)
+
+
+            var sw = map.options.crs.project(map.getBounds().getSouthWest());
+            var ne = map.options.crs.project(map.getBounds().getNorthEast());
+            var BBOX = sw.x + "," + sw.y + "," + ne.x + "," + ne.y;
+            var WIDTH = map.getSize().x;
+            var HEIGHT = map.getSize().y;
+            var X = Math.trunc(map.layerPointToContainerPoint(e.layerPoint).x);
+            var Y = Math.trunc(map.layerPointToContainerPoint(e.layerPoint).y);
+            var url = "https://gis.bkk.ag/geoserver/server/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&LAYERS=server:hbl_farms&CQL_FILTER=msisdn='" + msidn + "'&QUERY_LAYERS=server:hbl_farms&BBOX=" + BBOX + "&FEATURE_COUNT=1&HEIGHT=" + HEIGHT + "&WIDTH=" + WIDTH + "&INFO_FORMAT=application%2Fjson&TILED=false&CRS=EPSG%3A3857&I=" + X + "&J=" + Y;
+
+            axios.get(url).then(
+              d => {
+
+
+                d?.data?.features[0]['properties']['farm_crop_id'] ? farmidcommunicator.dispatch({ type: 'search', id: d.data.features[0]['properties']['farm_crop_id'] }) : <></>
+                setFarmids(d.data.features[0]['properties']['farm_crop_id'])
+
+                d.data.features[0]['properties']['farm_crop_id'] ? props.setIsloading(true) : <></>
+
+                getSpecificFram(d.data.features[0]['properties']['farm_crop_id'])
+
+              }
+            )
+
+
+          })
+
+        })
+      })
+  }
 
   const searchHandler = (event) => {
     let searcjQery = event;
@@ -67,7 +117,7 @@ const BlogSidebar = (props) => {
     return farmerList.map(item => {
       return (
         <div className='right-sidebar-content'>
-          <Card style={{ marginLeft: '8%' }} className='card-transaction' >
+          <Card style={{ marginLeft: '8%', cursor: 'pointer' }} className='card-transaction' onClick={() => DrawMap(item.msisdn)} >
 
 
             <CardBody>
@@ -76,29 +126,44 @@ const BlogSidebar = (props) => {
                 <div className='my-auto'>
                   <h6>  {item.msisdn}</h6>
 
-                  <CardText className='mb-0  text-success'>{item.growername}</CardText>
+                  <CardText className='mb-0  text-success'>{item.growername.substring(0, 12)}</CardText>
+                </div>
+                <div className='my-auto' style={{ marginLeft: '15px' }}>
+
+
+                  <Icon.Mic style={{ marginLeft: '10px', color: '#26BD69' }} onMouseDown={(e) => {
+                    e.stopPropagation();
+                    props?.setcenteredModalVoice(true)
+                  }} size={18} />
+
+
+                  <Icon.Mail style={{ marginLeft: '10px', color: '#26BD69' }} onMouseDown={(e) => {
+                    e.stopPropagation();
+                    props?.setCenteredModal(true)
+                  }} size={18} />
+
                 </div>
 
               </div>
               <div className='d-flex'>
 
                 <div style={{ backgroundColor: '#CDFFCC', width: '100%' }}>
-                  <Icon.Check size={14} />
-                  <small style={{ marginLeft: '2px' }}>{item.crops}</small>
+                  <Icon.Check size={16} />
+                  <small style={{ marginLeft: '3px' }}>{item.crops}</small>
                 </div>
               </div>
               <div className='d-flex'>
 
-                <div style={{ backgroundColor: '#CDFFCC', width: '100%', marginTop: '3px' }}>
-                  <Icon.Map size={14} />
-                  <small style={{ marginLeft: '2px' }} >{item.fields}</small>
+                <div style={{ backgroundColor: '#CDFFCC', width: '100%', marginTop: '4px' }}>
+                  <Icon.Map size={16} />
+                  <small style={{ marginLeft: '3px' }} >{item.fields}</small>
                 </div>
               </div>
               <div className='d-flex'>
 
-                <div style={{ backgroundColor: '#CDFFCC', width: '100%', marginTop: '3px' }}>
-                  <Icon.MapPin size={14} />
-                  <small style={{ marginLeft: '2px' }}>{item.total_area} Acres</small>
+                <div style={{ backgroundColor: '#CDFFCC', width: '100%', marginTop: '4px' }}>
+                  <Icon.MapPin size={16} />
+                  <small style={{ marginLeft: '3px' }}>{item.total_area} Acres</small>
                 </div>
               </div>
             </CardBody>
@@ -159,6 +224,9 @@ const BlogSidebar = (props) => {
 
     })
   }, [])
+
+
+
   return (
     <div className='sidebar-detached sidebar-right'>
       <div className='sidebar'>
@@ -219,64 +287,8 @@ const BlogSidebar = (props) => {
 
 
                   if (e.key == 'Enter') {
+                    DrawMap(e.target.value)
 
-                    var msidn = e.target.value
-                    Msidn.dispatch({ type: 'msidn', msidn: msidn })
-                    //   setMsidn(msidn)
-                    //   console.log(msidn)
-                    //  msidn.dispatch({type:'msidn',msidn:d.data.features[0]['properties']['field_1']})
-                    axios.get("https://gis.bkk.ag/geoserver/server/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=server%3Ahbl_farms&CQL_FILTER=msisdn='" + msidn + "'&outputFormat=application%2Fjson").then(
-                      r => {
-                        console.log('enter', r)
-                        var bbx = r.data.features[0]['geometry']['coordinates'][0][0][0]
-                        //     console.log('wmslayer',bbx)
-                        //     console.log(map)
-
-                        map.flyTo([bbx[1], bbx[0]], 15)
-
-
-                        r.data.features.map(d => {
-                          //     // console.log(d)
-                          map.on('click', e => {
-                            
-                            getNowcastWeather(e.latlng.lat, e.latlng.lng)
-
-
-                            var sw = map.options.crs.project(map.getBounds().getSouthWest());
-                            var ne = map.options.crs.project(map.getBounds().getNorthEast());
-                            var BBOX = sw.x + "," + sw.y + "," + ne.x + "," + ne.y;
-                            var WIDTH = map.getSize().x;
-                            var HEIGHT = map.getSize().y;
-                            var X = Math.trunc(map.layerPointToContainerPoint(e.layerPoint).x);
-                            var Y = Math.trunc(map.layerPointToContainerPoint(e.layerPoint).y);
-                            var url = "https://gis.bkk.ag/geoserver/server/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&LAYERS=server:hbl_farms&CQL_FILTER=msisdn='" + msidn + "'&QUERY_LAYERS=server:hbl_farms&BBOX=" + BBOX + "&FEATURE_COUNT=1&HEIGHT=" + HEIGHT + "&WIDTH=" + WIDTH + "&INFO_FORMAT=application%2Fjson&TILED=false&CRS=EPSG%3A3857&I=" + X + "&J=" + Y;
-                           
-                            axios.get(url).then(
-                              d => {
-
-                                console.log('idvalue', d.data.features[0]['properties']['farm_crop_id'])
-                                d.data.features[0]['properties']['farm_crop_id'] ? farmidcommunicator.dispatch({ type: 'search', id: d.data.features[0]['properties']['farm_crop_id'] }) : <></>
-                                setFarmids(d.data.features[0]['properties']['farm_crop_id'])
-
-                                // d.data.features[0]['properties']['farm_crop_id'] ? props.setIsloading(true) : <></>
-                              
-                                getSpecificFram(d.data.features[0]['properties']['farm_crop_id'])
-
-                              }
-                            )
-                            // var bbxs = r.data.features[0]['properties']['cordinate'].split(',')
-                            // var lats = bbxs[0]
-                            // var lngs = bbxs[1]
-
-                            // console.log(lats, lngs)
-
-                            // lat.dispatch({ type: 'lat', lat: lats })
-                            // lngt.dispatch({ type: 'lng', lng: lngs })
-
-                          })
-
-                        })
-                      })
                     return true;
                   } else {
                     return false;
@@ -289,7 +301,7 @@ const BlogSidebar = (props) => {
                 </InputGroupText >
               </InputGroup>
             </div>
-            <div style={{ height: "650px", overflowY: "scroll", marginTop: "5%" }} className="side_bar">{sepcicFarm ? renderSpecific(sepcicFarm) : renderTransactions(searchedResult)}</div>
+            <div style={{ height: "400px", overflowY: "scroll", marginTop: "2%" }} className="side_bar">{sepcicFarm ? renderSpecific(sepcicFarm) : renderTransactions(searchedResult)}</div>
 
           </div>
         </div>
