@@ -15,7 +15,8 @@ import { ndvis } from "../../store/ndviraster";
 import { indexsel } from "../../store/indexselect";
 import { ndvilayer } from "../../store/ndvilayer";
 export default () => {
-  var layer
+  var layer = null
+  var a=0
   const[farmid,setFarmid]=useState(farmidcommunicator.getState())
     const [dates, setDates] = useState(datestore.getState())
     const [updatedata,setUpdatedata]=useState(null)
@@ -40,36 +41,37 @@ export default () => {
             const max = 1;
             const range = 1;
             var scale = chroma.scale("RdYlGn");
-            layer = new GeoRasterLayer({
-                georaster: georaster, 
-                opacity: 1,
-                pixelValuesToColorFn: function(pixelValues) {
-                  var pixelValue = pixelValues[0];
-                  if (isNaN(pixelValue)) return null;
-                  var scaledPixelValue = (pixelValue - min) / range;
-                  var color = scale(scaledPixelValue).hex();
-                  console.log('color',color)
-                  return color;
-                },
-                resolution: 256
-            });
-            layer ? indexsel.dispatch({type:'layerss',layerss: layer}) :<></>
-            map.addLayer(layer)
-          console.log('layer',layer)
-          
+     layer = new GeoRasterLayer({
+          georaster: georaster, 
+          opacity: 1,
+          pixelValuesToColorFn: function(pixelValues) {
+            var pixelValue = pixelValues[0];
+            if (isNaN(pixelValue)) return null;
+            var scaledPixelValue = (pixelValue - min) / range;
+            var color = scale(scaledPixelValue).hex();
+            console.log('color',color)
+            return color;
+          },
+          resolution: 256
+      });
+    //  indexsel.dispatch({type:'layerss',layerss: layer})
+  console.log('rasterlayer',layer)
+    map.addLayer(layer)
+  
         });
       })
     }
     
-    if(ndvi != null) {
-      console.log('indexselect',indexselect)
+    // if(ndvi != null) {
+    //   console.log('indexselect',indexselect)
       
       
+
        
       
-      rastergenaration(farmid, ndvi)
+    //   rastergenaration(farmid, ndvi)
 
-    }
+    // }
     useLayoutEffect(() => {
       ndvis.subscribe(() => {
         setNdvi(ndvis.getState())
@@ -113,14 +115,7 @@ export default () => {
 
       },[ndvi])
     
-      const fetchdata =e =>{
-        let data = mapcontainer.getState();
-        setMap(data)
-         setUpdatedata(e.target.textContent) 
-         console.log('mapuseclick',map)
-
-         rastergenaration(farmid, e.target.textContent)
-             }  
+      
 
            
 
