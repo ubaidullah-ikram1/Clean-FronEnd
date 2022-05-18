@@ -92,7 +92,7 @@ const RecordView = (props) => {
   return (
 
     <Fragment>
-      <Row>
+      <Row style={{ marginTop: "15%" }}>
 
 
         <Col md={12} align="center" >

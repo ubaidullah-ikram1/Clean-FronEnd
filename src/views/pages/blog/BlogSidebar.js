@@ -156,7 +156,7 @@ const BlogSidebar = (props) => {
 
                 <div style={{ backgroundColor: '#CDFFCC', width: '100%', marginTop: '4px' }}>
                   <Icon.Map size={16} />
-                  <small style={{ marginLeft: '3px' }} >{item.fields}</small>
+                  <small style={{ marginLeft: '5px' }} >{item.fields}</small>
                 </div>
               </div>
               <div className='d-flex'>
