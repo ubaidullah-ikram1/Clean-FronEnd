@@ -68,7 +68,7 @@ const BlogSidebar = (props) => {
           //     // console.log(d)
           map.on('click', e => {
             props.setshowGraph(true)
-            props.setmapHeight(true)
+            props.setmapHeight('50vh')
 
             // getNowcastWeather(e.latlng.lat, e.latlng.lng)
 
