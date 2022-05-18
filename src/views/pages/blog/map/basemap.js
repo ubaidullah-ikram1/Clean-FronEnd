@@ -16,10 +16,11 @@ export default (props) => {
 
   useEffect(() => {
     setMapHeight(props.mapHeight)
+
   }, [props.mapHeight]);
   return (
     <div>
-      <MapContainer style={{ width: '100%', height: mapHeight }} center={[33, 73]} zoom={13}
+      <MapContainer id="mapContainer" style={{ width: '100%', height: mapHeight }} center={[33, 73]} zoom={13}
         whenCreated={map => {
           mapcontainer.dispatch({ type: 'map', map })
 

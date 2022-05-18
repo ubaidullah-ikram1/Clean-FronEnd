@@ -63,10 +63,10 @@ const BlogList = () => {
   useEffect(() => {
     axios.get('/blog/list/data').then(res => setData(res.data.slice(0, 1)))
   }, [])
-  const tempcheck = () => { 
-    
+  const tempcheck = () => {
+
     setTemchek(!temchek)
-    
+
   };
 
   useLayoutEffect(() => {
@@ -124,17 +124,17 @@ const BlogList = () => {
 
           {showGraph && <Card className='p-0 m-0'>
             <CardHeader >
-            <div className='d-flex align-items-center'>
-              <CardTitle tag='h4'>Crop Timeline</CardTitle>
-            </div>
-            <div className='form-check form-check-inline'>
-              <Input type='checkbox' onChange={tempcheck}  id='basic-cb-checked' />
-              <Label for='basic-cb-checked' className='form-check-label'>
-                Checked
-              </Label>
-            </div>
-            <Icon.Filter id='popClick' size={18} className='cursor-pointer' />
-          </CardHeader>
+              <div className='d-flex align-items-center'>
+                <CardTitle tag='h4'>Crop Timeline</CardTitle>
+              </div>
+              <div className='form-check form-check-inline'>
+                <Input type='checkbox' onChange={tempcheck} id='basic-cb-checked' />
+                <Label for='basic-cb-checked' className='form-check-label'>
+                  Checked
+                </Label>
+              </div>
+              <Icon.Filter id='popClick' size={18} className='cursor-pointer' />
+            </CardHeader>
             <UncontrolledPopover trigger='click' placement='top' target='popClick'>
               <PopoverHeader>Apply Filters</PopoverHeader>
               <PopoverBody>
@@ -189,18 +189,17 @@ const BlogList = () => {
 
 
 
+
+
+
+
+
+
+
             <div style={{ display: 'flex', justifyContent: 'center', alignItem: 'center' }}> {isloading ? <Spinner className='me-25' size='lg' color='success' /> : <></>}</div>
             < Chart setIsloading={setIsloading} />
+            {temchek ? <Tempchart /> : <></>}
 
-
-
-
-            
-              
-              {/* <div  style={{display : 'flex'  , justifyContent : 'center' ,alignItem: 'center'}}> {isloading ?  <Spinner className='me-25' size='lg' color='success'/>: <></>}</div>  */}
-              {/* < Chart   setIsloading={setIsloading} /> */}
-            {temchek ?   <Tempchart /> : <></> }
-               
 
           </Card>
           }
@@ -224,7 +223,7 @@ const BlogList = () => {
             ) : null}
           </div>
         </div>
-        <Sidebar setCenteredModal={setCenteredModal} setcenteredModalVoice={setcenteredModalVoice} search={setSearch}  setshowGraph={setshowGraph} setmapHeight={setmapHeight} />
+        <Sidebar setCenteredModal={setCenteredModal} setIsloading={setIsloading} setcenteredModalVoice={setcenteredModalVoice} search={setSearch} setshowGraph={setshowGraph} setmapHeight={setmapHeight} />
       </div>
     </Fragment>
   )
