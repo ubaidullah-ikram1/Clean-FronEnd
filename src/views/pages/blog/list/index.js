@@ -46,7 +46,7 @@ const BlogList = () => {
   const [data, setData] = useState(null)
   const [picker, setPicker] = useState(new Date())
   const [search, setSearch] = useState(null)
-  const [mapHeight, setmapHeight] = useState('80vh')
+  const [mapHeight, setmapHeight] = useState(false)
   const [centeredModal, setCenteredModal] = useState(false)
   const [centeredModalVoice, setcenteredModalVoice] = useState(false)
   const [select, setSelect] = useState(null)
@@ -63,11 +63,9 @@ const BlogList = () => {
   useEffect(() => {
     axios.get('/blog/list/data').then(res => setData(res.data.slice(0, 1)))
   }, [])
-
   const tempcheck = () => { 
     
     setTemchek(!temchek)
-    console.log(temchek)
     
   };
 
@@ -83,7 +81,7 @@ const BlogList = () => {
       return (
 
         <Col className='p-0 m-0' style={{ width: '100%' }} key={item.title} md='12' lg='12'>
-          <Basemap mapHeight={mapHeight} />
+          {mapHeight ? <Basemaphalf /> : <Basemap />}
 
           <div className='vertically-centered-modal'>
 
@@ -167,6 +165,7 @@ const BlogList = () => {
                       id='date-time-picker'
                       className='form-control'
                       onChange={date => setPicker(date)} />
+
                     <Label className='form-label mt-1' for='date-time-picker'>
                       End Date
                     </Label>
@@ -191,12 +190,18 @@ const BlogList = () => {
 
 
             <div style={{ display: 'flex', justifyContent: 'center', alignItem: 'center' }}> {isloading ? <Spinner className='me-25' size='lg' color='success' /> : <></>}</div>
-            < Chart 
-            // setIsloading={setIsloading} 
-            />
+            < Chart setIsloading={setIsloading} />
+
+
+
+
+            
+              
               {/* <div  style={{display : 'flex'  , justifyContent : 'center' ,alignItem: 'center'}}> {isloading ?  <Spinner className='me-25' size='lg' color='success'/>: <></>}</div>  */}
               {/* < Chart   setIsloading={setIsloading} /> */}
-            {/* {temchek ?  <Tempchart/> :  <></> } */}
+            {temchek ?   <Tempchart /> : <></> }
+               
+
           </Card>
           }
         </Col>
