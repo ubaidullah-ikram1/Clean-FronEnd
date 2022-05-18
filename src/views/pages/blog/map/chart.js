@@ -10,8 +10,8 @@ import { ndvilayer } from '../../store/ndvilayer';
 // import { fetchfarmid } from '../../../stores/visibilty';
 const Chart = (props) => {
   const [reset, setReset] = useState('c')
-  const [indexname,SetIndexname] =useState()
-  const [layers,setLayers] =useState(ndvilayer.getState())
+  const [indexname, SetIndexname] = useState()
+  const [layers, setLayers] = useState(ndvilayer.getState())
 
   // const [dates, setDates] = useState([])
   // const [cloudesdate, setCloudesdate] = useState(clouddate.getState())
@@ -23,7 +23,7 @@ const Chart = (props) => {
     ndvilayer.subscribe(() => {
       setLayers(ndvilayer.getState())
     })
-    
+
   }, [])
   useEffect(() => {
     //   fetchfarmid.dispatch({type:'farmid',farmid :growernamer})
@@ -47,8 +47,7 @@ const Chart = (props) => {
             //   setDates(date)
           }
         }) : <></>
-      console.log('startdate', date[0])
-      console.log('enddate', date.slice(-1))
+
       if (growernamer) {
 
         datestore.dispatch({ type: 'date', date: date })
@@ -66,13 +65,15 @@ const Chart = (props) => {
               response.data.map(function (val, index) {
                 avgndmi.push(parseFloat(val.ndmi_avg))
               })
-              axios.get('https://prod.bkk.ag/weather-api/weather/historic/30.21337183/73.19943331/3-04-2022/5-05-2022',{headers: {
-                // Accept: "application/json", <---- **Originally BE returned stringified json. Not sure if I should be returning it as something else or if this is still needed**
-              
-                "Access-Control-Allow-Origin": "*"
-              }}).then(
+              axios.get('https://prod.bkk.ag/weather-api/weather/historic/30.21337183/73.19943331/3-04-2022/5-05-2022', {
+                headers: {
+                  // Accept: "application/json", <---- **Originally BE returned stringified json. Not sure if I should be returning it as something else or if this is still needed**
+
+                  "Access-Control-Allow-Origin": "*"
+                }
+              }).then(
                 (response) => {
-                // props.setIsloading(false)
+                  // props.setIsloading(false)
                   console.log(response)
                   Object.keys(response.data).map(
                     (e) => {
@@ -80,10 +81,10 @@ const Chart = (props) => {
                       console.log('axisdate', axisdate);
                     }
                   )
-             var readldate   =  axisdate.filter((i)=>{ return i>= '4/2/2022' && i <= '5/5/2022';})
-                  console.log('readldate',readldate)
+                  var readldate = axisdate.filter((i) => { return i >= '4/2/2022' && i <= '5/5/2022'; })
+                  console.log('readldate', readldate)
                   Object.values(response.data).map((e) => {
-                     console.log('rain',e)
+
                     temp.push(e.prec)
                   })
                   var dump = temp.length - avgndvi.length
@@ -92,17 +93,17 @@ const Chart = (props) => {
                   Highcharts.chart('container', {
                     chart: {
                       type: 'scatter',
-                      height : '300px'
+                      height: '300px'
                     },
                     title: {
                       text: ''
-                            // text: null // as an alternative
+                      // text: null // as an alternative
                     },
                     subtitle: {
                       text: ''
-                            // text: null // as an alternative
+                      // text: null // as an alternative
                     },
-                  
+
                     xAxis: {
                       tickInterval: 5,
                       categories: date,
@@ -120,13 +121,13 @@ const Chart = (props) => {
                       series: {
                         cursor: 'pointer',
                         allowPointSelect: true,
-                              
+
                         events: {
                           click: function (event) {
-                            ndvis.dispatch({type:'ndvi',ndvi: event.point.category})
-                            var ind   = this.name
-                            console.log('layers',layers)
-                            ind ? indexsel.dispatch({type:'indexis',indexis: ind}) :<></>
+                            ndvis.dispatch({ type: 'ndvi', ndvi: event.point.category })
+                            var ind = this.name
+
+                            ind ? indexsel.dispatch({ type: 'indexis', indexis: ind }) : <></>
                             // console.log("event", event.point.category)
 
                           }
@@ -158,7 +159,7 @@ const Chart = (props) => {
                     }],
                     tooltip: {
                       shared: true,
-                     
+
                     },
 
                     legend: {
@@ -177,7 +178,7 @@ const Chart = (props) => {
                       {
                         name: 'Precipitation',
                         type: 'column',
-                        data: temp.slice(0,avgndvi.length),
+                        data: temp.slice(0, avgndvi.length),
                         yAxis: 1,
                         color: 'blue',
                         legendColor: 'red',
@@ -204,7 +205,7 @@ const Chart = (props) => {
                         color: '#add8e6',
                         legendColor: 'red',
                       },
-                      
+
                     ]
                   });
 
