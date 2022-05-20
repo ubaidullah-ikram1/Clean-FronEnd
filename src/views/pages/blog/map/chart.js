@@ -6,14 +6,18 @@ import { datestore } from '../../store/datesstore';
 import { ndvis } from '../../store/ndviraster';
 import { indexsel } from '../../store/indexselect';
 import { isPropsEqual } from '@fullcalendar/core';
+import { ndmilayerss } from '../../store/ndmilayer';
 import { ndvilayer } from '../../store/ndvilayer';
 import { map } from 'jquery';
 import { mapcontainer } from '../../store/mapcontainer';
+
 // import { fetchfarmid } from '../../../stores/visibilty';
 const Chart = (props) => {
   const [reset, setReset] = useState('c')
   const [indexname, SetIndexname] = useState()
   const [layers, setLayers] = useState(ndvilayer.getState())
+  const [ndmilaye, setNdmilaye] = useState(ndmilayerss.getState())
+
   const [ map,setMap]= useState(mapcontainer.getState())
 
   // const [dates, setDates] = useState([])
@@ -27,6 +31,9 @@ const Chart = (props) => {
       setLayers(ndvilayer.getState())
       console.log('actionlayer',layers)
     })
+    ndmilayerss.subscribe(() => {
+      setNdmilaye(ndmilayerss.getState())
+          })
     mapcontainer.subscribe(() => {
       setMap(mapcontainer.getState())
       console.log('actionlayer',layers)
@@ -134,6 +141,8 @@ var mint
                         events: {
                           click: function (event) {
                             var layerss=ndvilayer.getState()
+                             var NDMIlayerss=ndmilayerss.getState()
+                             NDMIlayerss? map.removeLayer(NDMIlayerss) : <></>
                             layerss ?  map.removeLayer(layerss) : <></>
                             ndvis.dispatch({ type: 'ndvi', ndvi: event.point.category })
                             var ind = this.name

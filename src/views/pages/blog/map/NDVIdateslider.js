@@ -98,26 +98,6 @@ export default () => {
         // setMap(data)
         // rastergenaration(farmid, updatedata)
       },[ndvi])
-    
-    
-
-           
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     return (
         <div className="swiper  " >
         {/* <Swiper
