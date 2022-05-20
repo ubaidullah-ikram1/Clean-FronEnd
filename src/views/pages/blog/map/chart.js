@@ -183,16 +183,16 @@ var mint
                     },
                     
         tooltip: {
-          shared: false,
-          useHTML: true,
-          formatter: function() {
-              var serie = this.series;
-              var index = this.series.points.indexOf(this.point);
-              var s = '<img src="http://static.bbci.co.uk/frameworks/barlesque/2.45.9/desktop/3.5/img/blq-blocks_grey_alpha.png" height="20" width="40"/><br/><b>' + Highcharts.dateFormat('%A, %b %e, %Y', this.x) + '</b><br>';
-              s += 'temp : ' + " "  +mint[index]  + " " + " " + '<span style="color:' + serie.color + '">' + serie.options.name + '</span>: <b>' + this.y + '</b><br/>';
+          shared: true,
+          // useHTML: true,
+          // formatter: function() {
+          //     var serie = this.series;
+          //     var index = this.series.points.indexOf(this.point);
+          //     var s = '<img src="http://static.bbci.co.uk/frameworks/barlesque/2.45.9/desktop/3.5/img/blq-blocks_grey_alpha.png" height="20" width="40"/><br/><b>' + Highcharts.dateFormat('%A, %b %e, %Y', this.x) + '</b><br>';
+          //     s += 'temp : ' + " "  +mint[index]  + " " + " " + '<span style="color:' + serie.color + '">' + serie.options.name + '</span>: <b>' + this.y + '</b><br/>';
            
-              return s;
-          }
+          //     return s;
+          // }
       },
                     series: [
                       {

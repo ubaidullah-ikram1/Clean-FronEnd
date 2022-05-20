@@ -21,6 +21,7 @@ const BlogSidebar = (props) => {
   const [farmids, setFarmids] = useState()
   const [overviewData, setOverviewData] = useState([])
   const [farmerList, setfarmerList] = useState([])
+  const [FarmsList, setFarmsList] = useState(null)
   const [searchedResult, setsearchedResult] = useState([]);
   const [sepcicFarm, setSpecificFarm] = useState(null);
 
@@ -28,6 +29,8 @@ const BlogSidebar = (props) => {
   const getFarmersList = async () => {
     let res = await axios.get("https://gistest.bkk.ag/all_growers/hbl");
     setfarmerList(res.data)
+    setSpecificFarm(null)
+    setFarmsList(null)
     setsearchedResult(res.data)
   }
 
@@ -42,7 +45,10 @@ const BlogSidebar = (props) => {
     setSpecificFarm(res.data)
   }
 
-
+  const getFarmByMsisdn = async (msisdn) => {
+    let res = await axios.get(`https://gistest.bkk.ag/farm_data/${msisdn}`);
+    setFarmsList(res.data)
+  }
 
 
   useEffect(async () => {
@@ -53,20 +59,23 @@ const BlogSidebar = (props) => {
 
   }, [])
   function DrawMap(msidn) {
-
-    Msidn.dispatch({ type: 'msidn', msidn: msidn })
-
-    axios.get("https://gis.bkk.ag/geoserver/server/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=server%3Ahbl_farms&CQL_FILTER=msisdn='" + msidn + "'&outputFormat=application%2Fjson").then(
+    // const filteredData = searchedResult.filter((data) => data.msisdn === msidn)
+    // setsearchedResult(filteredData)
+    // Msidn.dispatch({ type: 'msidn', msidn: msidn })
+    msidn ? farmidcommunicator.dispatch({ type: 'search', id:msidn }) : <></>
+    setFarmids(msidn)
+    msidn ?  props.setIsloading(true) : <></>
+    axios.get("https://gis.bkk.ag/geoserver/server/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=server%3Ahbl_farms&CQL_FILTER=farm_crop_id='" + msidn + "'&outputFormat=application%2Fjson").then(
       r => {
 
         var bbx = r.data.features[0]['geometry']['coordinates'][0][0][0]
 
-        map.flyTo([bbx[1], bbx[0]], 13)
+        map.flyTo([bbx[1], bbx[0]], 16)
 
 
-        r.data.features.map(d => {
+        
           //     // console.log(d)
-          map.on('click', e => {
+          msidn ?   map.on('click', e => {
             props.setshowGraph(true)
             // props.setmapHeight('50vh')
 
@@ -85,8 +94,7 @@ const BlogSidebar = (props) => {
             axios.get(url).then(
               d => {
 
-                d?.data?.features[0]['properties']['farm_crop_id'] ? farmidcommunicator.dispatch({ type: 'search', id: d.data.features[0]['properties']['farm_crop_id'] }) : <></>
-                setFarmids(d.data.features[0]['properties']['farm_crop_id'])
+              
                 d?.data?.features[0]['properties']['farm_crop_id'] ?  props.setIsloading(true) : <></>
                 // d.data.features[0]['properties']['farm_crop_id'] ? props.setIsloading(true) : <></>
                 var farmidurl="https://gis.bkk.ag/geoserver/server/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=server%3Ahbl_farms&CQL_FILTER=farm_crop_id	='" + d.data.features[0]['properties']['farm_crop_id'] + "'&outputFormat=application%2Fjson";
@@ -107,10 +115,10 @@ const BlogSidebar = (props) => {
             )
 
 
-          })
+          }) : <></>
 
         })
-      })
+      
   }
 
   const searchHandler = (event) => {
@@ -127,53 +135,109 @@ const BlogSidebar = (props) => {
     return farmerList.map(item => {
       return (
         <div className='right-sidebar-content'>
-          <Card style={{ marginLeft: '8%', cursor: 'pointer' }} className='card-transaction' onClick={() => DrawMap(item.msisdn)} >
+          <Card style={{ marginLeft: '8%', cursor: 'pointer' }} className='card-transaction' onClick={() => getFarmByMsisdn(item.msisdn)} >
 
 
             <CardBody>
               <div className='meetup-header d-flex align-items-center'>
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <h6>  {item.msisdn}</h6>
+                  </div>
+                  <div>
 
-                <div className='my-auto'>
-                  <h6>  {item.msisdn}</h6>
 
-                  <CardText className='mb-0  text-success'>{item.growername.substring(0, 12)}</CardText>
+                    <Icon.Mic style={{ marginLeft: '10px', color: '#26BD69' }} onMouseDown={(e) => {
+                      e.stopPropagation();
+                      props?.setcenteredModalVoice(true)
+                    }} size={18} />
+
+
+                    <Icon.Mail style={{ marginLeft: '10px', color: '#26BD69' }} onMouseDown={(e) => {
+                      e.stopPropagation();
+                      props?.setCenteredModal(true)
+                    }} size={18} />
+
+                  </div>
                 </div>
-                <div className='my-auto' style={{ marginLeft: '15px' }}>
 
 
-                  <Icon.Mic style={{ marginLeft: '10px', color: '#26BD69' }} onMouseDown={(e) => {
-                    e.stopPropagation();
-                    props?.setcenteredModalVoice(true)
-                  }} size={18} />
 
+              </div>
+              <div className='my-auto'>
 
-                  <Icon.Mail style={{ marginLeft: '10px', color: '#26BD69' }} onMouseDown={(e) => {
-                    e.stopPropagation();
-                    props?.setCenteredModal(true)
-                  }} size={18} />
-
-                </div>
-
+                <CardText className='mb-0  text-success'>{item.growername}</CardText>
               </div>
               <div className='d-flex'>
 
-                <div style={{ backgroundColor: '#CDFFCC', width: '100%' }}>
+                <div >
                   <Icon.Check size={16} />
                   <small style={{ marginLeft: '3px' }}>{item.crops}</small>
                 </div>
               </div>
               <div className='d-flex'>
 
-                <div style={{ backgroundColor: '#CDFFCC', width: '100%', marginTop: '4px' }}>
+                <div style={{ marginTop: '4px' }}>
                   <Icon.Map size={16} />
                   <small style={{ marginLeft: '5px' }} >{item.fields}</small>
                 </div>
               </div>
               <div className='d-flex'>
 
-                <div style={{ backgroundColor: '#CDFFCC', width: '100%', marginTop: '4px' }}>
+                <div style={{ marginTop: '4px' }}>
                   <Icon.MapPin size={16} />
                   <small style={{ marginLeft: '3px' }}>{item.total_area} Acres</small>
+                </div>
+              </div>
+            </CardBody>
+
+          </Card>
+        </div>
+      )
+    })
+  }
+  const renderAllfarms = (FarmList) => {
+    return FarmList.map(item => {
+      return (
+        <div className='right-sidebar-content'>
+          <Card style={{ marginLeft: '8%', cursor: 'pointer' }} className='card-transaction' onClick={() => DrawMap(item.farm_crop_id)} >
+
+
+            <CardBody>
+              <div className='meetup-header d-flex align-items-center'>
+                <div class="d-flex justify-content-between">
+                  {/* <div>
+                    <h6>  {item.msisdn}</h6>
+                  </div> */}
+
+                </div>
+
+
+
+              </div>
+              {/* <div className='my-auto'>
+
+                <CardText className='mb-0  text-success'>{item.farmer_name}</CardText>
+              </div> */}
+              <div className='d-flex'>
+
+                <div >
+                  <Icon.Check size={16} />
+                  <small style={{ marginLeft: '3px' }}>{item.location_name}</small>
+                </div>
+              </div>
+              <div className='d-flex'>
+
+                <div style={{ marginTop: '4px' }}>
+                  <Icon.Map size={16} />
+                  <small style={{ marginLeft: '5px' }} >{item.crops}</small>
+                </div>
+              </div>
+              <div className='d-flex'>
+
+                <div style={{ marginTop: '4px' }}>
+                  <Icon.MapPin size={16} />
+                  <small style={{ marginLeft: '3px' }}>{item.area_farm} Acres</small>
                 </div>
               </div>
             </CardBody>
@@ -306,12 +370,22 @@ const BlogSidebar = (props) => {
                 }} />
 
                 <InputGroupText>
+                  {/* <Icon.X size={16}  /> */}
                   <Icon.Search size={14} />
+
 
                 </InputGroupText >
               </InputGroup>
             </div>
-            <div style={{ height: "400px", overflowY: "scroll", marginTop: "2%" }} className="side_bar">{sepcicFarm ? renderSpecific(sepcicFarm) : renderTransactions(searchedResult)}</div>
+            <div class="d-flex justify-content-between">
+              <div>
+                <Icon.ArrowLeft style={{ cursor: 'pointer' }} onClick={() => getFarmersList()} />
+              </div>
+              <div>
+                <Icon.X />
+              </div>
+            </div>
+            <div style={{ height: "400px", overflowY: "scroll", marginTop: "2%" }} className="side_bar">{FarmsList ? renderAllfarms(FarmsList) : renderTransactions(searchedResult)}</div>
 
           </div>
         </div>

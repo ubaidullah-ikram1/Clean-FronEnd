@@ -4,6 +4,7 @@ import { Msidn } from '../../store/msidn';
 import { WMSTileLayer } from 'react-leaflet';
 import { mapcontainer } from '../../store/mapcontainer';
 import { farmidcommunicator } from '../../store/farmidcommunicator';
+
 export default () => {
   const [growernamer, setGrowernamer] = useState(Msidn.getState())
   const [show,setShow]=useState(false)
@@ -27,7 +28,7 @@ export default () => {
     setShow(true)
   }, [])
     useEffect(()=>{
-      growernamer>0 ?  setBbox(growernamer) :<></>
+      farmid !=null ?  setBbox(farmid) :<></>
       console.log('farmid',farmid)
       
       
@@ -37,7 +38,7 @@ export default () => {
          
 console.log('wmsstate',farmid)
 
-      },[growernamer ,farmid])
+      },[farmid])
 
     
 
@@ -45,9 +46,9 @@ console.log('wmsstate',farmid)
      <> 
  {
    
-growernamer== bbox ?
+   farmid== bbox ?
 
-farmid != null ?   <WMSTileLayer
+  <WMSTileLayer
 layers = {'server:hbl_farms'}
   format= { 'image/png'}
   transparent = {true}
@@ -64,31 +65,9 @@ layers = {'server:hbl_farms'}
 />      : <></>
 
 
-:<>{console.log('wmsnot')}</>
+
          }
- {
-   
-   growernamer== bbox ?
-   
-   farmid == null ?   <WMSTileLayer
-   layers = {'server:hbl_farms'}
-     format= { 'image/png'}
-     transparent = {true}
-     opacity= { 0.7}
-     version = {'1.3.0'}
-     epsg= { '4326'}
-     //styles = { 'gis_server:ndvi'}
-     attribution = {'<a href="https://bkk.ag/">BKK</a>'}
-     minZoom = {4}
-     maxZoom = {20}
-     CQL_FILTER= {"msisdn = '" + growernamer  +    " '"}
-    url={`https://gis.bkk.ag/geoserver/server/wms?`}
-    
-   />      : <></>
-   
-   
-   :<>{console.log('wmsnot')}</>
-            }
+
           
       
     </>
