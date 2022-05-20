@@ -63,10 +63,10 @@ const BlogList = () => {
   useEffect(() => {
     axios.get('/blog/list/data').then(res => setData(res.data.slice(0, 1)))
   }, [])
-  const tempcheck = () => {
-
+  const tempcheck = () => { 
+    
     setTemchek(!temchek)
-
+    
   };
 
   useLayoutEffect(() => {
@@ -81,7 +81,7 @@ const BlogList = () => {
       return (
 
         <Col className='p-0 m-0' style={{ width: '100%' }} key={item.title} md='12' lg='12'>
-          <Basemap mapHeight={mapHeight} />
+          {mapHeight ? <Basemaphalf /> : <Basemap />}
 
           <div className='vertically-centered-modal'>
 
@@ -189,17 +189,11 @@ const BlogList = () => {
 
 
 
-
-
-
-
-
-
-
-            <div style={{ display: 'flex', justifyContent: 'center', alignItem: 'center' }}> {isloading ? <Spinner className='me-25' size='lg' color='success' /> : <></>}</div>
-            < Chart setIsloading={setIsloading} />
-            {temchek ? <Tempchart /> : <></>}
-
+           
+              <div  style={{display : 'flex'  , justifyContent : 'center' ,alignItem: 'center'}}> {isloading ?  <Spinner className='me-25' size='lg' color='success'/>: <></>}</div> 
+              < Chart setIsloading={setIsloading} />
+            {/* {temchek ?   <Tempchart /> : <></> } */}
+               
 
           </Card>
           }
@@ -223,7 +217,7 @@ const BlogList = () => {
             ) : null}
           </div>
         </div>
-        <Sidebar setCenteredModal={setCenteredModal} setIsloading={setIsloading} setcenteredModalVoice={setcenteredModalVoice} search={setSearch} setshowGraph={setshowGraph} setmapHeight={setmapHeight} />
+        <Sidebar setCenteredModal={setCenteredModal} setcenteredModalVoice={setcenteredModalVoice} search={setSearch} setIsloading={setIsloading}  setshowGraph={setshowGraph} setmapHeight={setmapHeight} />
       </div>
     </Fragment>
   )

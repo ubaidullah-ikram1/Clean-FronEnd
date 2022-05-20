@@ -18,6 +18,7 @@ export default () => {
     const [dates, setDates] = useState(datestore.getState())
     const [updatedata,setUpdatedata]=useState(null)
     const [map, setMap] = useState(mapcontainer.getState())
+    var layer =null
     const rastergenaration= (farm, update)=>{
         console.log('farm',farm)
       var url_to_geotiff_file = "https://gistest.bkk.ag/NDMI_image/"+farm+"/"+update;
@@ -29,7 +30,7 @@ export default () => {
             const max = 1;
             const range = 2;
             var scale = chroma.scale(['#b1988d', '#cab6ba', '#a99ed6', '#5363d4', '#1030e0']);
-           var layer = new GeoRasterLayer({
+            layer = new GeoRasterLayer({
                 georaster: georaster, 
                 opacity: 1,
                 pixelValuesToColorFn: function(pixelValues) {
@@ -42,17 +43,21 @@ export default () => {
                 },
                 resolution: 256
             });
-          console.log('mapuse',layer)
-            map.addLayer(layer)
+           
            
         });
       })
     }
     if(ndvi != null) {
       
-      rastergenaration(farmid, ndvi)
-
+      // rastergenaration(farmid, ndvi)
+  
     }
+    layer != null ?    map.addLayer(layer) : <></>
+map.on('click',()=>{
+  //  map.removeLayer(layer) 
+   alert('asd')
+} )
     useEffect(() => {
         datestore.subscribe(() => {
             setDates(datestore.getState())
@@ -70,17 +75,7 @@ export default () => {
         setMap(data)
       },[ndvi])
     
-  
-      const fetchdata =e =>{
-    
-        
-        let data = mapcontainer.getState();
-        setMap(data)
-         setUpdatedata(e.target.textContent)
-         
-         rastergenaration(farmid, e.target.textContent)
-    
-             }  
+   
     
     return (
         <div className="swiper  " >

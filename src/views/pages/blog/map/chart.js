@@ -7,11 +7,14 @@ import { ndvis } from '../../store/ndviraster';
 import { indexsel } from '../../store/indexselect';
 import { isPropsEqual } from '@fullcalendar/core';
 import { ndvilayer } from '../../store/ndvilayer';
+import { map } from 'jquery';
+import { mapcontainer } from '../../store/mapcontainer';
 // import { fetchfarmid } from '../../../stores/visibilty';
 const Chart = (props) => {
   const [reset, setReset] = useState('c')
   const [indexname, SetIndexname] = useState()
   const [layers, setLayers] = useState(ndvilayer.getState())
+  const [ map,setMap]= useState(mapcontainer.getState())
 
   // const [dates, setDates] = useState([])
   // const [cloudesdate, setCloudesdate] = useState(clouddate.getState())
@@ -22,6 +25,11 @@ const Chart = (props) => {
     })
     ndvilayer.subscribe(() => {
       setLayers(ndvilayer.getState())
+      console.log('actionlayer',layers)
+    })
+    mapcontainer.subscribe(() => {
+      setMap(mapcontainer.getState())
+      console.log('actionlayer',layers)
     })
 
   }, [])
@@ -36,7 +44,8 @@ const Chart = (props) => {
     var avgbaselinendvi = []
     var avgndmi = []
     var temp = []
-
+var mintemp=[]
+var mint
     axios.get('https://gistest.bkk.ag/NDVI_polygon/' + growernamer).then((response) => {
 
       response.data ?
@@ -86,10 +95,10 @@ const Chart = (props) => {
                   Object.values(response.data).map((e) => {
 
                     temp.push(e.prec)
+                    mintemp.push(e.minTemp)
                   })
-                  var dump = temp.length - avgndvi.length
-                  console.log('dump', dump)
-                  console.log(avgndvi)
+                  mint=   mintemp.slice(0,avgndvi.length)
+                  console.log('mintemp',mint.length,avgndvi.length)
                   Highcharts.chart('container', {
                     chart: {
                       type: 'scatter',
@@ -124,6 +133,8 @@ const Chart = (props) => {
 
                         events: {
                           click: function (event) {
+                            var layerss=ndvilayer.getState()
+                            layerss ?  map.removeLayer(layerss) : <></>
                             ndvis.dispatch({ type: 'ndvi', ndvi: event.point.category })
                             var ind = this.name
 
@@ -157,10 +168,6 @@ const Chart = (props) => {
                       },
                       opposite: true
                     }],
-                    tooltip: {
-                      shared: true,
-
-                    },
 
                     legend: {
                       itemStyle: {
@@ -174,6 +181,19 @@ const Chart = (props) => {
                       symbolPadding: 20,
                       symbolWidth: 50
                     },
+                    
+        tooltip: {
+          shared: true,
+          // useHTML: true,
+          // formatter: function() {
+          //     var serie = this.series;
+          //     var index = this.series.points.indexOf(this.point);
+          //     var s = '<img src="http://static.bbci.co.uk/frameworks/barlesque/2.45.9/desktop/3.5/img/blq-blocks_grey_alpha.png" height="20" width="40"/><br/><b>' + Highcharts.dateFormat('%A, %b %e, %Y', this.x) + '</b><br>';
+          //     s += 'temp : ' + " "  +mint[index]  + " " + " " + '<span style="color:' + serie.color + '">' + serie.options.name + '</span>: <b>' + this.y + '</b><br/>';
+           
+          //     return s;
+          // }
+      },
                     series: [
                       {
                         name: 'Precipitation',

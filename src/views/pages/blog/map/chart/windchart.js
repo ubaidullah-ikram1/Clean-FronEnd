@@ -41,7 +41,7 @@ const Tempchart = (props) => {
                     temperature.push(e.minTemp)
                   })
 
-                  Highcharts.chart('tempcontainer', {
+                  Highcharts.chart('windcontainer', {
                     chart: {
                       
                       height : '300px'
@@ -71,7 +71,7 @@ const Tempchart = (props) => {
                     
                     yAxis: [{ // Primary yAxis
                       title: {
-                        text: 'Temp',
+                        text: 'wind',
                         style: {
                           color: Highcharts.getOptions().colors[1]
                         }
@@ -97,7 +97,7 @@ const Tempchart = (props) => {
                     },
                     series: [
                         {
-                            name: 'Temp',
+                            name: 'windspeed',
                             type: 'spline',
                             data: temperature,
                             color: '#90ee90',
@@ -117,7 +117,7 @@ const Tempchart = (props) => {
     <div  >
 
       <div className='highcharts-figure'>
-        <div className=' text-center'  id="tempcontainer"></div>
+        <div className=' text-center'  id="windcontainer"></div>
       </div>
 
     </div>

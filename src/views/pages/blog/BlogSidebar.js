@@ -63,55 +63,63 @@ const BlogSidebar = (props) => {
     const filteredData = FarmsList.filter((data) => data.farm_crop_id === farm_crop_id)
     setFarmsList(filteredData)
     getNowcastWeather(lat, lng)
-
-    // Msidn.dispatch({ type: 'msidn', msidn: msidn })
-
-
-    axios.get("https://gis.bkk.ag/geoserver/server/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=server%3Ahbl_farms&CQL_FILTER=msisdn='" + farm_crop_id + "'&outputFormat=application%2Fjson").then(
+    farm_crop_id ? farmidcommunicator.dispatch({ type: 'search', id: farm_crop_id }) : <></>
+    setFarmids(farm_crop_id)
+    farm_crop_id ? props.setIsloading(true) : <></>
+    axios.get("https://gis.bkk.ag/geoserver/server/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=server%3Ahbl_farms&CQL_FILTER=farm_crop_id='" + farm_crop_id + "'&outputFormat=application%2Fjson").then(
       r => {
 
         var bbx = r.data.features[0]['geometry']['coordinates'][0][0][0]
 
-        map.flyTo([bbx[1], bbx[0]], 15)
+        map.flyTo([bbx[1], bbx[0]], 16)
 
 
-        r.data.features.map(d => {
-          //     // console.log(d)
-          map.on('click', e => {
-            props.setshowGraph(true)
-            props.setmapHeight('50vh')
 
-            // getNowcastWeather(e.latlng.lat, e.latlng.lng)
+        //     // console.log(d)
+        farm_crop_id ? map.on('click', e => {
+          props.setshowGraph(true)
+          // props.setmapHeight('50vh')
 
-
-            var sw = map.options.crs.project(map.getBounds().getSouthWest());
-            var ne = map.options.crs.project(map.getBounds().getNorthEast());
-            var BBOX = sw.x + "," + sw.y + "," + ne.x + "," + ne.y;
-            var WIDTH = map.getSize().x;
-            var HEIGHT = map.getSize().y;
-            var X = Math.trunc(map.layerPointToContainerPoint(e.layerPoint).x);
-            var Y = Math.trunc(map.layerPointToContainerPoint(e.layerPoint).y);
-            var url = "https://gis.bkk.ag/geoserver/server/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&LAYERS=server:hbl_farms&CQL_FILTER=msisdn='" + msidn + "'&QUERY_LAYERS=server:hbl_farms&BBOX=" + BBOX + "&FEATURE_COUNT=1&HEIGHT=" + HEIGHT + "&WIDTH=" + WIDTH + "&INFO_FORMAT=application%2Fjson&TILED=false&CRS=EPSG%3A3857&I=" + X + "&J=" + Y;
-
-            axios.get(url).then(
-              d => {
+          // getNowcastWeather(e.latlng.lat, e.latlng.lng)
 
 
-                d?.data?.features[0]['properties']['farm_crop_id'] ? farmidcommunicator.dispatch({ type: 'search', id: d.data.features[0]['properties']['farm_crop_id'] }) : <></>
-                setFarmids(d.data.features[0]['properties']['farm_crop_id'])
+          var sw = map.options.crs.project(map.getBounds().getSouthWest());
+          var ne = map.options.crs.project(map.getBounds().getNorthEast());
+          var BBOX = sw.x + "," + sw.y + "," + ne.x + "," + ne.y;
+          var WIDTH = map.getSize().x;
+          var HEIGHT = map.getSize().y;
+          var X = Math.trunc(map.layerPointToContainerPoint(e.layerPoint).x);
+          var Y = Math.trunc(map.layerPointToContainerPoint(e.layerPoint).y);
+          var url = "https://gis.bkk.ag/geoserver/server/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&LAYERS=server:hbl_farms&CQL_FILTER=msisdn='" + msidn + "'&QUERY_LAYERS=server:hbl_farms&BBOX=" + BBOX + "&FEATURE_COUNT=1&HEIGHT=" + HEIGHT + "&WIDTH=" + WIDTH + "&INFO_FORMAT=application%2Fjson&TILED=false&CRS=EPSG%3A3857&I=" + X + "&J=" + Y;
 
-                d.data.features[0]['properties']['farm_crop_id'] ? props.setIsloading(true) : <></>
-
-                getSpecificFram(d.data.features[0]['properties']['farm_crop_id'])
-
-              }
-            )
+          axios.get(url).then(
+            d => {
 
 
-          })
+              d?.data?.features[0]['properties']['farm_crop_id'] ? props.setIsloading(true) : <></>
+              // d.data.features[0]['properties']['farm_crop_id'] ? props.setIsloading(true) : <></>
+              var farmidurl = "https://gis.bkk.ag/geoserver/server/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=server%3Ahbl_farms&CQL_FILTER=farm_crop_id	='" + d.data.features[0]['properties']['farm_crop_id'] + "'&outputFormat=application%2Fjson";
+              axios.get(farmidurl).then(
+                single => {
+                  console.log('afterclickable', single)
+                  var bbx = single.data.features[0]['geometry']['coordinates'][0][0][0]
+                  // map.fitBound(bbx)
+                  map.flyTo([bbx[1], bbx[0]], 16)
+                }
 
-        })
+
+              )
+
+              getSpecificFram(d.data.features[0]['properties']['farm_crop_id'])
+
+            }
+          )
+
+
+        }) : <></>
+
       })
+
   }
 
   const searchHandler = (event) => {
