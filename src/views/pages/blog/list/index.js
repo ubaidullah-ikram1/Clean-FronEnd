@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom'
 import { Fragment, useState, useEffect, useLayoutEffect, useContext } from 'react'
 import Basemap from '../map/basemap'
-
+import Timeline from '@components/timeline'
 import classnames from 'classnames'
 // ** Third Party Components
 import axios from 'axios'
@@ -20,6 +20,7 @@ import { indexsel } from '../../store/indexselect'
 import { Spinner } from 'reactstrap'
 import Tempchart from '../map/chart/tempcheck'
 import AudioRecorder from './AudioRecorder'
+import { basicData } from './data'
 // ** Reactstrap Imports
 import {
   Row,
@@ -49,6 +50,7 @@ const BlogList = () => {
   const [mapHeight, setmapHeight] = useState('70vh')
   const [centeredModal, setCenteredModal] = useState(false)
   const [centeredModalVoice, setcenteredModalVoice] = useState(false)
+  const [advisoryTimeline, setadvisoryTimeline] = useState(false)
   const [select, setSelect] = useState(null)
   const [temchek, setTemchek] = useState(false);
   const [indexselect, setIndexselect] = useState(indexsel.getState())
@@ -82,6 +84,18 @@ const BlogList = () => {
 
         <Col className='p-0 m-0' style={{ width: '100%' }} key={item.title} md='12' lg='12'>
           {<Basemap />}
+
+          <div className='vertically-centered-modal'>
+
+            <Modal isOpen={advisoryTimeline} toggle={() => setadvisoryTimeline(!advisoryTimeline)} className='modal-dialog-centered'>
+              <ModalHeader toggle={() => setadvisoryTimeline(!advisoryTimeline)}>Advisory  Message</ModalHeader>
+              <ModalBody>
+                <Timeline data={basicData} />
+
+              </ModalBody>
+
+            </Modal>
+          </div>
 
           <div className='vertically-centered-modal'>
 
@@ -217,7 +231,7 @@ const BlogList = () => {
             ) : null}
           </div>
         </div>
-        <Sidebar setCenteredModal={setCenteredModal} setcenteredModalVoice={setcenteredModalVoice} search={setSearch} setIsloading={setIsloading} setshowGraph={setshowGraph} setmapHeight={setmapHeight} />
+        <Sidebar setadvisoryTimeline={setadvisoryTimeline} setCenteredModal={setCenteredModal} setcenteredModalVoice={setcenteredModalVoice} search={setSearch} setIsloading={setIsloading} setshowGraph={setshowGraph} setmapHeight={setmapHeight} />
       </div>
     </Fragment>
   )
