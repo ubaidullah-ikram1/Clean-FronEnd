@@ -53,15 +53,16 @@ const Chart = (props) => {
     var temp = []
 var mintemp=[]
 var mint
-    axios.get('https://gistest.bkk.ag/NDVI_polygon/' + growernamer).then((response) => {
-
+    axios.get('https://gistest.bkk.ag/ndvi_series/' + growernamer).then((response) => {
+      console.log('ndviseries',response)
       response.data ?
+      
         response.data.map(function (val, index) {
-          if (parseFloat(val.cloud_cover) < 60.00) {
-            avgndvi.push(parseFloat(val.ndvi_avg))
+        
+            avgndvi.push(parseFloat(val.ndvi))
             date.push(val.date)
             //   setDates(date)
-          }
+          
         }) : <></>
 
       if (growernamer) {
@@ -81,10 +82,8 @@ var mint
               response.data.map(function (val, index) {
                 avgndmi.push(parseFloat(val.ndmi_avg))
               })
-              axios.get('https://prod.bkk.ag/weather-api/weather/historic/30.21337183/73.19943331/3-04-2022/5-05-2022', {
+              axios.get('https://prod.bkk.ag/weather-api/weather/historic/30.21337183/73.19943331/2-04-2022/5-05-2022', {
                 headers: {
-                  // Accept: "application/json", <---- **Originally BE returned stringified json. Not sure if I should be returning it as something else or if this is still needed**
-
                   "Access-Control-Allow-Origin": "*"
                 }
               }).then(
@@ -97,14 +96,14 @@ var mint
                       console.log('axisdate', axisdate);
                     }
                   )
-                  var readldate = axisdate.filter((i) => { return i >= '4/2/2022' && i <= '5/5/2022'; })
+                  var readldate = axisdate
                   console.log('readldate', readldate)
                   Object.values(response.data).map((e) => {
 
                     temp.push(e.prec)
                     mintemp.push(e.minTemp)
                   })
-                  mint=   mintemp.slice(0,avgndvi.length)
+                  mint=   mintemp
                   console.log('mintemp',mint.length,avgndvi.length)
                   Highcharts.chart('container', {
                     chart: {
@@ -207,7 +206,7 @@ var mint
                       {
                         name: 'Precipitation',
                         type: 'column',
-                        data: temp.slice(0, avgndvi.length),
+                        data: temp,
                         yAxis: 1,
                         color: 'blue',
                         legendColor: 'red',
