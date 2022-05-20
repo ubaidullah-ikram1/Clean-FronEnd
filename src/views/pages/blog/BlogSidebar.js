@@ -67,7 +67,7 @@ const BlogSidebar = (props) => {
     // Msidn.dispatch({ type: 'msidn', msidn: msidn })
 
 
-    axios.get("https://gis.bkk.ag/geoserver/server/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=server%3Ahbl_farms&CQL_FILTER=msisdn='" + msidn + "'&outputFormat=application%2Fjson").then(
+    axios.get("https://gis.bkk.ag/geoserver/server/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=server%3Ahbl_farms&CQL_FILTER=msisdn='" + farm_crop_id + "'&outputFormat=application%2Fjson").then(
       r => {
 
         var bbx = r.data.features[0]['geometry']['coordinates'][0][0][0]
@@ -214,7 +214,7 @@ const BlogSidebar = (props) => {
               </div>
 
               <div className='d-flex mt-1'>
-                <Avatar color='light-primary' className='rounded me-1' icon={<Icon.ArrowUpRight onClick={() => window.open(`https://weather.bkk.ag/weather?geo=${weatherData.lat},${weatherData.long}`, "_blank")} size={18} />} />
+                <Avatar onClick={() => window.open(`https://weather.bkk.ag/weather?geo=${weatherData.lat},${weatherData.long}`, "_blank")} color='light-primary' className='rounded me-1' icon={<Icon.ArrowUpRight size={18} />} />
                 {/* <div>
                   <h6 className='mb-0'>Location</h6>
                   <small >{item.location_name}</small>
