@@ -73,7 +73,7 @@ const Chart = (props) => {
                 }
               }).then(
                 (response) => {
-                  // props.setIsloading(false)
+                  props.setIsloading(false)
                   console.log(response)
                   Object.keys(response.data).map(
                     (e) => {

@@ -46,7 +46,7 @@ const BlogList = () => {
   const [data, setData] = useState(null)
   const [picker, setPicker] = useState(new Date())
   const [search, setSearch] = useState(null)
-  const [mapHeight, setmapHeight] = useState('80vh')
+  const [mapHeight, setmapHeight] = useState('55vh')
   const [centeredModal, setCenteredModal] = useState(false)
   const [centeredModalVoice, setcenteredModalVoice] = useState(false)
   const [select, setSelect] = useState(null)
