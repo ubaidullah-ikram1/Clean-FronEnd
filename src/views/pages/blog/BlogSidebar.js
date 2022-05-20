@@ -20,6 +20,7 @@ const BlogSidebar = (props) => {
   // ** States
   const [farmids, setFarmids] = useState()
   const [overviewData, setOverviewData] = useState([])
+  const [weatherData, setweatherData] = useState(null)
   const [farmerList, setfarmerList] = useState([])
   const [FarmsList, setFarmsList] = useState(null)
   const [searchedResult, setsearchedResult] = useState([]);
@@ -36,7 +37,7 @@ const BlogSidebar = (props) => {
 
   const getNowcastWeather = async (lat, lng) => {
     let res = await axios.get(`http://192.168.100.162:200/weather/${lat}/${lng}`, { headers: { Authorization: "Basic c3lzdGVtOjU4OU5jUlVIV2RLTjZzRVM=" } });
-    console.log(res.data)
+    setweatherData(res.data?.record?.weatherStats)
   }
 
 
@@ -58,11 +59,12 @@ const BlogSidebar = (props) => {
 
 
   }, [])
-  function DrawMap(msidn) {
-    const filteredData = searchedResult.filter((data) => data.msisdn === msidn)
-    setsearchedResult(filteredData)
+  function DrawMap(farm_crop_id, lat, lng) {
+    const filteredData = FarmsList.filter((data) => data.farm_crop_id === farm_crop_id)
+    setFarmsList(filteredData)
+    getNowcastWeather(lat, lng)
 
-    Msidn.dispatch({ type: 'msidn', msidn: msidn })
+    // Msidn.dispatch({ type: 'msidn', msidn: msidn })
 
 
     axios.get("https://gis.bkk.ag/geoserver/server/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=server%3Ahbl_farms&CQL_FILTER=msisdn='" + msidn + "'&outputFormat=application%2Fjson").then(
@@ -191,7 +193,45 @@ const BlogSidebar = (props) => {
     return FarmList.map(item => {
       return (
         <div className='right-sidebar-content'>
-          <Card style={{ marginLeft: '8%', cursor: 'pointer' }} className='card-transaction' onClick={() => DrawMap(item.msisdn)} >
+          {weatherData && <Card style={{ marginLeft: '8%' }} className='card-transaction'  >
+
+
+            <CardBody>
+              <div className='meetup-header d-flex align-items-center'>
+
+                <div className='my-auto'>
+                  <h6>  Condition</h6>
+
+                  <CardText className='mb-0  text-success'>{weatherData.weatherCondition}</CardText>
+                </div>
+              </div>
+              <div className='my-auto'>
+
+                <div>
+                  <h6 className='mb-0'>Max Temp</h6>
+                  <small >{weatherData.maxTemp}</small>
+                </div>
+              </div>
+
+              <div className='d-flex mt-1'>
+                <Avatar color='light-primary' className='rounded me-1' icon={<Icon.ArrowUpRight onClick={() => window.open(`https://weather.bkk.ag/weather?geo=${weatherData.lat},${weatherData.long}`, "_blank")} size={18} />} />
+                {/* <div>
+                  <h6 className='mb-0'>Location</h6>
+                  <small >{item.location_name}</small>
+                </div> */}
+              </div>
+              {/* <div className='d-flex mt-2'>
+                <Avatar color='light-primary' className='rounded me-1' icon={<Icon.MapPin size={18} />} />
+                <div>
+                  <h6 className='mb-0'>Total Area</h6>
+                  <small>{item.area_acres} Acres</small>
+                </div>
+              </div> */}
+            </CardBody>
+
+          </Card>}
+
+          <Card style={{ marginLeft: '8%', cursor: 'pointer' }} className='card-transaction' onClick={() => DrawMap(item.farm_crop_id, item.lat, item.long)} >
 
 
             <CardBody>
@@ -206,10 +246,10 @@ const BlogSidebar = (props) => {
 
 
               </div>
-              {/* <div className='my-auto'>
+              <div className='my-auto'>
 
-                <CardText className='mb-0  text-success'>{item.farmer_name}</CardText>
-              </div> */}
+                <CardText className='mb-0  text-success'>{item.farm_title}</CardText>
+              </div>
               <div className='d-flex'>
 
                 <div >
@@ -229,6 +269,13 @@ const BlogSidebar = (props) => {
                 <div style={{ marginTop: '4px' }}>
                   <Icon.MapPin size={16} />
                   <small style={{ marginLeft: '3px' }}>{item.area_farm} Acres</small>
+                </div>
+              </div>
+              <div className='d-flex'>
+
+                <div style={{ marginTop: '4px' }}>
+                  <Icon.Calendar size={16} />
+                  <small style={{ marginLeft: '3px' }}>{item.sowing_date} </small>
                 </div>
               </div>
             </CardBody>

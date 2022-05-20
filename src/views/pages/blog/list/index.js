@@ -46,7 +46,7 @@ const BlogList = () => {
   const [data, setData] = useState(null)
   const [picker, setPicker] = useState(new Date())
   const [search, setSearch] = useState(null)
-  const [mapHeight, setmapHeight] = useState('55vh')
+  const [mapHeight, setmapHeight] = useState('70vh')
   const [centeredModal, setCenteredModal] = useState(false)
   const [centeredModalVoice, setcenteredModalVoice] = useState(false)
   const [select, setSelect] = useState(null)
@@ -125,7 +125,7 @@ const BlogList = () => {
           {showGraph && <Card className='p-0 m-0'>
             <CardHeader >
               <div className='d-flex align-items-center'>
-                <CardTitle tag='h4'>Crop Timeline</CardTitle>
+                <CardTitle tag='h4'>Timeline</CardTitle>
               </div>
               <div className='form-check form-check-inline'>
                 <Input type='checkbox' onChange={tempcheck} id='basic-cb-checked' />
