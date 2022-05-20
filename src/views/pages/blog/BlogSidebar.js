@@ -32,11 +32,12 @@ const BlogSidebar = (props) => {
     setfarmerList(res.data)
     setSpecificFarm(null)
     setFarmsList(null)
+    setweatherData(null)
     setsearchedResult(res.data)
   }
 
   const getNowcastWeather = async (lat, lng) => {
-    let res = await axios.get(`http://192.168.100.162:200/weather/${lat}/${lng}`, { headers: { Authorization: "Basic c3lzdGVtOjU4OU5jUlVIV2RLTjZzRVM=" } });
+    let res = await axios.get(`https://gistest.bkk.ag/weather/${lat}/${lng}`, { headers: { Authorization: "Basic c3lzdGVtOjU4OU5jUlVIV2RLTjZzRVM=" } });
     setweatherData(res.data?.record?.weatherStats)
   }
 
@@ -197,47 +198,67 @@ const BlogSidebar = (props) => {
       )
     })
   }
+  const renderweatherData = (weatherData) => {
+
+    return (
+      <div className='right-sidebar-content'>
+        {weatherData && <Card style={{ marginLeft: '4%' }} className='card-transaction'  >
+
+
+          <CardBody>
+            <h6 style={{ textAlign: 'center', color: 'green' }}>Current Weather <Icon.ArrowUpRight onClick={() => window.open(`https://weather.bkk.ag/weather?geo=${weatherData.lat},${weatherData.long}`, "_blank")} /></h6>
+            <Row>
+              <Col>
+
+                <div className='my-auto'>
+                  <h6>  Condition <Icon.HelpCircle id='location' size={14} /></h6>
+
+
+                  <CardText className='mb-0  text-success'>{weatherData.weatherCondition}</CardText>
+                </div>
+              </Col>
+              <Col>
+                <div className='my-auto'>
+                  <h6>  Max Temp</h6>
+
+                  <CardText className='mb-0  text-success'>{weatherData?.maxTemp || "N/A"}</CardText>
+                </div>
+              </Col>
+              <Col>
+                <div className='my-auto'>
+                  <h6>  Min Temp</h6>
+
+                  <CardText className='mb-0  text-success'>{weatherData.minTemp}</CardText>
+                </div>
+              </Col>
+              <Col>
+                <div className='my-auto'>
+                  <h6>  preception</h6>
+
+
+                  <CardText className='mb-0  text-success'>{weatherData.prec || "N/A"}</CardText>
+                </div>
+              </Col>
+
+
+            </Row>
+
+
+
+          </CardBody>
+
+        </Card>}
+
+
+      </div>
+    )
+
+  }
   const renderAllfarms = (FarmList) => {
     return FarmList.map(item => {
       return (
         <div className='right-sidebar-content'>
-          {weatherData && <Card style={{ marginLeft: '8%' }} className='card-transaction'  >
 
-
-            <CardBody>
-              <div className='meetup-header d-flex align-items-center'>
-
-                <div className='my-auto'>
-                  <h6>  Condition</h6>
-
-                  <CardText className='mb-0  text-success'>{weatherData.weatherCondition}</CardText>
-                </div>
-              </div>
-              <div className='my-auto'>
-
-                <div>
-                  <h6 className='mb-0'>Max Temp</h6>
-                  <small >{weatherData.maxTemp}</small>
-                </div>
-              </div>
-
-              <div className='d-flex mt-1'>
-                <Avatar onClick={() => window.open(`https://weather.bkk.ag/weather?geo=${weatherData.lat},${weatherData.long}`, "_blank")} color='light-primary' className='rounded me-1' icon={<Icon.ArrowUpRight size={18} />} />
-                {/* <div>
-                  <h6 className='mb-0'>Location</h6>
-                  <small >{item.location_name}</small>
-                </div> */}
-              </div>
-              {/* <div className='d-flex mt-2'>
-                <Avatar color='light-primary' className='rounded me-1' icon={<Icon.MapPin size={18} />} />
-                <div>
-                  <h6 className='mb-0'>Total Area</h6>
-                  <small>{item.area_acres} Acres</small>
-                </div>
-              </div> */}
-            </CardBody>
-
-          </Card>}
 
           <Card style={{ marginLeft: '8%', cursor: 'pointer' }} className='card-transaction' onClick={() => DrawMap(item.farm_crop_id, item.lat, item.long)} >
 
@@ -267,7 +288,10 @@ const BlogSidebar = (props) => {
               </div>
               <div className='d-flex'>
 
-                <div style={{ marginTop: '4px' }}>
+                <div style={{ marginTop: '4px' }} onMouseDown={(e) => {
+                  e.stopPropagation();
+                  props?.setadvisoryTimeline(true)
+                }}>
                   <Icon.Map size={16} />
                   <small style={{ marginLeft: '5px' }} >{item.crops}</small>
                 </div>
@@ -293,50 +317,7 @@ const BlogSidebar = (props) => {
       )
     })
   }
-  const renderSpecific = (sepcicFarm) => {
-    return sepcicFarm.map(item => {
-      return (
-        <div className='right-sidebar-content'>
-          <Card style={{ marginLeft: '8%' }} className='card-transaction' >
 
-
-            <CardBody>
-              <div className='meetup-header d-flex align-items-center'>
-
-                <div className='my-auto'>
-                  <h6>  {item.msisdn}</h6>
-
-                  <CardText className='mb-0  text-success'>{item.farmer_name}</CardText>
-                </div>
-              </div>
-              <div className='d-flex mt-2'>
-                <Avatar color='light-primary' className='rounded me-1' icon={<Icon.Crosshair size={18} />} />
-                <div>
-                  <h6 className='mb-0'>Crop</h6>
-                  <small >{item.crop_name}</small>
-                </div>
-              </div>
-              <div className='d-flex mt-1'>
-                <Avatar color='light-primary' className='rounded me-1' icon={<Icon.Check size={18} />} />
-                <div>
-                  <h6 className='mb-0'>Location</h6>
-                  <small >{item.location_name}</small>
-                </div>
-              </div>
-              <div className='d-flex mt-2'>
-                <Avatar color='light-primary' className='rounded me-1' icon={<Icon.MapPin size={18} />} />
-                <div>
-                  <h6 className='mb-0'>Total Area</h6>
-                  <small>{item.area_acres} Acres</small>
-                </div>
-              </div>
-            </CardBody>
-
-          </Card>
-        </div>
-      )
-    })
-  }
   useLayoutEffect(() => {
     mapcontainer.subscribe(() => {
       setMap(mapcontainer.getState())
@@ -431,6 +412,7 @@ const BlogSidebar = (props) => {
                 <Icon.X />
               </div>
             </div>
+            <div>{renderweatherData(weatherData)}</div>
             <div style={{ height: "400px", overflowY: "scroll", marginTop: "2%" }} className="side_bar">{FarmsList ? renderAllfarms(FarmsList) : renderTransactions(searchedResult)}</div>
 
           </div>
