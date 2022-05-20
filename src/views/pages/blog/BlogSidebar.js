@@ -73,11 +73,11 @@ const BlogSidebar = (props) => {
 
         map.flyTo([bbx[1], bbx[0]], 16)
 
-
+        props.setshowGraph(true)
 
         //     // console.log(d)
         farm_crop_id ? map.on('click', e => {
-          props.setshowGraph(true)
+          
           // props.setmapHeight('50vh')
 
           // getNowcastWeather(e.latlng.lat, e.latlng.lng)
