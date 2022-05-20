@@ -189,7 +189,6 @@ const BlogList = () => {
 
 
 
-            <div style={{ display: 'flex', justifyContent: 'center', alignItem: 'center' }}> {isloading ? <Spinner className='me-25' size='lg' color='success' /> : <></>}</div>
            
               <div  style={{display : 'flex'  , justifyContent : 'center' ,alignItem: 'center'}}> {isloading ?  <Spinner className='me-25' size='lg' color='success'/>: <></>}</div> 
               < Chart setIsloading={setIsloading} />
@@ -218,7 +217,7 @@ const BlogList = () => {
             ) : null}
           </div>
         </div>
-        <Sidebar setCenteredModal={setCenteredModal} setcenteredModalVoice={setcenteredModalVoice} search={setSearch}  setshowGraph={setshowGraph} setmapHeight={setmapHeight} />
+        <Sidebar setCenteredModal={setCenteredModal} setcenteredModalVoice={setcenteredModalVoice} search={setSearch} setIsloading={setIsloading}  setshowGraph={setshowGraph} setmapHeight={setmapHeight} />
       </div>
     </Fragment>
   )

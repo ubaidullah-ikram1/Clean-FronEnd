@@ -61,14 +61,14 @@ const BlogSidebar = (props) => {
 
         var bbx = r.data.features[0]['geometry']['coordinates'][0][0][0]
 
-        map.flyTo([bbx[1], bbx[0]], 15)
+        map.flyTo([bbx[1], bbx[0]], 13)
 
 
         r.data.features.map(d => {
           //     // console.log(d)
           map.on('click', e => {
             props.setshowGraph(true)
-            props.setmapHeight('50vh')
+            // props.setmapHeight('50vh')
 
             // getNowcastWeather(e.latlng.lat, e.latlng.lng)
 
@@ -85,12 +85,22 @@ const BlogSidebar = (props) => {
             axios.get(url).then(
               d => {
 
-
                 d?.data?.features[0]['properties']['farm_crop_id'] ? farmidcommunicator.dispatch({ type: 'search', id: d.data.features[0]['properties']['farm_crop_id'] }) : <></>
                 setFarmids(d.data.features[0]['properties']['farm_crop_id'])
-
+                d?.data?.features[0]['properties']['farm_crop_id'] ?  props.setIsloading(true) : <></>
                 // d.data.features[0]['properties']['farm_crop_id'] ? props.setIsloading(true) : <></>
+                var farmidurl="https://gis.bkk.ag/geoserver/server/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=server%3Ahbl_farms&CQL_FILTER=farm_crop_id	='" + d.data.features[0]['properties']['farm_crop_id'] + "'&outputFormat=application%2Fjson";
+             axios.get(farmidurl).then(
+              single=>{
+     console.log('afterclickable', single)
+     var bbx = single.data.features[0]['geometry']['coordinates'][0][0][0]
+// map.fitBound(bbx)
+        map.flyTo([bbx[1], bbx[0]], 16)
+              }
 
+
+             )
+            
                 getSpecificFram(d.data.features[0]['properties']['farm_crop_id'])
 
               }

@@ -15,15 +15,14 @@ import { ndvis } from "../../store/ndviraster";
 import { indexsel } from "../../store/indexselect";
 import { ndvilayer } from "../../store/ndvilayer";
 export default () => {
-  var layer = null
-  var a=0
+  
   const[farmid,setFarmid]=useState(farmidcommunicator.getState())
     const [dates, setDates] = useState(datestore.getState())
     const [updatedata,setUpdatedata]=useState(null)
     const [map, setMap] = useState(mapcontainer.getState())
     const [ndvi,setNdvi] =useState(ndvis.getState())
     const [indexselect,setIndexselect] =useState(indexsel.getState())
-
+    const [layer,setLayer] = useState()
      useLayoutEffect(()=>{
       indexsel.subscribe(() => {
         setIndexselect(indexsel.getState())
@@ -41,7 +40,7 @@ export default () => {
             const max = 1;
             const range = 1;
             var scale = chroma.scale("RdYlGn");
-     layer = new GeoRasterLayer({
+      var  layers = new GeoRasterLayer({
           georaster: georaster, 
           opacity: 1,
           pixelValuesToColorFn: function(pixelValues) {
@@ -54,39 +53,21 @@ export default () => {
           },
           resolution: 256
       });
-    //  indexsel.dispatch({type:'layerss',layerss: layer})
-  console.log('rasterlayer',layer)
-    map.addLayer(layer)
-  
+      // setLayer(layers)
+
+      ndvilayer.dispatch({type:'layerss',layerss: layers})
+      map.addLayer(layers)
         });
       })
     }
     
-    // if(ndvi != null) {
-    //   console.log('indexselect',indexselect)
-      
-      
-
-       
-      
-    //   rastergenaration(farmid, ndvi)
-
-    // }
+    
     useLayoutEffect(() => {
       ndvis.subscribe(() => {
         setNdvi(ndvis.getState())
         let data = mapcontainer.getState();
         setMap(data)
-        if(ndvi){
-      
-        console.log(map)
-        console.log(farmid)
-
-        
-        }
        
-       
-
       })
     })
     
@@ -97,25 +78,28 @@ export default () => {
         farmidcommunicator.subscribe(() => {
           setFarmid(farmidcommunicator.getState())
         })
+        console.log(map)
+     
 
-        
-      layer ?   alert('ad'):  <></>
-        
         if(ndvi != null){
-          
           let data = mapcontainer.getState();
         setMap(data)
-        
         rastergenaration(farmid, ndvi)
+        console.log('bhailayer',layer)
+        // layer  ?  map.addLayer(layer) : <></>
+        // layer  ?   : <></>
+
+      layer?  map.on('click',e=>{
+          map.removeLayer(layer)
+        }) : <></>
+
         }
         // let data = mapcontainer.getState();
         // setMap(data)
         // rastergenaration(farmid, updatedata)
-        console.log('mapuse',map)
-
       },[ndvi])
     
-      
+    
 
            
 
