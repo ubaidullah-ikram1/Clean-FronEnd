@@ -14,7 +14,7 @@ import { lngt } from '../store/polygoncentroid'
 // ** Custom Components
 import Avatar from '@components/avatar'
 // ** Reactstrap Imports
-import { InputGroup, Row, Col, Input, InputGroupText, Card, CardHeader, CardTitle, CardBody, CardText, UncontrolledTooltip } from 'reactstrap'
+import { InputGroup, Row, Col, Input, Divider, InputGroupText, Card, CardHeader, CardTitle, CardBody, CardText, UncontrolledTooltip } from 'reactstrap'
 
 const BlogSidebar = (props) => {
   // ** States
@@ -24,6 +24,7 @@ const BlogSidebar = (props) => {
   const [farmerList, setfarmerList] = useState([])
   const [FarmsList, setFarmsList] = useState(null)
   const [searchedResult, setsearchedResult] = useState([]);
+  const [hourData, sethourData] = useState(null);
   const [sepcicFarm, setSpecificFarm] = useState(null);
 
   const [map, setMap] = useState(mapcontainer.getState())
@@ -37,7 +38,15 @@ const BlogSidebar = (props) => {
   }
 
   const getNowcastWeather = async (lat, lng) => {
-    let res = await axios.get(`https://gistest.bkk.ag/weather/${lat}/${lng}`, { headers: { Authorization: "Basic c3lzdGVtOjU4OU5jUlVIV2RLTjZzRVM=" } });
+    let res = await axios.get(`https://test.bkk.ag/bkk-v2-weather-script/bkk_v2/getWeather/${lat}/${lng}`, { headers: { Authorization: "Basic c3lzdGVtOjU4OU5jUlVIV2RLTjZzRVM=" } });
+    sethourData(res.data?.weather?.intradayWeather)
+    // let val = this?.state?.hourData?.validTimeLocal?.length > 0 && this?.state?.hourData?.validTimeLocal.map(item => moment(item).format("YYYY-MM-DD"))
+    // let index = val?.indexOf(moment(today).format("YYYY-MM-DD"))
+
+
+    // todayData: resp.data?.weather?.hourlyWeather,
+    // hourData: ,
+    // weekData: resp.data?.weather?.dailyWeather
     setweatherData(res.data?.record?.weatherStats)
   }
 
@@ -82,7 +91,7 @@ const BlogSidebar = (props) => {
 
         //     // console.log(d)
         farm_crop_id ? map.on('click', e => {
-          
+
           // props.setmapHeight('50vh')
 
           // getNowcastWeather(e.latlng.lat, e.latlng.lng)
@@ -145,22 +154,35 @@ const BlogSidebar = (props) => {
 
 
             <CardBody>
-              <div className='meetup-header d-flex align-items-center'>
-                <div class="d-flex justify-content-between">
-                  <div>
-                    <h6>  {item.msisdn}</h6>
-                  </div>
-                  <div>
-                    <Icon.Mic style={{ marginLeft: '10px', color: '#26BD69' }} onMouseDown={(e) => {
-                      e.stopPropagation();
-                      props?.setcenteredModalVoice(true)
-                    }} size={18} />
-                    <Icon.Mail style={{ marginLeft: '10px', color: '#26BD69' }} onMouseDown={(e) => {
-                      e.stopPropagation();
-                      props?.setCenteredModal(true)
-                    }} size={18} />
-                  </div>
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h6>  {item.msisdn}</h6>
                 </div>
+                {/* <div>
+                  <Icon.Mic style={{ color: '#26BD69' }} onMouseDown={(e) => {
+                    e.stopPropagation();
+                    props?.setcenteredModalVoice(true)
+                  }} size={18} />
+
+
+                  <Icon.Mail style={{ marginLeft: '2px', color: '#26BD69' }} onMouseDown={(e) => {
+                    e.stopPropagation();
+                    props?.setCenteredModal(true)
+                  }} size={18} />
+
+                </div> */}
+              </div>
+
+
+
+              <div className='meetup-header d-flex align-items-center'>
+
+
+
+
+
+
+
               </div>
               <div className='my-auto'>
                 <CardText className='mb-0  text-success'>{item.growername}</CardText>
@@ -197,42 +219,66 @@ const BlogSidebar = (props) => {
 
     return (
       <div className='right-sidebar-content'>
-        {weatherData && <Card style={{ marginLeft: '4%' }} className='card-transaction'  >
+        {<Card style={{ marginLeft: '0%' }} className='card-transaction'  >
 
 
           <CardBody>
-            <h6 style={{ textAlign: 'center', color: 'green' }}>Current Weather <Icon.ArrowUpRight onClick={() => window.open(`https://weather.bkk.ag/weather?geo=${weatherData.lat},${weatherData.long}`, "_blank")} /></h6>
             <Row>
-              <Col>
-
-                <div className='my-auto'>
-                  <h6>  Condition <Icon.HelpCircle id='location' size={14} /></h6>
+              <div class="d-flex justify-content-between">
+                <div className="d-flex flex-column">
 
 
-                  <CardText className='mb-0  text-success'>{weatherData.weatherCondition}</CardText>
+                  <div className="fw-bold mx-auto" style={{ fontSize: '1.1rem', color: '#00c451' }}> 96°C</div>
+                  <div className="fw-bold mx-auto" style={{ fontSize: '1.1rem', textAlign: 'center', textAlign: 'center' }}>{46 || ""}</div>
+                  <div className="fw-bold mx-auto" style={{ fontSize: '1rem', textAlign: 'center' }}>Good </div>
                 </div>
-              </Col>
-              <Col>
-                <div className='my-auto'>
-                  <h6>  Max Temp</h6>
-
-                  <CardText className='mb-0  text-success'>{weatherData?.maxTemp || "N/A"}</CardText>
+                <div>
+                  <Icon.X />
                 </div>
-              </Col>
-              <Col>
-                <div className='my-auto'>
-                  <h6>  Min Temp</h6>
-
-                  <CardText className='mb-0  text-success'>{weatherData.minTemp}</CardText>
-                </div>
-              </Col>
-              <Col>
-                <div className='my-auto'>
-                  <h6>  preception</h6>
-                  <CardText className='mb-0  text-success'>{weatherData.prec || "N/A"}</CardText>
-                </div>
-              </Col>
+              </div>
             </Row>
+            < hr />
+            <div className="d-flex flex-row justify-content-evenly">
+              <div className="d-flex flex-column border-end pe-1 ">
+                <div className="fw-bold mx-auto" style={{ fontSize: '0.9rem' }}>Morning</div>
+                {/* <div className="text-center">
+              {<img alt="loading.." className="rounded" height="42px" width="42px" />}
+            </div> */}
+                <div className="fw-bold mx-auto" style={{ fontSize: '1.1rem', color: '#00c451' }}> 96°C</div>
+                <div className="fw-bold mx-auto" style={{ fontSize: '1.1rem', textAlign: 'center', textAlign: 'center' }}>{46 || ""}</div>
+                <div className="fw-bold mx-auto" style={{ fontSize: '1rem', textAlign: 'center' }}>Good </div>
+              </div>
+              <div className="d-flex flex-column border-end ps-1 pe-1">
+                <div className="fw-bold mx-auto" style={{ fontSize: '0.9rem' }}>Afternoon</div>
+                {/* <div className="text-center">
+              <img alt="loading.." className="rounded" height="42px" width="42px" />
+            </div> */}
+                <div className="semi-bold mx-auto" style={{ fontSize: '1.1rem', marginLeft: '14px' }}>76°C</div>
+                <div className="semi-bold mx-auto" style={{ fontSize: '1.1rem', marginTop: '-2px', textAlign: 'center' }}>hgh</div>
+                <div className="fw-bold mx-auto" style={{ fontSize: '1.1rem', textAlign: 'center' }}>Good</div>
+              </div>
+              <div className="d-flex flex-column border-end ps-1 pe-0.5">
+                <div className="semi-bold mx-auto" style={{ fontSize: '0.9rem' }}>Evening</div>
+                {/* <div className="text-center">
+              <img alt="loading.." className="rounded" height="42px" width="42px" />
+            </div> */}
+                <div className="semi-bold mx-auto" style={{ fontSize: '1.1rem', marginLeft: '14px' }}>76°C</div>
+                <div className="semi-bold mx-auto" style={{ fontSize: '1.1rem', marginTop: '-2px', textAlign: 'center' }}>hgh</div>
+                <div className="fw-bold mx-auto" style={{ fontSize: '1.1rem', textAlign: 'center' }}>Good</div>
+              </div>
+              {/* <div className="d-flex flex-column ps-1">
+            <div className="semi-bold mx-auto" style={{ fontSize: '2.7vw' }}>Overnight</div>
+            <div className="text-center">
+              <Image alt="loading.." className="rounded" src={this.state.hourData?.conditionImages?.length > 0 && `${configData.urlImg}${this.state.hourData?.conditionImages[this.state.index + 3]}`} height="42px" width="42px" />
+            </div>
+            <div className="semi-bold mx-auto" style={{ fontSize: '2.78vw', marginLeft: '14px' }}>{this.state.hourData?.temp?.length > 0 && this.state.hourData?.temp[this.state.index + 3] || ""}°C</div>
+            <div className="semi-bold mx-auto" style={{ fontSize: '2.5vw', marginTop: '-2px', textAlign: 'center' }}>{this.state.hourData?.phrase?.length > 0 && this.state.hourData?.phrase[this.state.index + 3] || ""}</div>
+            <div className="fw-bold mx-auto" style={{ fontSize: '2vw', textAlign: 'center' }}>({this.state.hourData?.conditionDescUrdu?.length > 0 && this.state.hourData?.conditionDescUrdu[this.state.index + 3] || ""})</div>
+          </div> */}
+            </div>
+
+
+
           </CardBody>
         </Card>}
       </div>
@@ -271,9 +317,10 @@ const BlogSidebar = (props) => {
                 <div style={{ marginTop: '4px' }} onMouseDown={(e) => {
                   e.stopPropagation();
                   props?.setadvisoryTimeline(true)
+                  props.getAdvisoryList(item.sowing_date)
                 }}>
                   <Icon.Map size={16} />
-                  <small style={{ marginLeft: '5px' }} >{item.crops}</small>
+                  <small style={{ marginLeft: '5px', textDecoration: 'underline', color: 'green' }} >{item.crops}</small>
                 </div>
               </div>
               <div className='d-flex'>
@@ -389,11 +436,11 @@ const BlogSidebar = (props) => {
                 <Icon.ArrowLeft style={{ cursor: 'pointer' }} onClick={() => getFarmersList()} />
               </div>
               <div>
-                <Icon.X />
+                {/* <Icon.X /> */}
               </div>
             </div>
             <div>{renderweatherData(weatherData)}</div>
-            <div style={{ height: "400px", overflowY: "scroll", marginTop: "2%" }} className="side_bar">{FarmsList ? renderAllfarms(FarmsList) : renderTransactions(searchedResult)}</div>
+            <div style={{ height: "55vh", overflowY: "scroll", marginTop: "2%" }} className="side_bar">{FarmsList ? renderAllfarms(FarmsList) : renderTransactions(searchedResult)}</div>
 
           </div>
         </div>

@@ -40,13 +40,22 @@ const Timeline = props => {
                 })}
               >
                 <h6>{item.title}</h6>
+                {item.date ? (
+                  <span
+                    className={classnames('timeline-event-time', {
+                      [item.metaClassName]: item.metaClassName
+                    })}
+                  >
+                    {item.date}
+                  </span>
+                ) : null}
                 {item.meta ? (
                   <span
                     className={classnames('timeline-event-time', {
                       [item.metaClassName]: item.metaClassName
                     })}
                   >
-                    {item.meta}
+                    After {item.meta}
                   </span>
                 ) : null}
               </div>
@@ -57,6 +66,7 @@ const Timeline = props => {
               >
                 {item.content}
               </p>
+              <button class="btn btn-success btn-sm float-left" type="submit">Send</button>
               {item.customContent ? item.customContent : null}
             </div>
           </ItemTag>

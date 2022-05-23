@@ -4,6 +4,7 @@ import { Fragment, useState, useEffect, useLayoutEffect, useContext } from 'reac
 import Basemap from '../map/basemap'
 import Timeline from '@components/timeline'
 import classnames from 'classnames'
+import moment from 'moment'
 // ** Third Party Components
 import axios from 'axios'
 import { ThemeColors } from '@src/utility/context/ThemeColors'
@@ -45,6 +46,7 @@ const BlogList = () => {
   const [isloading, setIsloading] = useState(false)
   const [showGraph, setshowGraph] = useState(false)
   const [data, setData] = useState(null)
+  const [advisoryData, setadvisoryData] = useState(null)
   const [picker, setPicker] = useState(new Date())
   const [search, setSearch] = useState(null)
   const [mapHeight, setmapHeight] = useState('70vh')
@@ -62,8 +64,26 @@ const BlogList = () => {
     { value: 'NDVI', label: 'NDVI' },
     { value: 'NDMI', label: 'NDMI' },
   ]
+
+  const getAdvisoryList = async (sowingdate) => {
+    console.log(sowingdate)
+
+
+    const res = await axios.get("https://gistest.bkk.ag/advisory_timeline/sms")
+
+    const newObj = res.data.map(item => {
+      return {
+        content: item.Text,
+        meta: item.aftersowing,
+        date: (moment(sowingdate, "YYYY-MM-DD").add(parseInt(item.numberofdays), 'days').format('DD-MM-YYYY'))
+      };
+    });
+
+    setadvisoryData(newObj)
+  }
   useEffect(() => {
     axios.get('/blog/list/data').then(res => setData(res.data.slice(0, 1)))
+    getAdvisoryList()
   }, [])
   const tempcheck = () => {
 
@@ -87,10 +107,10 @@ const BlogList = () => {
 
           <div className='vertically-centered-modal'>
 
-            <Modal isOpen={advisoryTimeline} toggle={() => setadvisoryTimeline(!advisoryTimeline)} className='modal-dialog-centered'>
+            <Modal scrollable isOpen={advisoryTimeline} toggle={() => setadvisoryTimeline(!advisoryTimeline)} className='modal-dialog-centered'>
               <ModalHeader toggle={() => setadvisoryTimeline(!advisoryTimeline)}>Advisory  Message</ModalHeader>
               <ModalBody>
-                <Timeline data={basicData} />
+                <Timeline data={advisoryData} />
 
               </ModalBody>
 
@@ -175,8 +195,8 @@ const BlogList = () => {
                     </Label>
                     <Flatpickr
                       value={picker}
-                      data-enable-time
-                      id='date-time-picker'
+                      options={{ altFormat: 'Y', dateFormat: "m.y" }}
+
                       className='form-control'
                       onChange={date => setPicker(date)} />
 
@@ -185,10 +205,19 @@ const BlogList = () => {
                     </Label>
                     <Flatpickr
                       value={picker}
-                      data-enable-time
-                      id='date-time-picker'
+                      options={{ altFormat: 'Y', dateFormat: "m.y", showDays: false }}
+
                       className='form-control'
                       onChange={date => setPicker(date)} />
+
+                  </Col>
+                </Row>
+                <Row>
+                  <Col md={12}>
+                    <div class="d-flex justify-content-center mt-1">
+                      <Button color='primary'>Apply</Button>
+
+                    </div>
                   </Col>
                 </Row>
               </PopoverBody>
@@ -231,7 +260,7 @@ const BlogList = () => {
             ) : null}
           </div>
         </div>
-        <Sidebar setadvisoryTimeline={setadvisoryTimeline} setCenteredModal={setCenteredModal} setcenteredModalVoice={setcenteredModalVoice} search={setSearch} setIsloading={setIsloading} setshowGraph={setshowGraph} setmapHeight={setmapHeight} />
+        <Sidebar getAdvisoryList={getAdvisoryList} setadvisoryTimeline={setadvisoryTimeline} setCenteredModal={setCenteredModal} setcenteredModalVoice={setcenteredModalVoice} search={setSearch} setIsloading={setIsloading} setshowGraph={setshowGraph} setmapHeight={setmapHeight} />
       </div>
     </Fragment>
   )
