@@ -30,18 +30,19 @@ import { Row, Col, Form, Input, Label, Alert, Button, CardText, CardTitle, Uncon
 
 // ** Styles
 import '@styles/react/pages/page-authentication.scss'
-import Logo from '../../../assets/images/logo/logo_new.png'
+import Logo from '../../../assets/images/logo/logofull.png'
 
 const ToastContent = ({ name, role }) => (
   <Fragment>
     <div className='toastify-header'>
       <div className='title-wrapper'>
         <Avatar size='sm' color='success' icon={<Coffee size={12} />} />
-        <h6 className='toast-title fw-bold'>Welcome, {name}</h6>
+        <h6 className='toast-title fw-bold'>Welcome</h6>
       </div>
     </div>
     <div className='toastify-body'>
-      <span>You have successfully logged in as an {role} user to Vuexy. Now you can start to explore. Enjoy!</span>
+
+      <span>You have successfully logged, this is a beta version of BKK Crop monitoring system.</span>
     </div>
   </Fragment>
 )
@@ -65,6 +66,9 @@ const Login = () => {
   } = useForm({ defaultValues })
   const illustration = skin === 'dark' ? 'login-v2-dark.svg' : 'login-v2.svg',
     source = require(`@src/assets/images/logo/cropbanner.jpg`).default
+  const _onClick = (e) => {
+    e.preventDefault()
+  }
 
   const onSubmit = data => {
     if (Object.values(data).every(field => field.length > 0)) {
@@ -96,12 +100,12 @@ const Login = () => {
     <div className='auth-wrapper auth-cover'>
       <Row className='auth-inner m-0'>
         <Link className='brand-logo' to='/' onClick={e => e.preventDefault()}>
-          <img className='img-fluid' src={Logo} alt='Login Cover' />
+          <img width='10%' src={Logo} alt='Login Cover' />
           {/* <h2 className='brand-text text-primary ms-1'>Crop Monitoring</h2> */}
         </Link>
-        <Col className='d-none d-lg-flex align-items-center p-1' lg='8' sm='12'>
-          <div className='w-100 d-lg-flex align-items-center justify-content-center px-1'>
-            <img className='img-fluid' src={source} alt='Login Cover' />
+        <Col className='d-none d-lg-flex align-items-center' lg='8' sm='12'>
+          <div className='w-100 d-lg-flex align-items-center justify-content-center'>
+            <img style={{ maxWidth: "103%" }} className='img-fluid' src={source} alt='Login Cover' />
           </div>
         </Col>
         <Col className='d-flex align-items-center auth-bg px-2 p-lg-5' lg='4' sm='12'>
@@ -110,29 +114,7 @@ const Login = () => {
               Welcome to Crop Monitoring System!
             </CardTitle>
 
-            <Alert color='primary'>
-              {/* <div className='alert-body font-small-2'>
-                <p>
-                  <small className='me-50'>
-                    <span className='fw-bold'>Admin:</span> admin@demo.com | admin
-                  </small>
-                </p>
-                <p>
-                  <small className='me-50'>
-                    <span className='fw-bold'>Client:</span> client@demo.com | client
-                  </small>
-                </p>
-              </div> */}
-              <HelpCircle
-                id='login-tip'
-                className='position-absolute'
-                size={18}
-                style={{ top: '10px', right: '10px' }}
-              />
-              <UncontrolledTooltip target='login-tip' placement='left'>
-                This is just for ACL demo purpose.
-              </UncontrolledTooltip>
-            </Alert>
+
             <Form className='auth-login-form mt-2' onSubmit={handleSubmit(onSubmit)}>
               <div className='mb-1'>
                 <Label className='form-label' for='login-email'>
@@ -158,7 +140,7 @@ const Login = () => {
                   <Label className='form-label' for='login-password'>
                     Password
                   </Label>
-                  <Link to='/forgot-password'>
+                  <Link to='/forgot-password' onClick={(e) => _onClick(e)} >
                     <small>Forgot Password?</small>
                   </Link>
                 </div>
@@ -183,7 +165,7 @@ const Login = () => {
             </Form>
             <p className='text-center mt-2'>
               <span className='me-25'>New on our platform?</span>
-              <Link to='/register'>
+              <Link to='/register' onClick={(e) => _onClick(e)} >
                 <span>Create an account</span>
               </Link>
             </p>

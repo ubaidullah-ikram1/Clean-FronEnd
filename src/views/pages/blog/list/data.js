@@ -61,66 +61,20 @@ export const basicData = [
     title: 'Advisory Day 1',
     content: 'Farmer brother, if your corn is in the stage of 1 to 2 leaves and the crop is seen to be infested with sprouts.',
     meta: '12 min ago',
-    customContent: (
-      <div className='d-flex align-items-center'>
-        <img className='me-1' src={pdf} alt='pdf' height='23' />
-        <span>invoice.pdf</span>
-      </div>
-    )
+
   },
   {
     title: 'Advisory Day 2',
     content: 'Farmer brother, if your corn is in the stage of 1 to 2 leaves and the crop is seen to be infested with sprouts, then spray try isophos. For more information on spray, use the same number. Call .',
     meta: '45 min ago',
-    color: 'secondary',
+
 
   },
   {
     title: 'Advisory Day 3',
     content: 'Spray try isophos. For more information on spray, use the same number. Call ',
     meta: '2 hours ago',
-    color: 'success',
-    customContent: (
-      <Fragment>
-        <Button size='sm' color='primary' id='reportToggler' outline>
-          Show Report
-        </Button>
-        <UncontrolledCollapse toggler='#reportToggler'>
-          <ListGroup className='mt-1' flush>
-            <ListGroupItem className='list-group-item d-flex justify-content-between flex-wrap'>
-              <span>
-                Last Years's Profit : <span className='fw-bold'>$20000</span>
-              </span>
-              <Share2 size={17} />
-            </ListGroupItem>
-            <ListGroupItem className='list-group-item d-flex justify-content-between flex-wrap'>
-              <span>
-                This Years's Profit : <span className='fw-bold'>$25000</span>
-              </span>
-              <Share2 size={17} />
-            </ListGroupItem>
-            <ListGroupItem className='list-group-item d-flex justify-content-between flex-wrap'>
-              <span>
-                Last Years's Commission : <span className='fw-bold'>$5000</span>
-              </span>
-              <Share2 size={17} />
-            </ListGroupItem>
-            <ListGroupItem className='list-group-item d-flex justify-content-between flex-wrap'>
-              <span>
-                This Years's Commission : <span className='fw-bold'>$7000</span>
-              </span>
-              <Share2 size={17} />
-            </ListGroupItem>
-            <ListGroupItem className='list-group-item d-flex justify-content-between flex-wrap'>
-              <span>
-                This Years's Total Balance : <span className='fw-bold'>$70000</span>
-              </span>
-              <Share2 size={17} />
-            </ListGroupItem>
-          </ListGroup>
-        </UncontrolledCollapse>
-      </Fragment>
-    )
+
   },
 
 
