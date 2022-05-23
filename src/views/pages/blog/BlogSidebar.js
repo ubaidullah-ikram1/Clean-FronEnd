@@ -9,7 +9,7 @@ import axios from 'axios'
 import * as Icon from 'react-feather'
 import { useLayoutEffect, useState, useEffect } from 'react'
 import { Msidn } from '../store/msidn'
-import { lat } from '../store/polygoncentroid'
+import { latt } from '../store/polygoncentroid'
 import { lngt } from '../store/polygoncentroid'
 // ** Custom Components
 import Avatar from '@components/avatar'
@@ -65,8 +65,12 @@ const BlogSidebar = (props) => {
     setFarmsList(filteredData)
     getNowcastWeather(lat, lng)
     farm_crop_id ? farmidcommunicator.dispatch({ type: 'search', id: farm_crop_id }) : <></>
+     latt.dispatch({ type: 'lat', lat: lat }) 
+     lngt.dispatch({ type: 'lng', lng: lng })
+
     setFarmids(farm_crop_id)
     farm_crop_id ? props.setIsloading(true) : <></>
+    // setInterval(function () {props.setIsloading(false)}, 50000);
     axios.get("https://gis.bkk.ag/geoserver/server/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=server%3Ahbl_farms&CQL_FILTER=farm_crop_id='" + farm_crop_id + "'&outputFormat=application%2Fjson").then(
       r => {
 
@@ -98,7 +102,7 @@ const BlogSidebar = (props) => {
 
 
               d?.data?.features[0]['properties']['farm_crop_id'] ? props.setIsloading(true) : <></>
-              // d.data.features[0]['properties']['farm_crop_id'] ? props.setIsloading(true) : <></>
+              // d.data.features[0]['properties']['farm_crop_id'] ? alert(setIsloading) : <></>
               var farmidurl = "https://gis.bkk.ag/geoserver/server/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=server%3Ahbl_farms&CQL_FILTER=farm_crop_id	='" + d.data.features[0]['properties']['farm_crop_id'] + "'&outputFormat=application%2Fjson";
               axios.get(farmidurl).then(
                 single => {
@@ -147,27 +151,18 @@ const BlogSidebar = (props) => {
                     <h6>  {item.msisdn}</h6>
                   </div>
                   <div>
-
-
                     <Icon.Mic style={{ marginLeft: '10px', color: '#26BD69' }} onMouseDown={(e) => {
                       e.stopPropagation();
                       props?.setcenteredModalVoice(true)
                     }} size={18} />
-
-
                     <Icon.Mail style={{ marginLeft: '10px', color: '#26BD69' }} onMouseDown={(e) => {
                       e.stopPropagation();
                       props?.setCenteredModal(true)
                     }} size={18} />
-
                   </div>
                 </div>
-
-
-
               </div>
               <div className='my-auto'>
-
                 <CardText className='mb-0  text-success'>{item.growername}</CardText>
               </div>
               <div className='d-flex'>
@@ -234,53 +229,38 @@ const BlogSidebar = (props) => {
               <Col>
                 <div className='my-auto'>
                   <h6>  preception</h6>
-
-
                   <CardText className='mb-0  text-success'>{weatherData.prec || "N/A"}</CardText>
                 </div>
               </Col>
-
-
             </Row>
-
-
-
           </CardBody>
-
         </Card>}
-
-
       </div>
     )
-
   }
   const renderAllfarms = (FarmList) => {
     return FarmList.map(item => {
       return (
         <div className='right-sidebar-content'>
-
-
           <Card style={{ marginLeft: '8%', cursor: 'pointer' }} className='card-transaction' onClick={() => DrawMap(item.farm_crop_id, item.lat, item.long)} >
-
-
+         {
+         console.log('lat',item.lat)
+         }
+         {
+        console.log('lat',item.long)
+         } 
             <CardBody>
               <div className='meetup-header d-flex align-items-center'>
                 <div class="d-flex justify-content-between">
                   {/* <div>
                     <h6>  {item.msisdn}</h6>
                   </div> */}
-
                 </div>
-
-
-
               </div>
               <div className='my-auto'>
-
                 <CardText className='mb-0  text-success'>{item.farm_title}</CardText>
               </div>
               <div className='d-flex'>
-
                 <div >
                   <Icon.Check size={16} />
                   <small style={{ marginLeft: '3px' }}>{item.location_name}</small>

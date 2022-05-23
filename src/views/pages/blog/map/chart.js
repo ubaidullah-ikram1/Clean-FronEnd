@@ -10,19 +10,18 @@ import { ndmilayerss } from '../../store/ndmilayer';
 import { ndvilayer } from '../../store/ndvilayer';
 import { map } from 'jquery';
 import { mapcontainer } from '../../store/mapcontainer';
-
-// import { fetchfarmid } from '../../../stores/visibilty';
+import { latt } from '../../store/polygoncentroid';
+import { lngt } from '../../store/polygoncentroid';
 const Chart = (props) => {
   const [reset, setReset] = useState('c')
   const [indexname, SetIndexname] = useState()
   const [layers, setLayers] = useState(ndvilayer.getState())
   const [ndmilaye, setNdmilaye] = useState(ndmilayerss.getState())
-
+  const [lat, setLat] = useState(ndmilayerss.getState())
   const [ map,setMap]= useState(mapcontainer.getState())
-
-  // const [dates, setDates] = useState([])
-  // const [cloudesdate, setCloudesdate] = useState(clouddate.getState())
   const [growernamer, setGrowernamer] = useState(farmidcommunicator.getState())
+  const [latitude,setLatitude] = useState(latt.getState())
+  const [longitude, setLongitude] = useState(lngt.getState())
   useLayoutEffect(() => {
     farmidcommunicator.subscribe(() => {
       setGrowernamer(farmidcommunicator.getState())
@@ -38,11 +37,16 @@ const Chart = (props) => {
       setMap(mapcontainer.getState())
       console.log('actionlayer',layers)
     })
-
+    latt.subscribe(() => {
+      setLatitude(latt.getState())
+   
+    })
+    lngt.subscribe(() => {
+      setLongitude(lngt.getState())
+      
+    })
   }, [])
   useEffect(() => {
-    //   fetchfarmid.dispatch({type:'farmid',farmid :growernamer})
-    //   console.log('cloudates',dates)
     var avgndvi = []
     var minndvi = []
     var maxndvi = []
@@ -50,23 +54,17 @@ const Chart = (props) => {
     var axisdate = []
     var avgbaselinendvi = []
     var avgndmi = []
-    var temp = []
+    var precp = []
 var mintemp=[]
 var mint
-    axios.get('https://gistest.bkk.ag/ndvi_series/' + growernamer).then((response) => {
-      console.log('ndviseries',response)
-      response.data ?
-      
+    axios.get('https://gistest.bkk.ag/NDVI_polygon/'+growernamer).then((response) => {
+      console.log('latt',latitude)
+      response.data ?  
         response.data.map(function (val, index) {
-        
-            avgndvi.push(parseFloat(val.ndvi))
+            avgndvi.push(parseFloat(val.ndvi_avg))
             date.push(val.date)
-            //   setDates(date)
-          
         }) : <></>
-
       if (growernamer) {
-
         datestore.dispatch({ type: 'date', date: date })
         axios.get('https://gistest.bkk.ag/NDVI_baseline/' + growernamer, {
           headers: {
@@ -82,29 +80,28 @@ var mint
               response.data.map(function (val, index) {
                 avgndmi.push(parseFloat(val.ndmi_avg))
               })
-              axios.get('https://prod.bkk.ag/weather-api/weather/historic/30.21337183/73.19943331/2-04-2022/5-05-2022', {
+              axios.get('https://prod.bkk.ag/weather-api/weather/historic/'+latitude+'/'+longitude+ '/2-04-2022/5-05-2022', {
                 headers: {
                   "Access-Control-Allow-Origin": "*"
                 }
               }).then(
                 (response) => {
                   props.setIsloading(false)
-                  console.log(response)
+                  console.log('avgndvi',  response)
                   Object.keys(response.data).map(
                     (e) => {
                       axisdate.push(e)
                       console.log('axisdate', axisdate);
                     }
                   )
-                  var readldate = axisdate
-                  console.log('readldate', readldate)
-                  Object.values(response.data).map((e) => {
-
-                    temp.push(e.prec)
-                    mintemp.push(e.minTemp)
+               
+               Object.values(response.data).map((e) => {
+                    precp.push(e.prec)   
+                    mintemp.push(e.minTemp)  
                   })
-                  mint=   mintemp
-                  console.log('mintemp',mint.length,avgndvi.length)
+                  
+                      console.log('precp',precp)
+                      console.log('avgndvi',avgndvi)
                   Highcharts.chart('container', {
                     chart: {
                       type: 'scatter',
@@ -145,10 +142,8 @@ var mint
                             layerss ?  map.removeLayer(layerss) : <></>
                             ndvis.dispatch({ type: 'ndvi', ndvi: event.point.category })
                             var ind = this.name
-
                             ind ? indexsel.dispatch({ type: 'indexis', indexis: ind }) : <></>
                             // console.log("event", event.point.category)
-
                           }
                         }
                       }
@@ -163,13 +158,13 @@ var mint
                       crosshair: true
                     }, { // Secondary yAxis
                       title: {
-                        text: 'Rainfall',
+                        text: 'Precp %',
                         style: {
                           color: Highcharts.getOptions().colors[0]
                         }
                       },
                       labels: {
-                        format: '{value} mm',
+                        format: '{value} %',
                         style: {
                           color: Highcharts.getOptions().colors[0]
                         }
@@ -206,7 +201,7 @@ var mint
                       {
                         name: 'Precipitation',
                         type: 'column',
-                        data: temp,
+                        data: precp.slice(0,avgndvi.length),
                         yAxis: 1,
                         color: 'blue',
                         legendColor: 'red',

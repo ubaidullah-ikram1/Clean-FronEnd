@@ -43,23 +43,19 @@ const [data,setData]=useState()
       'Humidity :'+ features.properties.weatherStats[0]['hum']+ "%"+"<br>"+
       'Precipitation :'+ features.properties.weatherStats[0]['prec']+ "%"+"<br>"
     )
-
-  
   }
+  var circleOptions = {
+    color: 'blue',
+    fillColor: '#f03',
+    fillOpacity: 0
+ } 
+  var circle=   L.circle([features.geometry.coordinates[0],features.geometry.coordinates[1]],features.properties.radius*1000, circleOptions)
+          map.addLayer(circle)
       }
   useEffect(() => {
     axios.get('https://weatherwalay-web-server.herokuapp.com/jis/getStats').then(response=>{
         console.log('wetherstation',response)
-        setData(response.data)
-        // station=   L.geoJson(response.data,{
-            
-        //     pointToLayer : function(features, latlng) {
-        //         console.log('latlng',latlng)
-        //                     return L.marker([latlng.lng,latlng.lat])
-        //                 }}   )     
-           
-                
-                    
+        setData(response.data)               
   })
 },[])
   

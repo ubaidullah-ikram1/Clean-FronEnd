@@ -141,12 +141,12 @@ const BlogList = () => {
               <div className='d-flex align-items-center'>
                 <CardTitle tag='h4'>Timeline</CardTitle>
               </div>
-              <div className='form-check form-check-inline'>
+              {/* <div className='form-check form-check-inline'>
                 <Input type='checkbox' onChange={tempcheck} id='basic-cb-checked' />
                 <Label for='basic-cb-checked' className='form-check-label'>
                   Checked
                 </Label>
-              </div>
+              </div> */}
               <Icon.Filter id='popClick' size={18} className='cursor-pointer' />
             </CardHeader>
             <UncontrolledPopover trigger='click' placement='top' target='popClick'>
