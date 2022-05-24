@@ -11,6 +11,7 @@ import { useLayoutEffect, useState, useEffect } from 'react'
 import { Msidn } from '../store/msidn'
 import { latt } from '../store/polygoncentroid'
 import { lngt } from '../store/polygoncentroid'
+import moment from 'moment'
 // ** Custom Components
 import Avatar from '@components/avatar'
 // ** Reactstrap Imports
@@ -26,6 +27,9 @@ const BlogSidebar = (props) => {
   const [searchedResult, setsearchedResult] = useState([]);
   const [hourData, sethourData] = useState(null);
   const [sepcicFarm, setSpecificFarm] = useState(null);
+  const [index, setIndex] = useState(null);
+  const [todayData, settodayData] = useState(null)
+  const [locationName, setlocationName] = useState(null)
 
   const [map, setMap] = useState(mapcontainer.getState())
   const getFarmersList = async () => {
@@ -38,16 +42,19 @@ const BlogSidebar = (props) => {
   }
 
   const getNowcastWeather = async (lat, lng) => {
-    let res = await axios.get(`https://test.bkk.ag/bkk-v2-weather-script/bkk_v2/getWeather/${lat}/${lng}`, { headers: { Authorization: "Basic c3lzdGVtOjU4OU5jUlVIV2RLTjZzRVM=" } });
-    sethourData(res.data?.weather?.intradayWeather)
-    // let val = this?.state?.hourData?.validTimeLocal?.length > 0 && this?.state?.hourData?.validTimeLocal.map(item => moment(item).format("YYYY-MM-DD"))
-    // let index = val?.indexOf(moment(today).format("YYYY-MM-DD"))
-
-
-    // todayData: resp.data?.weather?.hourlyWeather,
+    let today = new Date();
+    let res = await axios.get(`https://weather.bkk.ag/api/getWeather/${lat}/${lng}`, { headers: { Authorization: "Basic c3lzdGVtOjU4OU5jUlVIV2RLTjZzRVM=" } });
+    let intradayWeather = res.data?.data?.weather?.intradayWeather
+    let val = intradayWeather?.validTimeLocal?.length > 0 && intradayWeather?.validTimeLocal.map(item => moment(item).format("YYYY-MM-DD"))
+    let index = val?.indexOf(moment(today).format("YYYY-MM-DD"))
+    settodayData(res.data?.data?.weather?.hourlyWeather)
+    setlocationName(res.data?.data?.location.name)
+    setIndex(index)
+    setweatherData(intradayWeather)
+    // todayData: ,
     // hourData: ,
     // weekData: resp.data?.weather?.dailyWeather
-    setweatherData(res.data?.record?.weatherStats)
+
   }
 
 
@@ -72,10 +79,12 @@ const BlogSidebar = (props) => {
   function DrawMap(farm_crop_id, lat, lng) {
     const filteredData = FarmsList.filter((data) => data.farm_crop_id === farm_crop_id)
     setFarmsList(filteredData)
+    // props.mapHeight('20vh')
     getNowcastWeather(lat, lng)
+
     farm_crop_id ? farmidcommunicator.dispatch({ type: 'search', id: farm_crop_id }) : <></>
-     latt.dispatch({ type: 'lat', lat: lat }) 
-     lngt.dispatch({ type: 'lng', lng: lng })
+    latt.dispatch({ type: 'lat', lat: lat })
+    lngt.dispatch({ type: 'lng', lng: lng })
 
     setFarmids(farm_crop_id)
     farm_crop_id ? props.setIsloading(true) : <></>
@@ -223,17 +232,19 @@ const BlogSidebar = (props) => {
 
 
           <CardBody>
+            <div className="text-center semi-bold" style={{ fontSize: '15px', marginTop: '-15px' }}>{locationName}, Pakistan</div>
             <Row>
               <div class="d-flex justify-content-between">
+
                 <div className="d-flex flex-column">
 
 
-                  <div className="fw-bold mx-auto" style={{ fontSize: '1.1rem', color: '#00c451' }}> 96°C</div>
-                  <div className="fw-bold mx-auto" style={{ fontSize: '1.1rem', textAlign: 'center', textAlign: 'center' }}>{46 || ""}</div>
-                  <div className="fw-bold mx-auto" style={{ fontSize: '1rem', textAlign: 'center' }}>Good </div>
+                  <div className="fw-bold mx-auto" style={{ fontSize: '1.1rem', color: '#00c451' }}> {todayData?.temperature[index] || ""}°C</div>
+                  <div className="fw-bold mx-auto" style={{ fontSize: '1.1rem', textAlign: 'center', textAlign: 'center' }}>{todayData?.wxPhraseLong[index] || ""}</div>
+                  <div className="fw-bold mx-auto" style={{ fontSize: '1rem', textAlign: 'center' }}>{todayData?.conditionDescUrdu[index] || ""} </div>
                 </div>
                 <div>
-                  <Icon.X />
+                  <img height="62px" width="62px" src={`${"https://weather.bkk.ag/api/"}${todayData?.conditionImages[index]}`} alt="loading.." className="rounded" />
                 </div>
               </div>
             </Row>
@@ -241,30 +252,33 @@ const BlogSidebar = (props) => {
             <div className="d-flex flex-row justify-content-evenly">
               <div className="d-flex flex-column border-end pe-1 ">
                 <div className="fw-bold mx-auto" style={{ fontSize: '0.9rem' }}>Morning</div>
-                {/* <div className="text-center">
-              {<img alt="loading.." className="rounded" height="42px" width="42px" />}
-            </div> */}
-                <div className="fw-bold mx-auto" style={{ fontSize: '1.1rem', color: '#00c451' }}> 96°C</div>
-                <div className="fw-bold mx-auto" style={{ fontSize: '1.1rem', textAlign: 'center', textAlign: 'center' }}>{46 || ""}</div>
-                <div className="fw-bold mx-auto" style={{ fontSize: '1rem', textAlign: 'center' }}>Good </div>
+                <div className="text-center">
+
+                  <img height="42px" width="42px" src={`${"https://weather.bkk.ag/api/"}${weatherData?.conditionImages[index]}`} alt="loading.." className="rounded" />
+                </div>
+                <div className="fw-bold mx-auto" style={{ fontSize: '1.1rem', color: '#00c451' }}> {weatherData?.temp[index] || ""}°C</div>
+                <div className="fw-bold mx-auto" style={{ fontSize: '1rem', textAlign: 'center', textAlign: 'center' }}>{weatherData?.phrase[index] || ""}</div>
+
               </div>
               <div className="d-flex flex-column border-end ps-1 pe-1">
                 <div className="fw-bold mx-auto" style={{ fontSize: '0.9rem' }}>Afternoon</div>
-                {/* <div className="text-center">
-              <img alt="loading.." className="rounded" height="42px" width="42px" />
-            </div> */}
-                <div className="semi-bold mx-auto" style={{ fontSize: '1.1rem', marginLeft: '14px' }}>76°C</div>
-                <div className="semi-bold mx-auto" style={{ fontSize: '1.1rem', marginTop: '-2px', textAlign: 'center' }}>hgh</div>
-                <div className="fw-bold mx-auto" style={{ fontSize: '1.1rem', textAlign: 'center' }}>Good</div>
+                <div className="text-center">
+
+                  <img height="42px" width="42px" src={`${"https://weather.bkk.ag/api/"}${weatherData?.conditionImages[index + 1]}`} alt="loading.." className="rounded" />
+                </div>
+                <div className="semi-bold mx-auto" style={{ fontSize: '1.1rem', marginLeft: '14px' }}>{weatherData?.temp[index + 1] || ""}°C</div>
+                <div className="fw-bold mx-auto" style={{ fontSize: '1rem', marginTop: '-2px', textAlign: 'center' }}>{weatherData?.phrase[index + 1] || ""}</div>
+
               </div>
-              <div className="d-flex flex-column border-end ps-1 pe-0.5">
+              <div className="d-flex flex-column  ps-1 pe-0.5">
                 <div className="semi-bold mx-auto" style={{ fontSize: '0.9rem' }}>Evening</div>
-                {/* <div className="text-center">
-              <img alt="loading.." className="rounded" height="42px" width="42px" />
-            </div> */}
-                <div className="semi-bold mx-auto" style={{ fontSize: '1.1rem', marginLeft: '14px' }}>76°C</div>
-                <div className="semi-bold mx-auto" style={{ fontSize: '1.1rem', marginTop: '-2px', textAlign: 'center' }}>hgh</div>
-                <div className="fw-bold mx-auto" style={{ fontSize: '1.1rem', textAlign: 'center' }}>Good</div>
+                <div className="text-center">
+
+                  <img height="42px" width="42px" src={`${"https://weather.bkk.ag/api/"}${weatherData?.conditionImages[index + 2]}`} alt="loading.." className="rounded" />
+                </div>
+                <div className="semi-bold mx-auto" style={{ fontSize: '1.1rem', marginLeft: '14px' }}>{weatherData?.temp[index + 2] || ""}°C</div>
+                <div className="fw-bold mx-auto" style={{ fontSize: '1rem', marginTop: '-2px', textAlign: 'center' }}>{weatherData?.phrase[index + 2] || ""}</div>
+
               </div>
               {/* <div className="d-flex flex-column ps-1">
             <div className="semi-bold mx-auto" style={{ fontSize: '2.7vw' }}>Overnight</div>
@@ -289,12 +303,12 @@ const BlogSidebar = (props) => {
       return (
         <div className='right-sidebar-content'>
           <Card style={{ marginLeft: '8%', cursor: 'pointer' }} className='card-transaction' onClick={() => DrawMap(item.farm_crop_id, item.lat, item.long)} >
-         {
-         console.log('lat',item.lat)
-         }
-         {
-        console.log('lat',item.long)
-         } 
+            {
+              console.log('lat', item.lat)
+            }
+            {
+              console.log('lat', item.long)
+            }
             <CardBody>
               <div className='meetup-header d-flex align-items-center'>
                 <div class="d-flex justify-content-between">
@@ -439,7 +453,7 @@ const BlogSidebar = (props) => {
                 {/* <Icon.X /> */}
               </div>
             </div>
-            <div>{renderweatherData(weatherData)}</div>
+            <div>{weatherData && renderweatherData(weatherData)}</div>
             <div style={{ height: "55vh", overflowY: "scroll", marginTop: "2%" }} className="side_bar">{FarmsList ? renderAllfarms(FarmsList) : renderTransactions(searchedResult)}</div>
 
           </div>

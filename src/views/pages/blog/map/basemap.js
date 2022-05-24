@@ -20,11 +20,12 @@ export default (props) => {
   }, [props.mapHeight]);
   return (
     <div>
-      <MapContainer id="mapContainer" style={{ width: '100%', height: '85vh' }} center={[33, 73]} zoom={13}
+      <MapContainer id="mapContainer" style={{ width: '100%', height: props.mapHeight }} center={[33, 73]} zoom={13}
         whenCreated={map => {
           mapcontainer.dispatch({ type: 'map', map })
         }}
-        ref={setMap}
+
+        ref={setMapHeight}
       >
         <Soildata />
         <Hblfarmwms />

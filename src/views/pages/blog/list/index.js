@@ -49,7 +49,7 @@ const BlogList = () => {
   const [advisoryData, setadvisoryData] = useState(null)
   const [picker, setPicker] = useState(new Date())
   const [search, setSearch] = useState(null)
-  const [mapHeight, setmapHeight] = useState('70vh')
+  const [mapHeight, setmapHeight] = useState('85vh')
   const [centeredModal, setCenteredModal] = useState(false)
   const [centeredModalVoice, setcenteredModalVoice] = useState(false)
   const [advisoryTimeline, setadvisoryTimeline] = useState(false)
@@ -103,7 +103,7 @@ const BlogList = () => {
       return (
 
         <Col className='p-0 m-0' style={{ width: '100%' }} key={item.title} md='12' lg='12'>
-          {<Basemap />}
+          {<Basemap mapHeight={mapHeight} />}
 
           <div className='vertically-centered-modal'>
 
@@ -159,7 +159,7 @@ const BlogList = () => {
           {showGraph && <Card className='p-0 m-0'>
             <CardHeader >
               <div className='d-flex align-items-center'>
-                <CardTitle tag='h4'>Timeline</CardTitle>
+                <CardTitle tag='h4'>Analytics</CardTitle>
               </div>
               {/* <div className='form-check form-check-inline'>
                 <Input type='checkbox' onChange={tempcheck} id='basic-cb-checked' />
