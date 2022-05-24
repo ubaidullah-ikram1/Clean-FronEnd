@@ -13,48 +13,48 @@ export default () => {
   const [map, setMap] = useState(mapcontainer.getState())
   const wms = useRef();
 
-
   useLayoutEffect(() => {
     mapcontainer.subscribe(() => {
       setMap(mapcontainer.getState())
     })
-
+    if (map) {
+     
+     
+      wms? 
+      map.on('click', function (e) {
+        var popup = new L.Popup({ maxWidth: 1000 });
+  
+        var latlngStr = '(' + e.latlng.lat.toFixed(3) + ', ' + e.latlng.lng.toFixed(3) + ')';
+        var sw = map.options.crs.project(map.getBounds().getSouthWest());
+        var ne = map.options.crs.project(map.getBounds().getNorthEast());
+        var BBOX = sw.x + "," + sw.y + "," + ne.x + "," + ne.y;
+        var WIDTH = map.getSize().x;
+        var HEIGHT = map.getSize().y;
+        var X = Math.trunc(map.layerPointToContainerPoint(e.layerPoint).x);
+        var Y = Math.trunc(map.layerPointToContainerPoint(e.layerPoint).y);
+        var url = "https://gis.bkk.ag/geoserver/server/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&LAYERS=server:mz_soil_data&QUERY_LAYERS=server:mz_soil_data&BBOX=" + BBOX + "&FEATURE_COUNT=1&HEIGHT=" + HEIGHT + "&WIDTH=" + WIDTH + "&INFO_FORMAT=application%2Fjson&TILED=false&CRS=EPSG%3A3857&I=" + X + "&J=" + Y;
+        axios.get(url).then(
+          d => {
+            popup.setLatLng(e.latlng);
+            popup.setContent("<b>PH </b> : " + d.data['features'][0]?.['properties']?.['ph_'] + '<br>' +
+              " <b>texture </b> : " + d.data['features'][0]?.['properties']?.['texture'] + '<br>'
+              +
+              "<b>copper </b>: " + d.data['features'][0]?.['properties']?.['copper'] + '<br>'
+              +
+              "<b>iron </b>: " + d.data['features']?.[0]?.['properties']?.['iron'] + '<br>'
+              +
+              "<b>manganese </b> : " + d.data['features'][0]?.['properties']?.['manganese'] + '<br>'
+            );
+            d.data['features'][0]?.['properties'] ?   map.openPopup(popup) : <></>
+          }
+        )
+      }) : <></>
+    }
 
   })
 
-  if (map) {
-    map.on('click', function (e) {
-      var popup = new L.Popup({ maxWidth: 1000 });
-
-      var latlngStr = '(' + e.latlng.lat.toFixed(3) + ', ' + e.latlng.lng.toFixed(3) + ')';
-      var sw = map.options.crs.project(map.getBounds().getSouthWest());
-      var ne = map.options.crs.project(map.getBounds().getNorthEast());
-      var BBOX = sw.x + "," + sw.y + "," + ne.x + "," + ne.y;
-      var WIDTH = map.getSize().x;
-      var HEIGHT = map.getSize().y;
-      var X = Math.trunc(map.layerPointToContainerPoint(e.layerPoint).x);
-      var Y = Math.trunc(map.layerPointToContainerPoint(e.layerPoint).y);
-      var url = "https://gis.bkk.ag/geoserver/server/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&LAYERS=server:mz_soil_data&QUERY_LAYERS=server:mz_soil_data&BBOX=" + BBOX + "&FEATURE_COUNT=1&HEIGHT=" + HEIGHT + "&WIDTH=" + WIDTH + "&INFO_FORMAT=application%2Fjson&TILED=false&CRS=EPSG%3A3857&I=" + X + "&J=" + Y;
-
-      axios.get(url).then(
-        d => {
-
-          popup.setLatLng(e.latlng);
-          popup.setContent("<b>PH </b> : " + d.data['features'][0]?.['properties']?.['ph_'] + '<br>' +
-            " <b>texture </b> : " + d.data['features'][0]?.['properties']?.['texture'] + '<br>'
-            +
-            "<b>copper </b>: " + d.data['features'][0]?.['properties']?.['copper'] + '<br>'
-            +
-            "<b>iron </b>: " + d.data['features']?.[0]?.['properties']?.['iron'] + '<br>'
-            +
-            "<b>manganese </b> : " + d.data['features'][0]?.['properties']?.['manganese'] + '<br>'
-          );
-          d.data['features'][0]?.['properties'] ?   map.openPopup(popup) : <></>
-        }
-      )
-    })
-  }
-
+  
+  
   return (
 
 
@@ -63,6 +63,7 @@ export default () => {
       <LayersControl.Overlay name="Soil Data">
 
         {
+
           <WMSTileLayer
             layers={'server:mz_soil_data'}
             format={'image/png'}
@@ -81,7 +82,6 @@ export default () => {
 
 
           >
-
           </WMSTileLayer>
         }
 
@@ -90,7 +90,9 @@ export default () => {
 
       </LayersControl.Overlay>
       <LayersControl.Overlay name="   Weather Data">
+      
       {
+        
 < Weatherstation />
          }
       </LayersControl.Overlay>
@@ -101,4 +103,6 @@ export default () => {
 
 
   )
+
+  
 }

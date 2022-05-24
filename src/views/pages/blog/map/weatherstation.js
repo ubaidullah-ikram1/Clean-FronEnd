@@ -1,12 +1,16 @@
 import * as L from 'leaflet'
-import React, { useState, useEffect, useLayoutEffect } from 'react'
+import React, { useState, useEffect, useLayoutEffect,useRef } from 'react'
 import { mapcontainer } from '../../store/mapcontainer';
 import axios from 'axios';
 import { GeoJSON } from 'react-leaflet';
 import logo from '../../../../assets/images/WEATHER/logo.png'
 import { func } from 'prop-types';
+
 export default () => {
+  var circle
   const [map, setMap] = useState(mapcontainer.getState())
+  const inputElement = useRef();
+
 const [data,setData]=useState()
  var station
  
@@ -49,7 +53,7 @@ const [data,setData]=useState()
     fillColor: '#f03',
     fillOpacity: 0
  } 
-  var circle=   L.circle([features.geometry.coordinates[0],features.geometry.coordinates[1]],features.properties.radius*1000, circleOptions)
+    circle= L.circle([features.geometry.coordinates[0],features.geometry.coordinates[1]],features.properties.radius*1000, circleOptions)
           map.addLayer(circle)
       }
   useEffect(() => {
@@ -62,8 +66,9 @@ const [data,setData]=useState()
  
   return (
     <> 
- {  data ? <GeoJSON data={data} pointToLayer={pointToLayer}  onEachFeature= {onEachFeature} /> : <></>}
+ {  data ? <GeoJSON ref={inputElement} data={data} pointToLayer={pointToLayer}  onEachFeature= {onEachFeature} /> : <></>}
       
+
     </>
   )
   }
