@@ -67,14 +67,10 @@ const BlogSidebar = (props) => {
     let res = await axios.get(`https://gistest.bkk.ag/farm_data/${msisdn}`);
     setFarmsList(res.data)
   }
-
-
   useEffect(async () => {
     let res = await axios.get("https://gistest.bkk.ag/Partner_stats/hbl");
     setOverviewData(res.data[0])
     getFarmersList()
-
-
   }, [])
   function DrawMap(farm_crop_id, lat, lng) {
     const filteredData = FarmsList.filter((data) => data.farm_crop_id === farm_crop_id)
@@ -129,10 +125,7 @@ const BlogSidebar = (props) => {
                   // map.fitBound(bbx)
                   map.flyTo([bbx[1], bbx[0]], 16)
                 }
-
-
               )
-
               getSpecificFram(d.data.features[0]['properties']['farm_crop_id'])
 
             }
@@ -462,5 +455,4 @@ const BlogSidebar = (props) => {
     </div>
   )
 }
-
 export default BlogSidebar

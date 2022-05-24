@@ -59,18 +59,14 @@ export default () => {
       map.addLayer(layers)
         });
       })
-    }
-    
-    
+    }  
     useLayoutEffect(() => {
       ndvis.subscribe(() => {
         setNdvi(ndvis.getState())
         let data = mapcontainer.getState();
-        setMap(data)
-       
+        setMap(data) 
       })
     })
-    
     useEffect(() => {
         datestore.subscribe(() => {
             setDates(datestore.getState())
@@ -79,24 +75,16 @@ export default () => {
           setFarmid(farmidcommunicator.getState())
         })
         console.log(map)
-     
-
         if(ndvi != null){
           let data = mapcontainer.getState();
         setMap(data)
         rastergenaration(farmid, ndvi)
-        console.log('bhailayer',layer)
-        // layer  ?  map.addLayer(layer) : <></>
-        // layer  ?   : <></>
-
+      
       layer?  map.on('click',e=>{
           map.removeLayer(layer)
         }) : <></>
-
         }
-        // let data = mapcontainer.getState();
-        // setMap(data)
-        // rastergenaration(farmid, updatedata)
+
       },[ndvi])
     return (
         <div className="swiper  " >
