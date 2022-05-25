@@ -1,6 +1,7 @@
 // ** Third Party Components
 import Proptypes from 'prop-types'
 import classnames from 'classnames'
+import { Input, Label } from 'reactstrap'
 
 const Timeline = props => {
   // ** Props
@@ -66,7 +67,12 @@ const Timeline = props => {
               >
                 {item.content}
               </p>
-              <button class="btn btn-success btn-sm float-left" type="submit">Send</button>
+              <div className='form-check'>
+                <Input type='checkbox' />
+                <Label className='form-check-label' >
+
+                </Label>
+              </div>
               {item.customContent ? item.customContent : null}
             </div>
           </ItemTag>

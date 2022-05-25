@@ -176,7 +176,7 @@ const Chart = (props) => {
                             var NDMIlayerss = ndmilayerss.getState()
                             NDMIlayerss ? map.removeLayer(NDMIlayerss) : <></>
                             layerss ? map.removeLayer(layerss) : <></>
-                            ndvis.dispatch({ type: 'ndvi', ndvi: event.point.category })
+                            ndvis.dispatch({ type: 'ndvi', ndvi: event?.point?.category })
                             var ind = this.name
                             ind ? indexsel.dispatch({ type: 'indexis', indexis: ind }) : <></>
                             // console.log("event", event.point.category)
@@ -207,7 +207,7 @@ const Chart = (props) => {
                         }
                       },
                       opposite: true
-                    },{ // Secondary yAxis
+                    }, { // Secondary yAxis
                       title: {
                         text: 'temp ',
                         style: {
@@ -290,10 +290,10 @@ const Chart = (props) => {
                   });
                   // chart.series[1].options.data[0].color='red'
                   for (var i = 0; i <= chart.series[1].data.length; i++) {
-                    var datess = chart.series[1].data[i]['category'].split("-")
+                    var datess = chart?.series[1]?.data[i]?.['category']?.split("-")
 
 
-                    var staelitedates = datess[0] + datess[1] + datess[2]
+                    var staelitedates = datess?.length > 0 && (datess[0] + datess[1] + datess[2])
                     // var dd=ndviimg.filter(staelitedates)
                     // console.log(dd)
                     // console.log(staelitedates[i]==ndviimg[i])

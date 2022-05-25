@@ -108,8 +108,24 @@ const BlogList = () => {
           <div className='vertically-centered-modal'>
 
             <Modal scrollable isOpen={advisoryTimeline} toggle={() => setadvisoryTimeline(!advisoryTimeline)} className='modal-dialog-centered'>
-              <ModalHeader toggle={() => setadvisoryTimeline(!advisoryTimeline)}>Advisory  Message</ModalHeader>
+              <ModalHeader toggle={() => setadvisoryTimeline(!advisoryTimeline)}>Advisory  Message </ModalHeader>
+
               <ModalBody>
+
+                <div class="d-flex justify-content-between">
+                  <div>
+
+                  </div>
+                  <div>
+                    <button disabled type="button" class="btn btn-primary">Send</button>
+                  </div>
+                </div>
+
+                <hr />
+
+
+
+
                 <Timeline data={advisoryData} />
 
               </ModalBody>

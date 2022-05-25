@@ -297,17 +297,17 @@ const BlogSidebar = (props) => {
         <div className='right-sidebar-content'>
           <Card style={{ marginLeft: '8%', cursor: 'pointer' }} className='card-transaction' onClick={() => DrawMap(item.farm_crop_id, item.lat, item.long)} >
             {
-              console.log('lat', item.lat)
+
             }
             {
-              console.log('lat', item.long)
+
             }
             <CardBody>
               <div className='meetup-header d-flex align-items-center'>
                 <div class="d-flex justify-content-between">
-                  {/* <div>
-                    <h6>  {item.msisdn}</h6>
-                  </div> */}
+                  <div>
+                    <h6>  {item.farmer_name}</h6>
+                  </div>
                 </div>
               </div>
               <div className='my-auto'>
@@ -446,9 +446,9 @@ const BlogSidebar = (props) => {
                 {/* <Icon.X /> */}
               </div>
             </div>
-            <div>{weatherData && renderweatherData(weatherData)}</div>
-            <div style={{ height: "55vh", overflowY: "scroll", marginTop: "2%" }} className="side_bar">{FarmsList ? renderAllfarms(FarmsList) : renderTransactions(searchedResult)}</div>
 
+            <div style={{ height: weatherData ? "25vh" : '55vh', overflowY: "scroll", marginTop: "2%" }} className="side_bar">{FarmsList ? renderAllfarms(FarmsList) : renderTransactions(searchedResult)}</div>
+            <div>{weatherData && renderweatherData(weatherData)}</div>
           </div>
         </div>
       </div>
