@@ -12,11 +12,9 @@ import { map } from 'jquery';
 import { mapcontainer } from '../../store/mapcontainer';
 import { latt } from '../../store/polygoncentroid';
 import { lngt } from '../../store/polygoncentroid';
-import { symbol } from 'prop-types';
-import { circle } from 'leaflet';
+import { cloudcoverstore } from '../../store/cloudcoverstore';
 const Chart = (props) => {
-  const [reset, setReset] = useState('c')
-  const [indexname, SetIndexname] = useState()
+  const [clouddates, setClouddates] = useState(null)
   const [layers, setLayers] = useState(ndvilayer.getState())
   const [ndmilaye, setNdmilaye] = useState(ndmilayerss.getState())
   const [lat, setLat] = useState(ndmilayerss.getState())
@@ -24,7 +22,7 @@ const Chart = (props) => {
   const [growernamer, setGrowernamer] = useState(farmidcommunicator.getState())
   const [latitude, setLatitude] = useState(latt.getState())
   const [longitude, setLongitude] = useState(lngt.getState())
-  var color
+ 
   useLayoutEffect(() => {
     farmidcommunicator.subscribe(() => {
       setGrowernamer(farmidcommunicator.getState())
@@ -49,6 +47,23 @@ const Chart = (props) => {
 
     })
   }, [])
+  useEffect(()=>{
+    
+    axios.get('https://gistest.bkk.ag/NDVI_polygon/' + growernamer).then((response) => {
+
+
+      response.data.map(function (val, index) {
+       
+       
+        if(clouddates !=null){
+          if (clouddates == val.date_int) {
+            console.log('cloud_cover',val.cloud_cover)
+            cloudcoverstore.dispatch({ type: 'cloudcover', cloudcover: val.cloud_cover }) 
+          } 
+      }
+      })
+    })
+  },[clouddates])
   useEffect(() => {
 
 
@@ -70,12 +85,15 @@ const Chart = (props) => {
 
 
       response.data.map(function (val, index) {
-        console.log('val', val)
+       
         ndviimg.push(parseFloat(val.date_int))
-        color = val.date ? 'red' : 'green';
-
+      //   if(clouddates !=null){
+      //     if (clouddates == val.date_int) {
+      //       console.log('cloud_cover',val.cloud_cover)
+      //       cloudcoverstore.dispatch({ type: 'cloudcover', cloudcover: val.cloud_cover }) 
+      //     } 
+      // }
       })
-
     })
     axios.get('https://gistest.bkk.ag/ndvi_series/' + growernamer).then((response) => {
       console.log('latt', response)
@@ -91,14 +109,9 @@ const Chart = (props) => {
         }) : <></>
       if (growernamer) {
         datestore.dispatch({ type: 'date', date: date })
-        axios.get('https://gistest.bkk.ag/NDVI_baseline/' + growernamer, {
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            "Content-Type": "application/json",
-          }
-        }).then((response) => {
+        axios.get('https://gistest.bkk.ag/ndvi_baseline_series/' + growernamer).then((response) => {
           response.data.map(function (val, index) {
-            avgbaselinendvi.push(parseFloat(val.baseline_max_ndvi))
+            avgbaselinendvi.push(parseFloat(val.ndvi_baseline))
           })
           axios.get('https://gistest.bkk.ag/ndmi_series/' + growernamer).then(
             (response) => {
@@ -134,8 +147,6 @@ const Chart = (props) => {
                       type: 'spline',
                       height: '300px'
                     },
-
-
                     title: {
                       text: ''
                       // text: null // as an alternative
@@ -176,7 +187,20 @@ const Chart = (props) => {
                             var NDMIlayerss = ndmilayerss.getState()
                             NDMIlayerss ? map.removeLayer(NDMIlayerss) : <></>
                             layerss ? map.removeLayer(layerss) : <></>
+                           
                             ndvis.dispatch({ type: 'ndvi', ndvi: event?.point?.category })
+                            var datess = event?.point?.category?.split("-")
+                            datess = datess[0] + datess[1] + datess[2]
+                            setClouddates(datess)
+                            
+                            var staelitedates = datess?.length > 0 && (datess[0] + datess[1] + datess[2])
+                            // var dd=ndviimg.filter(staelitedates)
+                            // console.log(dd)
+                            // console.log(staelitedates[i]==ndviimg[i])
+
+
+
+
                             var ind = this.name
                             ind ? indexsel.dispatch({ type: 'indexis', indexis: ind }) : <></>
                             // console.log("event", event.point.category)
@@ -304,7 +328,7 @@ const Chart = (props) => {
                         chart.series[1].data[i].update({
 
                           marker: {
-                            fillColor: 'green',
+                            fillColor: '#90ee90',
                             radius: 4
                           }
                         }
@@ -312,7 +336,7 @@ const Chart = (props) => {
                         chart.series[3].data[i].update({
 
                           marker: {
-                            fillColor: 'blue',
+                            fillColor: '#add8e6',
                             radius: 4,
                             symbol: 'circle'
                           }
