@@ -122,12 +122,7 @@ const BlogList = () => {
                 </div>
 
                 <hr />
-
-
-
-
                 <Timeline data={advisoryData} />
-
               </ModalBody>
 
             </Modal>

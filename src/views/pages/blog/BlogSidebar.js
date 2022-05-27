@@ -244,39 +244,39 @@ const BlogSidebar = (props) => {
             < hr />
             <div className="d-flex flex-row justify-content-evenly">
               <div className="d-flex flex-column border-end pe-1 ">
-                <div className="fw-bold mx-auto" style={{ fontSize: '0.9rem' }}>Morning</div>
+                <div className="fw-bold mx-auto" style={{ fontSize: '0.7rem' }}>Morning</div>
                 <div className="text-center">
 
-                  <img height="42px" width="42px" src={`${"https://weather.bkk.ag/api/"}${weatherData?.conditionImages[index]}`} alt="loading.." className="rounded" />
+                  <img height="30px" width="30px" src={`${"https://weather.bkk.ag/api/"}${weatherData?.conditionImages[index]}`} alt="loading.." className="rounded" />
                 </div>
-                <div className="fw-bold mx-auto" style={{ fontSize: '1.1rem', color: '#00c451' }}> {weatherData?.temp[index] || ""}°C</div>
-                <div className="fw-bold mx-auto" style={{ fontSize: '1rem', textAlign: 'center', textAlign: 'center' }}>{weatherData?.phrase[index] || ""}</div>
+                <div className="fw-bold mx-auto" style={{ fontSize: '1rem', color: '#00c451' }}> {weatherData?.temp[index] || ""}°C</div>
+                <div className="semi-bold mx-auto" style={{ fontSize: '0.6rem', textAlign: 'center', textAlign: 'center' }}>{weatherData?.phrase[index] || ""}</div>
 
               </div>
               <div className="d-flex flex-column border-end ps-1 pe-1">
-                <div className="fw-bold mx-auto" style={{ fontSize: '0.9rem' }}>Afternoon</div>
+                <div className="fw-bold mx-auto" style={{ fontSize: '0.7rem' }}>Afternoon</div>
                 <div className="text-center">
 
-                  <img height="42px" width="42px" src={`${"https://weather.bkk.ag/api/"}${weatherData?.conditionImages[index + 1]}`} alt="loading.." className="rounded" />
+                  <img height="30px" width="30px" src={`${"https://weather.bkk.ag/api/"}${weatherData?.conditionImages[index + 1]}`} alt="loading.." className="rounded" />
                 </div>
-                <div className="semi-bold mx-auto" style={{ fontSize: '1.1rem', marginLeft: '14px' }}>{weatherData?.temp[index + 1] || ""}°C</div>
-                <div className="fw-bold mx-auto" style={{ fontSize: '1rem', marginTop: '-2px', textAlign: 'center' }}>{weatherData?.phrase[index + 1] || ""}</div>
+                <div className="semi-bold mx-auto" style={{ fontSize: '1rem', marginLeft: '10px' }}>{weatherData?.temp[index + 1] || ""}°C</div>
+                <div className="semi-bold mx-auto" style={{ fontSize: '0.6rem', marginTop: '-2px', textAlign: 'center' }}>{weatherData?.phrase[index + 1] || ""}</div>
 
               </div>
               <div className="d-flex flex-column  ps-1 pe-0.5">
-                <div className="semi-bold mx-auto" style={{ fontSize: '0.9rem' }}>Evening</div>
+                <div className="semi-bold mx-auto" style={{ fontSize: '0.7rem' }}>Evening</div>
                 <div className="text-center">
 
-                  <img height="42px" width="42px" src={`${"https://weather.bkk.ag/api/"}${weatherData?.conditionImages[index + 2]}`} alt="loading.." className="rounded" />
+                  <img height="30px" width="30px" src={`${"https://weather.bkk.ag/api/"}${weatherData?.conditionImages[index + 2]}`} alt="loading.." className="rounded" />
                 </div>
-                <div className="semi-bold mx-auto" style={{ fontSize: '1.1rem', marginLeft: '14px' }}>{weatherData?.temp[index + 2] || ""}°C</div>
-                <div className="fw-bold mx-auto" style={{ fontSize: '1rem', marginTop: '-2px', textAlign: 'center' }}>{weatherData?.phrase[index + 2] || ""}</div>
+                <div className="semi-bold mx-auto" style={{ fontSize: '1rem', marginLeft: '14px' }}>{weatherData?.temp[index + 2] || ""}°C</div>
+                <div className="semi-bold mx-auto" style={{ fontSize: '0.6rem', marginTop: '-2px', textAlign: 'center' }}>{weatherData?.phrase[index + 2] || ""}</div>
 
               </div>
               {/* <div className="d-flex flex-column ps-1">
             <div className="semi-bold mx-auto" style={{ fontSize: '2.7vw' }}>Overnight</div>
             <div className="text-center">
-              <Image alt="loading.." className="rounded" src={this.state.hourData?.conditionImages?.length > 0 && `${configData.urlImg}${this.state.hourData?.conditionImages[this.state.index + 3]}`} height="42px" width="42px" />
+              <Image alt="loading.." className="rounded" src={this.state.hourData?.conditionImages?.length > 0 && `${configData.urlImg}${this.state.hourData?.conditionImages[this.state.index + 3]}`} height="30px" width="30px" />
             </div>
             <div className="semi-bold mx-auto" style={{ fontSize: '2.78vw', marginLeft: '14px' }}>{this.state.hourData?.temp?.length > 0 && this.state.hourData?.temp[this.state.index + 3] || ""}°C</div>
             <div className="semi-bold mx-auto" style={{ fontSize: '2.5vw', marginTop: '-2px', textAlign: 'center' }}>{this.state.hourData?.phrase?.length > 0 && this.state.hourData?.phrase[this.state.index + 3] || ""}</div>
