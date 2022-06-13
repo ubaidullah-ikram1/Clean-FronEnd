@@ -21,7 +21,7 @@ import BlankLayout from '@layouts/BlankLayout'
 import VerticalLayout from '@src/layouts/VerticalLayout'
 import HorizontalLayout from '@src/layouts/HorizontalLayout'
 
-const Router = () => {
+const   Router = () => {
   // ** Hooks
   const { layout, setLayout, setLastLayout } = useLayout()
   const { transition, setTransition } = useRouterTransition()

@@ -13,7 +13,8 @@ import PageLayoutsRoutes from './PageLayouts'
 const TemplateTitle = '%s - Vuexy React Admin Template'
 
 // ** Default Route
-const DefaultRoute = '/cropmonitor/home'
+const role = 'admin'
+const DefaultRoute = role == 'admin' ? '/cropmonitor/home' : '/dashboard/analytics'
 
 // ** Merge Routes
 const Routes = [

@@ -1,21 +1,14 @@
 // ** React Imports
-import { Link } from 'react-router-dom'
-import { Fragment } from 'react'
-import CardAction from '@components/card-actions'
-import { mapcontainer } from '../store/mapcontainer'
+import axios from 'axios'
+import moment from 'moment'
+import { useEffect, useLayoutEffect, useState } from 'react'
+import * as Icon from 'react-feather'
+// ** Reactstrap Imports
+import { Card, CardBody, CardText, Col, Input, InputGroup, InputGroupText, Row, UncontrolledTooltip } from 'reactstrap'
 // ** Third Party Components
 import { farmidcommunicator } from '../store/farmidcommunicator'
-import axios from 'axios'
-import * as Icon from 'react-feather'
-import { useLayoutEffect, useState, useEffect } from 'react'
-import { Msidn } from '../store/msidn'
-import { latt } from '../store/polygoncentroid'
-import { lngt } from '../store/polygoncentroid'
-import moment from 'moment'
-// ** Custom Components
-import Avatar from '@components/avatar'
-// ** Reactstrap Imports
-import { InputGroup, Row, Col, Input, Divider, InputGroupText, Card, CardHeader, CardTitle, CardBody, CardText, UncontrolledTooltip } from 'reactstrap'
+import { mapcontainer } from '../store/mapcontainer'
+import { latt, lngt } from '../store/polygoncentroid'
 
 const BlogSidebar = (props) => {
   // ** States
@@ -24,8 +17,9 @@ const BlogSidebar = (props) => {
   const [weatherData, setweatherData] = useState(null)
   const [farmerList, setfarmerList] = useState([])
   const [FarmsList, setFarmsList] = useState(null)
+  const [selectedFarmsList, setSelectedFarmsList] = useState(null)
   const [searchedResult, setsearchedResult] = useState([]);
-  const [hourData, sethourData] = useState(null);
+
   const [sepcicFarm, setSpecificFarm] = useState(null);
   const [index, setIndex] = useState(null);
   const [todayData, settodayData] = useState(null)
@@ -71,17 +65,34 @@ const BlogSidebar = (props) => {
     let res = await axios.get("https://gistest.bkk.ag/Partner_stats/hbl");
     setOverviewData(res.data[0])
     getFarmersList()
+
   }, [])
-  function DrawMap(farm_crop_id, lat, lng) {
-    const filteredData = FarmsList.filter((data) => data.farm_crop_id === farm_crop_id)
-    setFarmsList(filteredData)
+
+  // const categorizedData=()=>{
+
+  // }
+  async function DrawMap(farm_crop_id, lat, lng, msisdn) {
+    if (weatherData) {
+      let res = await axios.get(`https://gistest.bkk.ag/farm_data/${msisdn}`);
+      const filteredSelectedData = res?.data?.filter((data) => data.farm_crop_id === farm_crop_id)
+      setFarmsList(filteredSelectedData)
+      const filteredRemainingData = res?.data.filter((data) => data.farm_crop_id !== farm_crop_id)
+      setSelectedFarmsList(filteredRemainingData)
+
+    }
+    else {
+      const filteredSelectedData = FarmsList.filter((data) => data.farm_crop_id === farm_crop_id)
+      setFarmsList(filteredSelectedData)
+      const filteredRemainingData = FarmsList.filter((data) => data.farm_crop_id !== farm_crop_id)
+      setSelectedFarmsList(filteredRemainingData)
+    }
+
     // props.mapHeight('20vh')
     getNowcastWeather(lat, lng)
 
     farm_crop_id ? farmidcommunicator.dispatch({ type: 'search', id: farm_crop_id }) : <></>
     latt.dispatch({ type: 'lat', lat: lat })
     lngt.dispatch({ type: 'lng', lng: lng })
-
     setFarmids(farm_crop_id)
     farm_crop_id ? props.setIsloading(true) : <></>
     // setInterval(function () {props.setIsloading(false)}, 50000);
@@ -113,8 +124,6 @@ const BlogSidebar = (props) => {
 
           axios.get(url).then(
             d => {
-
-
               d?.data?.features[0]['properties']['farm_crop_id'] ? props.setIsloading(true) : <></>
               // d.data.features[0]['properties']['farm_crop_id'] ? alert(setIsloading) : <></>
               var farmidurl = "https://gis.bkk.ag/geoserver/server/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=server%3Ahbl_farms&CQL_FILTER=farm_crop_id	='" + d.data.features[0]['properties']['farm_crop_id'] + "'&outputFormat=application%2Fjson";
@@ -153,8 +162,6 @@ const BlogSidebar = (props) => {
       return (
         <div className='right-sidebar-content'>
           <Card style={{ marginLeft: '8%', cursor: 'pointer' }} className='card-transaction' onClick={() => getFarmByMsisdn(item.msisdn)} >
-
-
             <CardBody>
               <div class="d-flex justify-content-between">
                 <div>
@@ -178,13 +185,6 @@ const BlogSidebar = (props) => {
 
 
               <div className='meetup-header d-flex align-items-center'>
-
-
-
-
-
-
-
               </div>
               <div className='my-auto'>
                 <CardText className='mb-0  text-success'>{item.growername}</CardText>
@@ -222,16 +222,12 @@ const BlogSidebar = (props) => {
     return (
       <div className='right-sidebar-content'>
         {<Card style={{ marginLeft: '0%' }} className='card-transaction'  >
-
-
           <CardBody>
             <div className="text-center semi-bold" style={{ fontSize: '15px', marginTop: '-15px' }}>{locationName}, Pakistan</div>
             <Row>
               <div class="d-flex justify-content-between">
 
                 <div className="d-flex flex-column">
-
-
                   <div className="fw-bold mx-auto" style={{ fontSize: '1.1rem', color: '#00c451' }}> {todayData?.temperature[index] || ""}°C</div>
                   <div className="fw-bold mx-auto" style={{ fontSize: '1.1rem', textAlign: 'center', textAlign: 'center' }}>{todayData?.wxPhraseLong[index] || ""}</div>
                   <div className="fw-bold mx-auto" style={{ fontSize: '1rem', textAlign: 'center' }}>{todayData?.conditionDescUrdu[index] || ""} </div>
@@ -291,11 +287,12 @@ const BlogSidebar = (props) => {
       </div>
     )
   }
+
   const renderAllfarms = (FarmList) => {
     return FarmList.map(item => {
       return (
         <div className='right-sidebar-content'>
-          <Card style={{ marginLeft: '8%', cursor: 'pointer' }} className='card-transaction' onClick={() => DrawMap(item.farm_crop_id, item.lat, item.long)} >
+          <Card style={{ marginLeft: '8%', cursor: 'pointer' }} className='card-transaction' onClick={() => DrawMap(item.farm_crop_id, item.lat, item.long, item.msisdn)} >
             {
 
             }
@@ -303,13 +300,13 @@ const BlogSidebar = (props) => {
 
             }
             <CardBody>
-              <div className='meetup-header d-flex align-items-center'>
+              {/* <div className='meetup-header d-flex align-items-center'>
                 <div class="d-flex justify-content-between">
                   <div>
                     <h6>  {item.farmer_name}</h6>
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div className='my-auto'>
                 <CardText className='mb-0  text-success'>{item.farm_title}</CardText>
               </div>
@@ -447,9 +444,12 @@ const BlogSidebar = (props) => {
               </div>
             </div>
 
-            <div style={{ height: weatherData ? "25vh" : '55vh', overflowY: "scroll", marginTop: "2%" }} className="side_bar">{FarmsList ? renderAllfarms(FarmsList) : renderTransactions(searchedResult)}</div>
+            <div style={{ height: weatherData ? "25vh" : '55vh', overflowY: weatherData ? 'hidden' : "scroll", marginTop: "2%" }} className="side_bar">{FarmsList ? renderAllfarms(FarmsList) : renderTransactions(searchedResult)}</div>
             <div>{weatherData && renderweatherData(weatherData)}</div>
+
+            {weatherData && <div style={{ height: '55vh', overflowY: "scroll", marginTop: "2%" }} className="side_bar">{renderAllfarms(selectedFarmsList)}</div>}
           </div>
+
         </div>
       </div>
     </div>
