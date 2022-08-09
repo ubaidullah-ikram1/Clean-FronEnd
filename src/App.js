@@ -1,6 +1,4 @@
 // ** Router Import
-import Router from './router/Router'
-
-const App = () => <Router />
-
+import BlogList from "./views"
+const App = () => <BlogList />
 export default App
